@@ -1,27 +1,17 @@
-package com.stevenmwesigwa.musicapp;
+package com.stevenmwesigwa.musicapp.activities;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.navigation.NavigationView;
+import com.stevenmwesigwa.musicapp.R;
+import com.stevenmwesigwa.musicapp.fragments.MainScreenFragment;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -64,6 +54,30 @@ public class MainActivity extends AppCompatActivity {
          */
         actionBarDrawerToggle.syncState();
 
+        /**
+         * When implementing fragments over an activity, we need our "main fragment" that will get displayed
+         * over the activity. For this case, it will be the 'mainscreenfragment' where the list of songs go
+         *
+         * Create 'mainscreenfragment' object
+         */
+        final MainScreenFragment mainScreenFragment = new MainScreenFragment();
+        /**
+         * A manager to manage different fragments, their inception, their layouts, animations if any
+         *  and all the other attributes associated with the fragment.
+         *  We access the FragmentManager by mentionng the context. (this)
+         *
+         *  To start a series of operations on the Fragments
+         *  associated with this FragmentManager - beginTransaction().
+         *
+         *  To commit all / apply the changes made - commit()
+         */
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.detailsFragment, mainScreenFragment, "MainScreenFragment")
+        .commit();
+
+
+
     }
 
 
@@ -72,3 +86,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 }
+
+
+/**
+ *
+ */

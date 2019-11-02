@@ -1,4 +1,4 @@
-package com.stevenmwesigwa.musicapp;
+package com.stevenmwesigwa.musicapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import com.stevenmwesigwa.musicapp.R;
 
 import java.util.Arrays;
 

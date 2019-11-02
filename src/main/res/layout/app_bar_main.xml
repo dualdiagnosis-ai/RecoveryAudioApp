@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,7 +24,11 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
+    <!--   Define / set up the 'default fragment' class that is going to get launched inside our
+    xml file i.e class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"-->
 <fragment
+    class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"
     android:layout_width="match_parent"
     android:layout_below="@id/appBarLayout"
     android:id="@+id/detailsFragment"
