@@ -1,6 +1,7 @@
 package com.stevenmwesigwa.musicapp.activities;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,6 +13,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -76,8 +80,18 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.detailsFragment, mainScreenFragment, "MainScreenFragment")
         .commit();
 
+       RecyclerView navigationRecyclerView = findViewById(R.id.navigationRecyclerView);
+        /**
+         * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
+         */
+        // use a linear layout manager
+        RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager(this);
+        navigationRecyclerView.setLayoutManager(layoutManager);
+        navigationRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
+        /**
+         * Set up an adapter to show elements in a list
+         */
     }
 
 
