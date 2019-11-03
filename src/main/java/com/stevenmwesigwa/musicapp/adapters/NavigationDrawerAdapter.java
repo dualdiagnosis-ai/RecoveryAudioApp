@@ -34,7 +34,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private Context mContext;
 
     // data is passed into the constructor
-    NavigationDrawerAdapter(List<String> contentList, int[] getImages, Context context) {
+    public NavigationDrawerAdapter(List<String> contentList, int[] getImages, Context context) {
         this.mInflater = LayoutInflater.from(context);
         this.mContentList = contentList;
         this.mGetImages = getImages;
@@ -138,6 +138,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                             .replace(R.id.detailsFragment,aboutUsFragment)
                             .commit();
                 }
+                /**
+                 * (To automatically close the 'nav drawer' when an item is clicked)
+                 */
+                MainActivity.drawerLayout.closeDrawers();
             }
         });
     }
