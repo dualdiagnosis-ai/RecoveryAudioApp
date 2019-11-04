@@ -9,7 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
+import com.stevenmwesigwa.musicapp.adapters.MainScreenAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +45,35 @@ public class MainScreenFragment extends Fragment {
     RecyclerView contentMainRecyclerView = null;
     // Holds the 'context'
     Activity activity = null;
+//Instantiate MainScreenAdapter
+    MainScreenAdapter mainScreenAdapter = null;
 
+    List<Songs> getSongsList = null;
 
     public MainScreenFragment() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getSongsList = getSongsFromDevice();
+        mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
+
+        /**
+         * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
+         */
+        // use a linear layout manager
+        RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager( (Context)  activity);
+        contentMainRecyclerView.setLayoutManager(layoutManager);
+        contentMainRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        /**
+         * Set the adapter to the Recycler View so that the Recycler View will get synced with the
+         * Adapter.
+         */
+        contentMainRecyclerView.setAdapter(mainScreenAdapter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +86,8 @@ public class MainScreenFragment extends Fragment {
         visibleLayout = view.findViewById(R.id.visibleLayout);
         noSongsMainScreen = view.findViewById(R.id.noSongsMainScreen);
         contentMainRecyclerView = view.findViewById(R.id.contentMainRecyclerView);
+        setHasOptionsMenu(true);
+        activity.setTitle("All Songs");
 
         return view;
     }
