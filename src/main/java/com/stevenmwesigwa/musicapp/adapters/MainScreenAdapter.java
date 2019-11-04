@@ -1,6 +1,7 @@
 package com.stevenmwesigwa.musicapp.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stevenmwesigwa.musicapp.R;
@@ -19,6 +21,7 @@ import com.stevenmwesigwa.musicapp.fragments.AboutUsFragment;
 import com.stevenmwesigwa.musicapp.fragments.FavoriteFragment;
 import com.stevenmwesigwa.musicapp.fragments.MainScreenFragment;
 import com.stevenmwesigwa.musicapp.fragments.SettingsFragment;
+import com.stevenmwesigwa.musicapp.fragments.SongPlayingFragment;
 
 import java.util.List;
 
@@ -82,7 +85,27 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
         holder.contentRowSongList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, song.getSongTitle(),Toast.LENGTH_SHORT).show();
+                final SongPlayingFragment songPlayingFragment = new SongPlayingFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("songArtist", song.getSongArtist());
+                bundle.putString("songTitle", song.getSongTitle());
+                bundle.putLong("songId", song.getSongId());
+                bundle.putString("songData", song.getSongData());
+                bundle.putLong("songDateAdded", song.getSongDateAdded());
+                bundle.putInt("songPosition", position);
+                bundle.putParcelableArrayList("songsList", mSongsList);
+                /**
+                 * Let's begin the transaction
+                 * We will invoke this Adapter through our MainActivity.java file.
+                 */
+                FragmentActivity fragmentActivity = (FragmentActivity) mContext;
+                fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        /**
+                         * Replace the the already added fragment from MainActivity.java
+                         */
+                        .replace(R.id.detailsFragment,songPlayingFragment)
+                        .commit();
 
             }
         });
