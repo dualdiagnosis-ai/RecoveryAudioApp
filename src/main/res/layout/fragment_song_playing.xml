@@ -93,6 +93,68 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#fff" />
             </RelativeLayout>
+            <!--          Layout to act as a container for the widgets / controls-->
+            <RelativeLayout
+                android:id="@+id/controlPanelNowPlaying"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarLayoutNowPlaying"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="60dp">
+                <ImageButton
+                    android:id="@+id/shuffleButtonNowPlaying"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_toLeftOf="@id/previousButtonNowPlaying"
+                    android:background="@drawable/shuffle_white_icon"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp" />
+
+                <ImageButton
+                    android:id="@+id/previousButtonNowPlaying"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="19dp"
+                    android:layout_toLeftOf="@id/playPauseButtonNowPlaying"
+                    android:background="@drawable/play_previous_icon"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp" />
+
+                <ImageButton
+                    android:id="@+id/playPauseButtonNowPlaying"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/play_icon"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp" />
+                <ImageButton
+                    android:id="@+id/nextButtonNowPlaying"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:layout_toRightOf="@id/playPauseButtonNowPlaying"
+                    android:background="@drawable/play_next_icon"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp" />
+                <ImageButton
+                    android:id="@+id/loopButtonNowPlaying"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/nextButtonNowPlaying"
+                    android:background="@drawable/loop_white_icon"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
