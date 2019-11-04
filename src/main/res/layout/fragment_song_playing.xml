@@ -1,14 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.SongPlayingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--    Upper Half of Screen-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_weight="1">
 
-</FrameLayout>
+    </LinearLayout>
+
+    <!--    Lower Half of Screen-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#9d2a58">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--            Layout to contain song info (songTitle & songText)-->
+            <RelativeLayout
+                android:id="@+id/songInformationNowPlaying"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!--                songTitle-->
+                <TextView
+                    android:id="@+id/songTitleNowPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:ellipsize="marquee"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:text="Take On Me"
+                    android:textColor="#fff"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+                <!--                songArtist-->
+                <TextView
+                    android:id="@+id/songArtistNowPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/songTitleNowPlaying"
+                    android:layout_centerHorizontal="true"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="a-ha"
+                    android:textColor="#eeeeee"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+            <!--      Layout to contain the 'Seekbar' & 'start' & 'end' time-->
+            <RelativeLayout
+                android:id="@+id/seekBarLayoutNowPlaying"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/songInformationNowPlaying">
+                <!--SeekBar-->
+                <SeekBar
+                    android:id="@+id/seekBarNowPlaying"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+                <!--    SeekBar 'Start Time'-->
+                <TextView
+                    android:id="@+id/startTimeSeekBarNowPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/seekBarNowPlaying"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="15dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#fff" />
+
+
+                <!--    SeekBar 'End Time'-->
+                <TextView
+                    android:id="@+id/endTimeSeekBarNowPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/seekBarNowPlaying"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#fff" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
