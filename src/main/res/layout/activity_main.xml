@@ -36,13 +36,13 @@
             android:layout_centerInParent="true"
                 android:background="@drawable/echo_logo" />
         </RelativeLayout>
-    <view class="androidx.appcompat.app.AlertController$RecycleListView"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/navigationRecyclerView"
         android:layout_width="match_parent"
         android:layout_below="@id/headerLayout"
         android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
 
-    </view>
 </RelativeLayout>
 </com.google.android.material.navigation.NavigationView>
 
