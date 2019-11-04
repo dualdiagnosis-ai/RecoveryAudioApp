@@ -48,7 +48,7 @@ public class MainScreenFragment extends Fragment {
 //Instantiate MainScreenAdapter
     MainScreenAdapter mainScreenAdapter = null;
 
-    List<Songs> getSongsList = null;
+    ArrayList<Songs> getSongsList = null;
 
     public MainScreenFragment() {
         // Required empty public constructor
@@ -113,8 +113,8 @@ public class MainScreenFragment extends Fragment {
         this.activity = activity;
     }
 
-    private List<Songs> getSongsFromDevice() {
-        List songsList = new ArrayList();
+    private ArrayList<Songs> getSongsFromDevice() {
+        ArrayList songsList = new ArrayList();
         // Create 'ContentResolver' to access the database
         ContentResolver contentResolver = activity.getContentResolver();
         // Create a 'Uri' so that you would fetch a specific song. i.e searching for songs

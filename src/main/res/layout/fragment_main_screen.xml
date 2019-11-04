@@ -53,7 +53,7 @@
                 android:layout_marginTop="11dp"
                 android:layout_toRightOf="@+id/defaultMusicMainScreen"
                 android:text="Now Playing"
-                android:textColor="bdbdbd" />
+                android:textColor="#bdbdbd" />
 
             <TextView
                 android:id="@+id/songTitleMainScreen"

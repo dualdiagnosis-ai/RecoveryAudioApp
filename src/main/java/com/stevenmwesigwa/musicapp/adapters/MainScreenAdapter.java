@@ -23,6 +23,7 @@ import com.stevenmwesigwa.musicapp.fragments.MainScreenFragment;
 import com.stevenmwesigwa.musicapp.fragments.SettingsFragment;
 import com.stevenmwesigwa.musicapp.fragments.SongPlayingFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.MainScreenViewHolder>  {
@@ -33,11 +34,11 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
     /**
      * Define the data
      */
-    private List<Songs> mSongsList;
+    private ArrayList<Songs> mSongsList;
     private Context mContext;
 
     // data is passed into the constructor
-    public MainScreenAdapter(List<Songs> songsList, Context context) {
+    public MainScreenAdapter(ArrayList<Songs> songsList, Context context) {
         this.mInflater = LayoutInflater.from(context);
         this.mSongsList = songsList;
         this.mContext = context;
