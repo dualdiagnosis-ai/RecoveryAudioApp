@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,16 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stevenmwesigwa.musicapp.CurrentSongHelper;
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -52,6 +56,17 @@ public class SongPlayingFragment extends Fragment {
     ImageButton nextButtonNowPlaying = null;
     ImageButton loopButtonNowPlaying = null;
 
+    Runnable updateSongTime = ()-> {
+
+        final Handler handler = new Handler();
+        int getCurrentPosition = mediaPlayer.getCurrentPosition();
+        startTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+                TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition),
+                TimeUnit.MILLISECONDS.toSeconds(getCurrentPosition)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition))));
+        handler.postDelayed(this, 1000);
+    };
+
+
     CurrentSongHelper currentSongHelper = null;
 
     Integer currentPosition = null;
@@ -65,6 +80,8 @@ public class SongPlayingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_song_playing, container, false);
         RelativeLayout songInformationNowPlaying = view.findViewById(R.id.songInformationNowPlaying);
