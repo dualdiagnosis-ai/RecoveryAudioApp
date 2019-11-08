@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -26,6 +27,9 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
+        Log.d("SplashActivity", "IN COMING" );
+
         if (!hasPermissions(this, permissionsRequired)) {
             //we have to ask for permissions
             ActivityCompat.requestPermissions(this, permissionsRequired, 131);
@@ -39,12 +43,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 131) {
-            if (grantResults.length == 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[2] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[3] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[4] == PackageManager.PERMISSION_GRANTED
+
+            if ( !(grantResults.length == 0)
+                    && (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    && (grantResults[1] == PackageManager.PERMISSION_GRANTED)
+                    && (grantResults[2] == PackageManager.PERMISSION_GRANTED)
+                    && (grantResults[3] == PackageManager.PERMISSION_GRANTED)
+                    && (grantResults[4] == PackageManager.PERMISSION_GRANTED)
             ) {
                 showSplashScreen(1000);
             } else {

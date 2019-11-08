@@ -1,6 +1,7 @@
 package com.stevenmwesigwa.musicapp.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         /**
          * navigationdrawer icons list
          */
