@@ -24,6 +24,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cleveroad.audiovisualization.AudioVisualization;
+import com.cleveroad.audiovisualization.DbmHandler;
+import com.cleveroad.audiovisualization.GLAudioVisualizationView;
+import com.cleveroad.audiovisualization.VisualizerDbmHandler;
 import com.stevenmwesigwa.musicapp.CurrentSongHelper;
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
@@ -38,25 +42,28 @@ import java.util.concurrent.TimeUnit;
  * A simple {@link Fragment} subclass.
  */
 public class SongPlayingFragment extends Fragment {
-    Activity activity;
+    private Activity activity;
     // Controls playback of audio or video files
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
     RelativeLayout songInformationNowPlaying = null;
-    TextView songTitleNowPlaying = null;
-    TextView songArtistNowPlaying = null;
+    private TextView songTitleNowPlaying = null;
+    private TextView songArtistNowPlaying = null;
     RelativeLayout seekBarLayoutNowPlaying = null;
-    SeekBar seekBarNowPlaying = null;
-    TextView startTimeSeekBarNowPlaying = null;
-    TextView endTimeSeekBarNowPlaying = null;
+    private SeekBar seekBarNowPlaying = null;
+    private TextView startTimeSeekBarNowPlaying = null;
+    private TextView endTimeSeekBarNowPlaying = null;
     RelativeLayout controlPanelNowPlaying = null;
-    ImageButton shuffleButtonNowPlaying = null;
-    ImageButton previousButtonNowPlaying = null;
-    ImageButton playPauseButtonNowPlaying = null;
-    ImageButton nextButtonNowPlaying = null;
-    ImageButton loopButtonNowPlaying = null;
+    private ImageButton shuffleButtonNowPlaying = null;
+    private ImageButton previousButtonNowPlaying = null;
+    private ImageButton playPauseButtonNowPlaying = null;
+    private ImageButton nextButtonNowPlaying = null;
+    private ImageButton loopButtonNowPlaying = null;
 
-    Runnable updateSongTime = new Runnable() {
+    private AudioVisualization audioVisualization = null;
+    GLAudioVisualizationView glAudioVisualizationView =null;
+
+    private Runnable updateSongTime = new Runnable() {
         @Override
         public void run() {
             final Handler handler = new Handler();
@@ -69,10 +76,10 @@ public class SongPlayingFragment extends Fragment {
     };
 
 
-    CurrentSongHelper currentSongHelper = null;
+    private CurrentSongHelper currentSongHelper = null;
 
-    Integer currentPosition = null;
-    ArrayList<Songs> songsList = null;
+    private Integer currentPosition = null;
+    private ArrayList<Songs> songsList = null;
 
     public SongPlayingFragment() {
         // Required empty public constructor
@@ -98,7 +105,24 @@ public class SongPlayingFragment extends Fragment {
         ImageButton playPauseButtonNowPlaying = view.findViewById(R.id.playPauseButtonNowPlaying);
         ImageButton nextButtonNowPlaying = view.findViewById(R.id.nextButtonNowPlaying);
         ImageButton loopButtonNowPlaying = view.findViewById(R.id.loopButtonNowPlaying);
+        GLAudioVisualizationView visualizerViewNowPlaying = view.findViewById(R.id.visualizerViewNowPlaying);
         return view;
+    }
+
+    /**
+     * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
+     * has returned, but before any saved state has been restored in to the view.
+     * This gives subclasses a chance to initialize themselves once
+     * they know their view hierarchy has been completely created.  The fragment's
+     * view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        audioVisualization = glAudioVisualizationView;
     }
 
     /**
@@ -193,6 +217,36 @@ public class SongPlayingFragment extends Fragment {
         );
 
         clickHandler();
+
+        // set audio visualization handler. This will REPLACE previously set speech recognizer handler
+        VisualizerDbmHandler vizualizerHandler = DbmHandler.Factory.newVisualizerHandler(activity, 0);
+        audioVisualization.linkTo(vizualizerHandler);
+
+    }
+/*
+    You must always call onPause method to pause visualization
+    and stop wasting CPU resources for computations in vain.
+    As soon as your view appears in sight of user, call onResume.
+*/
+    @Override
+    public void onResume() {
+        super.onResume();
+        audioVisualization.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        audioVisualization.onPause();
+        super.onPause();
+    }
+
+   /* When user leaves screen with audio visualization view,
+    don't forget to free resources and call release() method.
+*/
+    @Override
+    public void onDestroyView() {
+        audioVisualization.release();
+        super.onDestroyView();
     }
 
     private void onSongComplete() {
@@ -385,4 +439,12 @@ if(currentSongHelper.isLoopFeatureEnabled()){
        handler.postDelayed(updateSongTime, 1000);
     }
 
+
+    public AudioVisualization getAudioVisualization() {
+        return audioVisualization;
+    }
+
+    public void setAudioVisualization(AudioVisualization audioVisualization) {
+        this.audioVisualization = audioVisualization;
+    }
 }
