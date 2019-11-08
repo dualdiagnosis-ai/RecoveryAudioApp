@@ -95,6 +95,9 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
                 bundle.putLong("songDateAdded", song.getSongDateAdded());
                 bundle.putInt("songPosition", position);
                 bundle.putParcelableArrayList("songsList", mSongsList);
+
+//Link values with the songPlayingFragment
+songPlayingFragment.setArguments(bundle);
                 /**
                  * Let's begin the transaction
                  * We will invoke this Adapter through our MainActivity.java file.

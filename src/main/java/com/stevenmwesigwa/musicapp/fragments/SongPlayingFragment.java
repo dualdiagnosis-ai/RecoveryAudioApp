@@ -56,14 +56,16 @@ public class SongPlayingFragment extends Fragment {
     ImageButton nextButtonNowPlaying = null;
     ImageButton loopButtonNowPlaying = null;
 
-    Runnable updateSongTime = ()-> {
-
-        final Handler handler = new Handler();
-        int getCurrentPosition = mediaPlayer.getCurrentPosition();
-        startTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
-                TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition),
-                TimeUnit.MILLISECONDS.toSeconds(getCurrentPosition)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition))));
-        handler.postDelayed(this, 1000);
+    Runnable updateSongTime = new Runnable() {
+        @Override
+        public void run() {
+            final Handler handler = new Handler();
+            int getCurrentPosition = mediaPlayer.getCurrentPosition();
+            startTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+                    TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition),
+                    TimeUnit.MILLISECONDS.toSeconds(getCurrentPosition)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition))));
+            handler.postDelayed(this, 1000);
+        }
     };
 
 
@@ -176,6 +178,7 @@ public class SongPlayingFragment extends Fragment {
             e.printStackTrace();
         }
         mediaPlayer.start();
+        processInformation(mediaPlayer);
         if (currentSongHelper.isPlaying()) {
             playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
         } else {
@@ -214,7 +217,7 @@ currentSongHelper.setPlaying(true);
                     mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
                     mediaPlayer.prepare();
                     mediaPlayer.start();
-
+                    processInformation(mediaPlayer);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -272,7 +275,7 @@ if(currentSongHelper.isLoopFeatureEnabled()){
     currentSongHelper.setLoopFeatureEnabled(true);
     currentSongHelper.setShuffleFeatureEnabled(false);
     loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_icon);
-    shuffleButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+    shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
 }
                 }
 
@@ -320,6 +323,7 @@ if(currentSongHelper.isLoopFeatureEnabled()){
             mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
             mediaPlayer.start();
+            processInformation(mediaPlayer);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -350,6 +354,7 @@ if(currentSongHelper.isLoopFeatureEnabled()){
             mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
             mediaPlayer.start();
+            processInformation(mediaPlayer);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -359,6 +364,25 @@ if(currentSongHelper.isLoopFeatureEnabled()){
     private void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
         this.songTitleNowPlaying.setText(songTitleNowPlaying);
         this.songArtistNowPlaying.setText(songArtistNowPlaying);
+    }
+
+    private  void processInformation(MediaPlayer mediaPlayer) {
+        int finalTime = mediaPlayer.getDuration();
+        int startTime = mediaPlayer.getCurrentPosition();
+        // Set max seek ar length
+        seekBarNowPlaying.setMax(finalTime);
+        startTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+                TimeUnit.MILLISECONDS.toMinutes(startTime),
+                TimeUnit.MILLISECONDS.toSeconds(startTime)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime))));
+
+       endTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+                TimeUnit.MILLISECONDS.toMinutes(finalTime),
+                TimeUnit.MILLISECONDS.toSeconds(finalTime)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
+
+
+       seekBarNowPlaying.setProgress(startTime);
+       final Handler handler = new Handler();
+       handler.postDelayed(updateSongTime, 1000);
     }
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/contentMainScreenFrag"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--    Will contain the Recycler View which will use to display a list of songs-->
