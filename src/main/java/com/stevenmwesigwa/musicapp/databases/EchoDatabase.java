@@ -134,4 +134,15 @@ public class EchoDatabase extends SQLiteOpenHelper {
         }
         return songId != 0;
     }
+
+
+    private void delete(int songId) {
+        final SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        final String whereClause = COLUMN_ID + "=" + songId;
+        sqLiteDatabase.delete(TABLE_NAME, whereClause, null);
+        sqLiteDatabase.close();
+    }
+
+
+
 }
