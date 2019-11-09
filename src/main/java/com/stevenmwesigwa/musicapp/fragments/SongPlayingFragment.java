@@ -4,6 +4,7 @@ package com.stevenmwesigwa.musicapp.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -61,16 +62,19 @@ public class SongPlayingFragment extends Fragment {
     private ImageButton loopButtonNowPlaying = null;
 
     private AudioVisualization audioVisualization = null;
-    GLAudioVisualizationView glAudioVisualizationView =null;
+    GLAudioVisualizationView glAudioVisualizationView = null;
+
+    private static String MY_PREFS_SHUFFLE = "Shuffle feature";
+    private static String MY_PREFS_LOOP = "Loop feature";
 
     private Runnable updateSongTime = new Runnable() {
         @Override
         public void run() {
             final Handler handler = new Handler();
             int getCurrentPosition = mediaPlayer.getCurrentPosition();
-            startTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+            startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
                     TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition),
-                    TimeUnit.MILLISECONDS.toSeconds(getCurrentPosition)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition))));
+                    TimeUnit.MILLISECONDS.toSeconds(getCurrentPosition) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition))));
             handler.postDelayed(this, 1000);
         }
     };
@@ -222,12 +226,47 @@ public class SongPlayingFragment extends Fragment {
         VisualizerDbmHandler vizualizerHandler = DbmHandler.Factory.newVisualizerHandler(activity, 0);
         audioVisualization.linkTo(vizualizerHandler);
 
+// For shuffle
+        SharedPreferences prefsForShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE);
+        Boolean isShuffleAllowed = prefsForShuffle.getBoolean("feature", false);
+
+        if (isShuffleAllowed) {
+            currentSongHelper.setShuffleFeatureEnabled(true);
+            currentSongHelper.setLoopFeatureEnabled(false);
+            shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_icon);
+            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+
+        } else {
+            currentSongHelper.setShuffleFeatureEnabled(false);
+            shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
+//            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+        }
+
+        // For Loop
+
+        SharedPreferences prefsForLoop = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE);
+        Boolean isLoopAllowed = prefsForLoop.getBoolean("feature", false);
+
+        if (isLoopAllowed) {
+            currentSongHelper.setLoopFeatureEnabled(true);
+            currentSongHelper.setShuffleFeatureEnabled(false);
+            shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
+            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_icon);
+
+        } else {
+            currentSongHelper.setLoopFeatureEnabled(false);
+            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+//            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+        }
+
+
     }
-/*
-    You must always call onPause method to pause visualization
-    and stop wasting CPU resources for computations in vain.
-    As soon as your view appears in sight of user, call onResume.
-*/
+
+    /*
+        You must always call onPause method to pause visualization
+        and stop wasting CPU resources for computations in vain.
+        As soon as your view appears in sight of user, call onResume.
+    */
     @Override
     public void onResume() {
         super.onResume();
@@ -240,9 +279,9 @@ public class SongPlayingFragment extends Fragment {
         super.onPause();
     }
 
-   /* When user leaves screen with audio visualization view,
-    don't forget to free resources and call release() method.
-*/
+    /* When user leaves screen with audio visualization view,
+     don't forget to free resources and call release() method.
+ */
     @Override
     public void onDestroyView() {
         audioVisualization.release();
@@ -250,12 +289,12 @@ public class SongPlayingFragment extends Fragment {
     }
 
     private void onSongComplete() {
-        if(currentSongHelper.isShuffleFeatureEnabled()) {
+        if (currentSongHelper.isShuffleFeatureEnabled()) {
             playNext("PlayNextLikeNormalShuffle");
             currentSongHelper.setPlaying(true);
         } else {
-            if(currentSongHelper.isLoopFeatureEnabled()) {
-currentSongHelper.setPlaying(true);
+            if (currentSongHelper.isLoopFeatureEnabled()) {
+                currentSongHelper.setPlaying(true);
                 Songs nextSong = songsList.get(currentPosition);
                 currentSongHelper.setSongData(nextSong.getSongData());
                 currentSongHelper.setSongArtist(nextSong.getSongArtist());
@@ -275,7 +314,7 @@ currentSongHelper.setPlaying(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else  {
+            } else {
                 playNext("PlayNextNormal");
                 currentSongHelper.setPlaying(true);
             }
@@ -285,14 +324,25 @@ currentSongHelper.setPlaying(true);
     private void clickHandler() {
         shuffleButtonNowPlaying.setOnClickListener(
                 view -> {
-if(currentSongHelper.isShuffleFeatureEnabled()) {
-    shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
-} else {
-    currentSongHelper.setShuffleFeatureEnabled(true);
-    currentSongHelper.setLoopFeatureEnabled(false);
-    shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_icon);
-    loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
-}
+                    SharedPreferences.Editor editShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editLoop = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE).edit();
+
+                    if (currentSongHelper.isShuffleFeatureEnabled()) {
+                        shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
+                        currentSongHelper.setShuffleFeatureEnabled(false);
+                        editShuffle.putBoolean("feature", false);
+                        editShuffle.apply();
+
+                    } else {
+                        currentSongHelper.setShuffleFeatureEnabled(true);
+                        currentSongHelper.setLoopFeatureEnabled(false);
+                        shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_icon);
+                        loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+                        editShuffle.putBoolean("feature", true);
+                        editShuffle.apply();
+                        editLoop.putBoolean("feature", false);
+                        editLoop.apply();
+                    }
                 }
 
         );
@@ -322,15 +372,25 @@ if(currentSongHelper.isShuffleFeatureEnabled()) {
         loopButtonNowPlaying.setOnClickListener(
 
                 view -> {
-if(currentSongHelper.isLoopFeatureEnabled()){
-    currentSongHelper.setLoopFeatureEnabled(false);
-    loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
-} else {
-    currentSongHelper.setLoopFeatureEnabled(true);
-    currentSongHelper.setShuffleFeatureEnabled(false);
-    loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_icon);
-    shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
-}
+                    SharedPreferences.Editor editShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editLoop = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE).edit();
+
+                    if (currentSongHelper.isLoopFeatureEnabled()) {
+                        currentSongHelper.setLoopFeatureEnabled(false);
+                        loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
+                        editShuffle.putBoolean("feature", false);
+                        editShuffle.apply();
+
+                    } else {
+                        currentSongHelper.setLoopFeatureEnabled(true);
+                        currentSongHelper.setShuffleFeatureEnabled(false);
+                        loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_icon);
+                        shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
+                        editShuffle.putBoolean("feature", false);
+                        editShuffle.apply();
+                        editLoop.putBoolean("feature", true);
+                        editLoop.apply();
+                    }
                 }
 
         );
@@ -420,23 +480,23 @@ if(currentSongHelper.isLoopFeatureEnabled()){
         this.songArtistNowPlaying.setText(songArtistNowPlaying);
     }
 
-    private  void processInformation(MediaPlayer mediaPlayer) {
+    private void processInformation(MediaPlayer mediaPlayer) {
         int finalTime = mediaPlayer.getDuration();
         int startTime = mediaPlayer.getCurrentPosition();
         // Set max seek ar length
         seekBarNowPlaying.setMax(finalTime);
-        startTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+        startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
                 TimeUnit.MILLISECONDS.toMinutes(startTime),
-                TimeUnit.MILLISECONDS.toSeconds(startTime)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime))));
+                TimeUnit.MILLISECONDS.toSeconds(startTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime))));
 
-       endTimeSeekBarNowPlaying.setText(String.format(Locale.US,"%d:%d",
+        endTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
                 TimeUnit.MILLISECONDS.toMinutes(finalTime),
-                TimeUnit.MILLISECONDS.toSeconds(finalTime)- TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
+                TimeUnit.MILLISECONDS.toSeconds(finalTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
 
 
-       seekBarNowPlaying.setProgress(startTime);
-       final Handler handler = new Handler();
-       handler.postDelayed(updateSongTime, 1000);
+        seekBarNowPlaying.setProgress(startTime);
+        final Handler handler = new Handler();
+        handler.postDelayed(updateSongTime, 1000);
     }
 
 
