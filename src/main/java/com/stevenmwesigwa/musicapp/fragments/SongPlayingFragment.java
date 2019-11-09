@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -32,6 +33,7 @@ import com.cleveroad.audiovisualization.VisualizerDbmHandler;
 import com.stevenmwesigwa.musicapp.CurrentSongHelper;
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
+import com.stevenmwesigwa.musicapp.databases.EchoDatabase;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -47,22 +49,24 @@ public class SongPlayingFragment extends Fragment {
     // Controls playback of audio or video files
     private MediaPlayer mediaPlayer;
 
-    RelativeLayout songInformationNowPlaying = null;
+    private RelativeLayout songInformationNowPlaying = null;
     private TextView songTitleNowPlaying = null;
     private TextView songArtistNowPlaying = null;
-    RelativeLayout seekBarLayoutNowPlaying = null;
+    private RelativeLayout seekBarLayoutNowPlaying = null;
     private SeekBar seekBarNowPlaying = null;
     private TextView startTimeSeekBarNowPlaying = null;
     private TextView endTimeSeekBarNowPlaying = null;
-    RelativeLayout controlPanelNowPlaying = null;
+    private RelativeLayout controlPanelNowPlaying = null;
     private ImageButton shuffleButtonNowPlaying = null;
     private ImageButton previousButtonNowPlaying = null;
     private ImageButton playPauseButtonNowPlaying = null;
     private ImageButton nextButtonNowPlaying = null;
     private ImageButton loopButtonNowPlaying = null;
+    private ImageButton favoriteIconNowPlaying = null;
+    private EchoDatabase echoDatabaseFavorite = null;
 
     private AudioVisualization audioVisualization = null;
-    GLAudioVisualizationView glAudioVisualizationView = null;
+    private GLAudioVisualizationView glAudioVisualizationView = null;
 
     private static String MY_PREFS_SHUFFLE = "Shuffle feature";
     private static String MY_PREFS_LOOP = "Loop feature";
@@ -97,19 +101,20 @@ public class SongPlayingFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_song_playing, container, false);
-        RelativeLayout songInformationNowPlaying = view.findViewById(R.id.songInformationNowPlaying);
-        TextView songTitleNowPlaying = view.findViewById(R.id.songTitleNowPlaying);
-        RelativeLayout seekBarLayoutNowPlaying = view.findViewById(R.id.seekBarLayoutNowPlaying);
-        SeekBar seekBarNowPlaying = view.findViewById(R.id.seekBarNowPlaying);
-        TextView startTimeSeekBarNowPlaying = view.findViewById(R.id.startTimeSeekBarNowPlaying);
-        TextView endTimeSeekBarNowPlaying = view.findViewById(R.id.endTimeSeekBarNowPlaying);
-        RelativeLayout controlPanelNowPlaying = view.findViewById(R.id.controlPanelNowPlaying);
-        ImageButton shuffleButtonNowPlaying = view.findViewById(R.id.shuffleButtonNowPlaying);
-        ImageButton previousButtonNowPlaying = view.findViewById(R.id.previousButtonNowPlaying);
-        ImageButton playPauseButtonNowPlaying = view.findViewById(R.id.playPauseButtonNowPlaying);
-        ImageButton nextButtonNowPlaying = view.findViewById(R.id.nextButtonNowPlaying);
-        ImageButton loopButtonNowPlaying = view.findViewById(R.id.loopButtonNowPlaying);
-        GLAudioVisualizationView visualizerViewNowPlaying = view.findViewById(R.id.visualizerViewNowPlaying);
+        songInformationNowPlaying = view.findViewById(R.id.songInformationNowPlaying);
+        songTitleNowPlaying = view.findViewById(R.id.songTitleNowPlaying);
+        seekBarLayoutNowPlaying = view.findViewById(R.id.seekBarLayoutNowPlaying);
+        seekBarNowPlaying = view.findViewById(R.id.seekBarNowPlaying);
+        startTimeSeekBarNowPlaying = view.findViewById(R.id.startTimeSeekBarNowPlaying);
+        endTimeSeekBarNowPlaying = view.findViewById(R.id.endTimeSeekBarNowPlaying);
+        controlPanelNowPlaying = view.findViewById(R.id.controlPanelNowPlaying);
+        shuffleButtonNowPlaying = view.findViewById(R.id.shuffleButtonNowPlaying);
+        previousButtonNowPlaying = view.findViewById(R.id.previousButtonNowPlaying);
+        playPauseButtonNowPlaying = view.findViewById(R.id.playPauseButtonNowPlaying);
+        nextButtonNowPlaying = view.findViewById(R.id.nextButtonNowPlaying);
+        loopButtonNowPlaying = view.findViewById(R.id.loopButtonNowPlaying);
+        favoriteIconNowPlaying = view.findViewById(R.id.favoriteIconNowPlaying);
+        glAudioVisualizationView = view.findViewById(R.id.visualizerViewNowPlaying);
         return view;
     }
 
@@ -170,6 +175,7 @@ public class SongPlayingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        echoDatabaseFavorite = new EchoDatabase(activity);
         currentSongHelper = new CurrentSongHelper();
         currentSongHelper.setPlaying(true);
         currentSongHelper.setShuffleFeatureEnabled(false);
@@ -258,7 +264,20 @@ public class SongPlayingFragment extends Fragment {
             loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
 //            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
         }
+changeFavoriteIconNowPlaying();
+    }
 
+    /*
+     * If song is playing and is among favorite songs
+     * change 'favorite icon'
+     */
+    private void changeFavoriteIconNowPlaying() {
+
+        if (echoDatabaseFavorite.ifSongIdExists(currentSongHelper.getSongId().intValue())) {
+            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
+        } else {
+            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
+        }
 
     }
 
@@ -318,10 +337,38 @@ public class SongPlayingFragment extends Fragment {
                 playNext("PlayNextNormal");
                 currentSongHelper.setPlaying(true);
             }
+
+            changeFavoriteIconNowPlaying();
         }
     }
 
     private void clickHandler() {
+
+        favoriteIconNowPlaying.setOnClickListener(
+
+                view -> {
+                    int songId = currentSongHelper.getSongId().intValue();
+                    String songArtist = currentSongHelper.getSongArtist();
+                    String songTitle = currentSongHelper.getSongTitle();
+                    String songPath = currentSongHelper.getSongData();
+
+                    /*
+                    * If it is already favorite, then that means
+                    * the user wants it deleted.
+                     */
+                    if(echoDatabaseFavorite.ifSongIdExists(songId)) {
+
+                        favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
+                        echoDatabaseFavorite.delete(songId);
+                        Toast.makeText(activity, "Removed from Favorites List", Toast.LENGTH_SHORT).show();
+                    } else {
+                        favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
+                        echoDatabaseFavorite.insert(songId, songArtist, songTitle, songPath);
+                        Toast.makeText(activity, "Added to Favorites List", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
         shuffleButtonNowPlaying.setOnClickListener(
                 view -> {
                     SharedPreferences.Editor editShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
@@ -441,6 +488,8 @@ public class SongPlayingFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        changeFavoriteIconNowPlaying();
     }
 
     private void playPrevious() {
@@ -473,6 +522,9 @@ public class SongPlayingFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        changeFavoriteIconNowPlaying();
+
     }
 
     private void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {

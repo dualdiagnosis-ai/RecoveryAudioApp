@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 public class EchoDatabase extends SQLiteOpenHelper {
     private  ArrayList<Songs> songsArrayList = null;
+    private Context context = null;
     final static private String DB_NAME = "FavoriteDatabase";
+    final static private int DB_VERSION = 1;
     final static private String TABLE_NAME = "FavoriteTable";
     final static private String COLUMN_ID = "SongID";
     final static private String COLUMN_SONG_TITLE = "SongTitle";
@@ -36,6 +38,11 @@ public class EchoDatabase extends SQLiteOpenHelper {
      */
     public EchoDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+    }
+
+    public EchoDatabase( Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     /**
@@ -75,7 +82,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
     }
 
-    private void insert(int songId, String songArtist, String songTitle, String songPath) {
+    public void insert(int songId, String songArtist, String songTitle, String songPath) {
         final SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ID, songId);
@@ -88,7 +95,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
     }
 
-    private ArrayList<Songs> get() {
+    protected ArrayList<Songs> get() {
         try {
             final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
             final String getQuery = "SELECT * FROM " + TABLE_NAME;
@@ -112,7 +119,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
     }
 
-    private boolean ifSongIdExists(int trackId) {
+    public boolean ifSongIdExists(int trackId) {
         boolean songIdExists =true;
         int songId = 0;
         try {
@@ -136,7 +143,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
     }
 
 
-    private void delete(int songId) {
+    public void delete(int songId) {
         final SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         final String whereClause = COLUMN_ID + "=" + songId;
         sqLiteDatabase.delete(TABLE_NAME, whereClause, null);
