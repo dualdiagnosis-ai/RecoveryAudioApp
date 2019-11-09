@@ -1,18 +1,25 @@
 package com.stevenmwesigwa.musicapp.databases;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.stevenmwesigwa.musicapp.Songs;
+
+import java.util.ArrayList;
+
 public class EchoDatabase extends SQLiteOpenHelper {
-final static private String DB_NAME = "FavoriteDatabase";
-final static private String TABLE_NAME = "FavoriteTable";
-final static private String COLUMN_ID = "SongID";
-final static private String COLUMN_SONG_TITLE = "SongTitle";
-final static private String COLUMN_SONG_ARTIST = "SongArtist";
-final static private String COLUMN_SONG_PATH = "SongPath";
+    private  ArrayList<Songs> songsArrayList = null;
+    final static private String DB_NAME = "FavoriteDatabase";
+    final static private String TABLE_NAME = "FavoriteTable";
+    final static private String COLUMN_ID = "SongID";
+    final static private String COLUMN_SONG_TITLE = "SongTitle";
+    final static private String COLUMN_SONG_ARTIST = "SongArtist";
+    final static private String COLUMN_SONG_PATH = "SongPath";
 
     /**
      * Create a helper object to create, open, and/or manage a database.
@@ -39,8 +46,8 @@ final static private String COLUMN_SONG_PATH = "SongPath";
      */
     @Override
     public void onCreate(SQLiteDatabase echoSongSqliteDb) {
-final String createTableSchema = "CREATE " + TABLE_NAME + " ( " + COLUMN_ID + " INTEGER, " + COLUMN_SONG_ARTIST + " STRING, " + COLUMN_SONG_TITLE + " STRING, " + COLUMN_SONG_PATH + " STRING)"  ;
-echoSongSqliteDb.execSQL(createTableSchema);
+        final String createTableSchema = "CREATE TABLE " + TABLE_NAME + " ( " + COLUMN_ID + " INTEGER, " + COLUMN_SONG_ARTIST + " STRING, " + COLUMN_SONG_TITLE + " STRING, " + COLUMN_SONG_PATH + " STRING)";
+        echoSongSqliteDb.execSQL(createTableSchema);
     }
 
     /**
@@ -66,5 +73,63 @@ echoSongSqliteDb.execSQL(createTableSchema);
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    private void insert(int songId, String songArtist, String songTitle, String songPath) {
+        final SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ID, songId);
+        contentValues.put(COLUMN_SONG_ARTIST, songArtist);
+        contentValues.put(COLUMN_SONG_TITLE, songTitle);
+        contentValues.put(COLUMN_SONG_PATH, songPath);
+
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+        sqLiteDatabase.close();
+
+    }
+
+    private ArrayList<Songs> get() {
+        try {
+            final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+            final String getQuery = "SELECT * FROM " + TABLE_NAME;
+            Cursor cursor = sqLiteDatabase.rawQuery(getQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    int songId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                    String songArtist = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SONG_ARTIST));
+                    String songTitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SONG_TITLE));
+                    String songPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SONG_PATH));
+                    songsArrayList.add(new Songs((long)songId, songTitle, songArtist, songPath,(long)0));
+                } while (cursor.moveToNext());
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return songsArrayList;
+
+    }
+
+    private Long ifSongIdExists(int trackId) {
+        int songId =0;
+        try {
+            final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+            final String getQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + trackId;
+            Cursor cursor = sqLiteDatabase.rawQuery(getQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                     songId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+
+                } while (cursor.moveToNext());
+            } else {
+                return (long) 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (long) songId;
     }
 }
