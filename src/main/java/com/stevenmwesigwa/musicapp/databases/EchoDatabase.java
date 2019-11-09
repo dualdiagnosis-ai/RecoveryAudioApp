@@ -112,8 +112,9 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
     }
 
-    private Long ifSongIdExists(int trackId) {
-        int songId =0;
+    private boolean ifSongIdExists(int trackId) {
+        boolean songIdExists =true;
+        int songId = 0;
         try {
             final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
             final String getQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + trackId;
@@ -125,11 +126,12 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
                 } while (cursor.moveToNext());
             } else {
-                return (long) 0;
+                songIdExists = false;
+                return songIdExists;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (long) songId;
+        return songId != 0;
     }
 }
