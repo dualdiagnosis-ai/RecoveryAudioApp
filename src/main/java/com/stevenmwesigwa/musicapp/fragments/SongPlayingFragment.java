@@ -45,33 +45,33 @@ import java.util.concurrent.TimeUnit;
  * A simple {@link Fragment} subclass.
  */
 public class SongPlayingFragment extends Fragment {
-    private Activity activity;
+    public static Activity activity;
     // Controls playback of audio or video files
-    private MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
 
     private RelativeLayout songInformationNowPlaying = null;
-    private TextView songTitleNowPlaying = null;
-    private TextView songArtistNowPlaying = null;
-    private RelativeLayout seekBarLayoutNowPlaying = null;
-    private SeekBar seekBarNowPlaying = null;
-    private TextView startTimeSeekBarNowPlaying = null;
-    private TextView endTimeSeekBarNowPlaying = null;
-    private RelativeLayout controlPanelNowPlaying = null;
-    private ImageButton shuffleButtonNowPlaying = null;
-    private ImageButton previousButtonNowPlaying = null;
-    private ImageButton playPauseButtonNowPlaying = null;
-    private ImageButton nextButtonNowPlaying = null;
-    private ImageButton loopButtonNowPlaying = null;
-    private ImageButton favoriteIconNowPlaying = null;
-    private EchoDatabase echoDatabaseFavorite = null;
+    public static TextView songTitleNowPlaying = null;
+    public static TextView songArtistNowPlaying = null;
+    public static RelativeLayout seekBarLayoutNowPlaying = null;
+    public static SeekBar seekBarNowPlaying = null;
+    public static TextView startTimeSeekBarNowPlaying = null;
+    public static TextView endTimeSeekBarNowPlaying = null;
+    public static RelativeLayout controlPanelNowPlaying = null;
+    public static ImageButton shuffleButtonNowPlaying = null;
+    public static ImageButton previousButtonNowPlaying = null;
+    public static ImageButton playPauseButtonNowPlaying = null;
+    public static ImageButton nextButtonNowPlaying = null;
+    public static ImageButton loopButtonNowPlaying = null;
+    public static ImageButton favoriteIconNowPlaying = null;
+    public static EchoDatabase echoDatabaseFavorite = null;
 
     private AudioVisualization audioVisualization = null;
     private GLAudioVisualizationView glAudioVisualizationView = null;
 
-    private static String MY_PREFS_SHUFFLE = "Shuffle feature";
-    private static String MY_PREFS_LOOP = "Loop feature";
+    public static String MY_PREFS_SHUFFLE = "Shuffle feature";
+    public static String MY_PREFS_LOOP = "Loop feature";
 
-    private Runnable updateSongTime = new Runnable() {
+    public static Runnable updateSongTime = new Runnable() {
         @Override
         public void run() {
             final Handler handler = new Handler();
@@ -84,10 +84,10 @@ public class SongPlayingFragment extends Fragment {
     };
 
 
-    private CurrentSongHelper currentSongHelper = null;
+    public static CurrentSongHelper currentSongHelper = null;
 
-    private Integer currentPosition = null;
-    private ArrayList<Songs> songsList = null;
+    public static Integer currentPosition = null;
+    public static ArrayList<Songs> songsList = null;
 
     public SongPlayingFragment() {
         // Required empty public constructor
@@ -271,7 +271,7 @@ changeFavoriteIconNowPlaying();
      * If song is playing and is among favorite songs
      * change 'favorite icon'
      */
-    private void changeFavoriteIconNowPlaying() {
+    public static void changeFavoriteIconNowPlaying() {
 
         if (echoDatabaseFavorite.ifSongIdExists(currentSongHelper.getSongId().intValue())) {
             favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
@@ -307,7 +307,7 @@ changeFavoriteIconNowPlaying();
         super.onDestroyView();
     }
 
-    private void onSongComplete() {
+    public static void onSongComplete() {
         if (currentSongHelper.isShuffleFeatureEnabled()) {
             playNext("PlayNextLikeNormalShuffle");
             currentSongHelper.setPlaying(true);
@@ -459,7 +459,7 @@ changeFavoriteIconNowPlaying();
         );
     }
 
-    private void playNext(String check) {
+    public static void playNext(String check) {
         if (check.equalsIgnoreCase("PlayNextNormal")) {
             currentPosition++;
         } else if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
@@ -527,12 +527,12 @@ changeFavoriteIconNowPlaying();
 
     }
 
-    private void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
-        this.songTitleNowPlaying.setText(songTitleNowPlaying);
-        this.songArtistNowPlaying.setText(songArtistNowPlaying);
+    public static void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
+        SongPlayingFragment.songTitleNowPlaying.setText(songTitleNowPlaying);
+        SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
     }
 
-    private void processInformation(MediaPlayer mediaPlayer) {
+    public static void processInformation(MediaPlayer mediaPlayer) {
         int finalTime = mediaPlayer.getDuration();
         int startTime = mediaPlayer.getCurrentPosition();
         // Set max seek ar length
