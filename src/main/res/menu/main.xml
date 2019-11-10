@@ -2,8 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/actionSort"
+        android:icon="@drawable/sort_icon"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+    <menu>
+<item android:id="@+id/actionSortRecent"
+    android:title="By recently added" />
+        <item android:id="@+id/actionSorAscending"
+            android:title="By name" />
+
+    </menu>
 </menu>

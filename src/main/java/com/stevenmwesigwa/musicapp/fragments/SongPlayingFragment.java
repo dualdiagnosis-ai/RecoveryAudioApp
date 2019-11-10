@@ -148,6 +148,8 @@ bindShakeListener();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_song_playing, container, false);
+        //Display Menu
+        setHasOptionsMenu(true);
         songInformationNowPlaying = view.findViewById(R.id.songInformationNowPlaying);
         songTitleNowPlaying = view.findViewById(R.id.songTitleNowPlaying);
         seekBarLayoutNowPlaying = view.findViewById(R.id.seekBarLayoutNowPlaying);
@@ -408,6 +410,8 @@ bindShakeListener();
         //Display a certain menu item on a specific screen
         final MenuItem menuItem = menu.findItem(R.id.actionRedirect);
         menuItem.setVisible(true);
+        final MenuItem menuItem2 = menu.findItem(R.id.actionSort);
+        menuItem2.setVisible(false);
     }
 
     /**

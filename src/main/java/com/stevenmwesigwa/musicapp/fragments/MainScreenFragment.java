@@ -4,6 +4,7 @@ package com.stevenmwesigwa.musicapp.fragments;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -28,6 +32,8 @@ import com.stevenmwesigwa.musicapp.Songs;
 import com.stevenmwesigwa.musicapp.adapters.MainScreenAdapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -59,20 +65,96 @@ public class MainScreenFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getSongsList = getSongsFromDevice();
-        mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
+        SharedPreferences sharedPreferencesEdit2 = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE);
+        String actionSortRecent = sharedPreferencesEdit2.getString("action_sort_recent", "false");
+        String actionSortAscending = sharedPreferencesEdit2.getString("action_sort_ascending", "true");
 
-        /**
-         * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
-         */
-        // use a linear layout manager
-        RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager( (Context)  activity);
-        contentMainRecyclerView.setLayoutManager(layoutManager);
-        contentMainRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        /**
-         * Set the adapter to the Recycler View so that the Recycler View will get synced with the
-         * Adapter.
-         */
-        contentMainRecyclerView.setAdapter(mainScreenAdapter);
+
+        if(getSongsList != null) {
+            if(actionSortAscending.equalsIgnoreCase("true") ) {
+                Collections.sort(getSongsList, Songs.sortBySongTItle);
+                mainScreenAdapter.notifyDataSetChanged();
+
+            } else  if(actionSortRecent.equalsIgnoreCase("true") ) {
+                Collections.sort(getSongsList, Songs.sortBySongDateAdded);
+                mainScreenAdapter.notifyDataSetChanged();
+
+            }
+        }
+
+        if(getSongsList == null) {
+visibleLayout.setVisibility(View.INVISIBLE);
+noSongsMainScreen.setVisibility(View.VISIBLE);
+        } else {
+            mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
+
+            /**
+             * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
+             */
+            // use a linear layout manager
+            RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager( (Context)  activity);
+            contentMainRecyclerView.setLayoutManager(layoutManager);
+            contentMainRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            /**
+             * Set the adapter to the Recycler View so that the Recycler View will get synced with the
+             * Adapter.
+             */
+            contentMainRecyclerView.setAdapter(mainScreenAdapter);
+        }
+
+//        bottomBarSetup();
+
+    }
+
+
+    /**
+     * Initialize the contents of the Fragment host's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.  For this method
+     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
+     * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
+     * for more information.
+     *
+     * @param menu     The options menu in which you place your items.
+     * @param inflater
+     * @see #setHasOptionsMenu
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        //Clear previous menu items
+        menu.clear();
+        // Create custom menu
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int switcher = item.getItemId();
+        if(switcher == R.id.actionSorAscending) {
+            SharedPreferences.Editor sharedPreferencesEdit = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
+            sharedPreferencesEdit.putString("action_sort_ascending", "true");
+            sharedPreferencesEdit.putString("action_sort_recent", "false");
+            sharedPreferencesEdit.apply();
+            if(getSongsList != null) {
+                Collections.sort(getSongsList, Songs.sortBySongTItle);
+            }
+            mainScreenAdapter.notifyDataSetChanged();
+            return false;
+        } else if(switcher == R.id.actionSortRecent){
+            SharedPreferences.Editor sharedPreferencesEdit2 = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
+            sharedPreferencesEdit2.putString("action_sort_recent", "true");
+            sharedPreferencesEdit2.putString("action_sort_ascending", "false");
+            sharedPreferencesEdit2.apply();
+            if(getSongsList != null) {
+            Collections.sort(getSongsList, Songs.sortBySongDateAdded);
+            }
+            mainScreenAdapter.notifyDataSetChanged();
+            return false;
+
+        }
+        return false;
     }
 
     @Override
@@ -80,6 +162,8 @@ public class MainScreenFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_screen, container, false);
+        //Display Menu
+        setHasOptionsMenu(true);
         hiddenBottomBarMainScreen = view.findViewById(R.id.hiddenBottomBarMainScreen);
         playPauseButtonMainScreen = view.findViewById(R.id.playPauseButtonMainScreen);
         songTitleMainScreen = view.findViewById(R.id.songTitleMainScreen);

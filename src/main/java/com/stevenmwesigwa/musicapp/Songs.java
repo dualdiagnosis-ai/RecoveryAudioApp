@@ -3,6 +3,8 @@ package com.stevenmwesigwa.musicapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Comparator;
+
 public class Songs implements Parcelable {
     private Long songId;
     private String songTitle;
@@ -97,4 +99,7 @@ public class Songs implements Parcelable {
         songDateAdded = parcel.readLong();
     }
 
+   public static Comparator<Songs> sortBySongTItle =  (Songs o1, Songs o2) -> o1.getSongTitle().compareToIgnoreCase(o2.getSongTitle());
+
+    public static Comparator<Songs> sortBySongDateAdded =  (Songs o1, Songs o2) -> o1.getSongDateAdded().compareTo(o2.getSongDateAdded());
 }
