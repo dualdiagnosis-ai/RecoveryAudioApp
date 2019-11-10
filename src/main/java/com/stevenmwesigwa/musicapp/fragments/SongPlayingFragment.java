@@ -5,9 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.sip.SipSession;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -45,10 +50,20 @@ import java.util.concurrent.TimeUnit;
  * A simple {@link Fragment} subclass.
  */
 public class SongPlayingFragment extends Fragment {
+    private static String My_PREFS_NAME = "ShakeFeature";
+    private Float accelaration = 0f;
+    private Float accelarationCurrent = 0f;
+    private Float accelarationLast = 0f;
     public static Activity activity;
     // Controls playback of audio or video files
     public static MediaPlayer mediaPlayer;
 
+    // Lets you access your device's sensors
+    public static SensorManager sensorManager = null;
+
+    //Enables you receive notifications from the 'Sensor Manager'
+    // when sensor values are changed.
+    public static SensorEventListener sensorEventListener = null;
     private RelativeLayout songInformationNowPlaying = null;
     public static TextView songTitleNowPlaying = null;
     public static TextView songArtistNowPlaying = null;
@@ -93,6 +108,35 @@ public class SongPlayingFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    /**
+     * Called to do initial creation of a fragment.  This is called after
+     * {@link #onAttach(Activity)} and before
+     * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     *
+     * <p>Note that this can be called while the fragment's activity is
+     * still in the process of being created.  As such, you can not rely
+     * on things like the activity's content view hierarchy being initialized
+     * at this point.  If you want to do work once the activity itself is
+     * created, see {@link #onActivityCreated(Bundle)}.
+     *
+     * <p>Any restored child fragments will be created before the base
+     * <code>Fragment.onCreate</code> method returns.</p>
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+        accelaration = 0.0f;
+accelarationCurrent = SensorManager.GRAVITY_EARTH;
+accelarationLast = SensorManager.GRAVITY_EARTH;
+bindShakeListener();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -303,12 +347,20 @@ public class SongPlayingFragment extends Fragment {
     public void onResume() {
         super.onResume();
         audioVisualization.onResume();
+        //Register listener for the sensor manager
+        sensorManager.registerListener(sensorEventListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onPause() {
         audioVisualization.onPause();
         super.onPause();
+        /*
+        * Unregister the Listener
+         */
+        sensorManager.unregisterListener(sensorEventListener);
     }
 
     /* When user leaves screen with audio visualization view,
@@ -564,6 +616,37 @@ public class SongPlayingFragment extends Fragment {
         handler.postDelayed(updateSongTime, 1000);
     }
 
+
+    private void bindShakeListener() {
+sensorEventListener = new SensorEventListener() {
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+final float xFirst  =event.values[0];
+final float ySecond  =event.values[1];
+final float zThird  =event.values[2];
+accelarationLast = accelarationCurrent;
+accelarationCurrent = (float) Math.sqrt(xFirst*xFirst + ySecond*ySecond + zThird*zThird);
+final float delta = accelarationCurrent - accelarationLast;
+accelaration = accelaration * 0.9f + delta;
+
+if(accelaration > 12) {
+    final SharedPreferences sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
+    final boolean isAllowed = sharedPreferencesEditor.getBoolean("feature", false);
+    if(isAllowed) {
+        playNext("PlayNextNormal");
+
+    }
+    }
+
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+};
+    }
 
     public AudioVisualization getAudioVisualization() {
         return audioVisualization;
