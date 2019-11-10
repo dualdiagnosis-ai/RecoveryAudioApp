@@ -22,6 +22,9 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -363,9 +366,79 @@ bindShakeListener();
         sensorManager.unregisterListener(sensorEventListener);
     }
 
+    /**
+     * Initialize the contents of the Fragment host's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.  For this method
+     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
+     * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
+     * for more information.
+     *
+     * @param menu     The options menu in which you place your items.
+     * @param inflater
+     * @see #setHasOptionsMenu
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//Clear previous menu items
+        menu.clear();
+        // Create custom menu
+        inflater.inflate(R.menu.song_playing_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    /**
+     * Prepare the Fragment host's standard options menu to be displayed.  This is
+     * called right before the menu is shown, every time it is shown.  You can
+     * use this method to efficiently enable/disable items or otherwise
+     * dynamically modify the contents.  See
+     * {@link Activity#onPrepareOptionsMenu(Menu) Activity.onPrepareOptionsMenu}
+     * for more information.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     * @see #setHasOptionsMenu
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        //Display a certain menu item on a specific screen
+        final MenuItem menuItem = menu.findItem(R.id.actionRedirect);
+        menuItem.setVisible(true);
+    }
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen (calling the item's Runnable or sending a message to
+     * its Handler as appropriate).  You can use this method for any items
+     * for which you would like to do processing without those other
+     * facilities.
+     *
+     * <p>Derived classes should call through to the base class for it to
+     * perform the default menu handling.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.actionRedirect) {
+activity.onBackPressed();
+return false;
+        }
+        return false;
+
+    }
+
     /* When user leaves screen with audio visualization view,
-     don't forget to free resources and call release() method.
- */
+                 don't forget to free resources and call release() method.
+             */
     @Override
     public void onDestroyView() {
         audioVisualization.release();
