@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
 import com.stevenmwesigwa.musicapp.adapters.FavoriteScreenAdapter;
+import com.stevenmwesigwa.musicapp.databases.EchoDatabase;
 
 import java.util.ArrayList;
 
@@ -39,14 +40,17 @@ import java.util.ArrayList;
  */
 public class FavoriteFragment extends Fragment {
     private Activity activity = null;
-    private ArrayList<Songs> songsArrayList = null;
     private TextView noFavoritesFavFrag = null;
     private RelativeLayout hiddenBottomBarMainScreen = null;
     private TextView songTitleMainScreen = null;
     private ImageButton playPauseButtonMainScreen = null;
     private RecyclerView favoriteRecyclerFavFrag = null;
-    private int trackPosition =0;
+    private int trackPosition = 0;
     public static MediaPlayer mediaPlayerFavFrag = null;
+    private EchoDatabase echoDatabase = null;
+    // Updated lis to be fed into the Adapter
+    private ArrayList<Songs> refreshSongListFavFrag = null;
+    private ArrayList<Songs> getSongListFromDbFavFrag = null;
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -132,33 +136,10 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        songsArrayList = getSongsFromDevice();
+        echoDatabase = new EchoDatabase(activity);
+        displayFavoritesBySearching();
+        bottomBarSetup();
 
-        /*
-         * If 'songsArrayList' is null, make `RecyclerView` disappear
-         * and make 'noFavoritesFavFrag' appear.
-         * Else set up Adapter so that all songs in the database
-         * get displayed on the screen.
-         */
-        if (songsArrayList == null) {
-            favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
-            noFavoritesFavFrag.setVisibility(View.VISIBLE);
-        } else {
-            FavoriteScreenAdapter favoriteScreenAdapter = new FavoriteScreenAdapter(songsArrayList, (Context) activity);
-            /**
-             * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
-             */
-            // use a linear layout manager
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((Context) activity);
-            favoriteRecyclerFavFrag.setLayoutManager(layoutManager);
-            favoriteRecyclerFavFrag.setItemAnimator(new DefaultItemAnimator());
-            favoriteRecyclerFavFrag.setHasFixedSize(true);
-            /**
-             * Set the adapter to the Recycler View so that the Recycler View will get synced with the
-             * Adapter.
-             */
-            favoriteRecyclerFavFrag.setAdapter(favoriteScreenAdapter);
-        }
 
     }
 
@@ -283,8 +264,8 @@ public class FavoriteFragment extends Fragment {
                             .beginTransaction()
                             .replace(R.id.detailsFragment, songPlayingFragment)
                             /*
-                            * Make fragment not to get destroyed and is pushed below the current
-                            *  appearing fragment
+                             * Make fragment not to get destroyed and is pushed below the current
+                             *  appearing fragment
                              */
                             .addToBackStack("SongPlayingFragment")
                             .commit();
@@ -294,9 +275,9 @@ public class FavoriteFragment extends Fragment {
 
         playPauseButtonMainScreen.setOnClickListener(
                 view -> {
-                    if(SongPlayingFragment.mediaPlayer.isPlaying()) {
+                    if (SongPlayingFragment.mediaPlayer.isPlaying()) {
                         SongPlayingFragment.mediaPlayer.pause();
-                       trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
+                        trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
                         playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
                     } else {
                         SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
@@ -306,5 +287,60 @@ public class FavoriteFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void displayFavoritesBySearching() {
+        if (echoDatabase.rowCount() > 0) {
+            refreshSongListFavFrag = new ArrayList<>();
+            getSongListFromDbFavFrag = echoDatabase.get();
+            ArrayList<Songs> getSongListFromDeviceFavFrag = getSongsFromDevice();
+
+            if (getSongListFromDeviceFavFrag != null) {
+                for (int i = 0; i < getSongListFromDeviceFavFrag.size() - 1; i++) {
+                    for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; i++) {
+                        if (getSongListFromDbFavFrag.get(j).getSongId() == getSongListFromDeviceFavFrag.get(i).getSongId()) {
+                            refreshSongListFavFrag.add(getSongListFromDbFavFrag.get(j));
+
+                        }
+
+                    }
+
+                }
+
+            } else {
+
+            }
+            /*
+             * If 'songsArrayList' is null, make `RecyclerView` disappear
+             * and make 'noFavoritesFavFrag' appear.
+             * Else set up Adapter so that all songs in the database
+             * get displayed on the screen.
+             */
+            if (refreshSongListFavFrag == null) {
+                favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
+                noFavoritesFavFrag.setVisibility(View.VISIBLE);
+            } else {
+                FavoriteScreenAdapter favoriteScreenAdapter = new FavoriteScreenAdapter(refreshSongListFavFrag, (Context) activity);
+                /**
+                 * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
+                 */
+                // use a linear layout manager
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((Context) activity);
+                favoriteRecyclerFavFrag.setLayoutManager(layoutManager);
+                favoriteRecyclerFavFrag.setItemAnimator(new DefaultItemAnimator());
+                favoriteRecyclerFavFrag.setHasFixedSize(true);
+                /**
+                 * Set the adapter to the Recycler View so that the Recycler View will get synced with the
+                 * Adapter.
+                 */
+                favoriteRecyclerFavFrag.setAdapter(favoriteScreenAdapter);
+            }
+
+
+        } else {
+            favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
+            noFavoritesFavFrag.setVisibility(View.VISIBLE);
+
+        }
     }
 }

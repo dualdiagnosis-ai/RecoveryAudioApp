@@ -203,15 +203,28 @@ public class SongPlayingFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
         try {
-            mediaPlayer.setDataSource(activity, Uri.parse(songData));
-            mediaPlayer.prepare();
+            Object fromFavBottomBarScreen = getArguments().get("favoriteFragBottomBar");
+            if (fromFavBottomBarScreen != null) {
+                // To maintain the consistency of the instance
+                mediaPlayer = FavoriteFragment.mediaPlayerFavFrag;
+            } else {
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                try {
+                    mediaPlayer.setDataSource(activity, Uri.parse(songData));
+                    mediaPlayer.prepare();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mediaPlayer.start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mediaPlayer.start();
+
+
         processInformation(mediaPlayer);
         if (currentSongHelper.isPlaying()) {
             playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
@@ -264,7 +277,7 @@ public class SongPlayingFragment extends Fragment {
             loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
 //            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
         }
-changeFavoriteIconNowPlaying();
+        changeFavoriteIconNowPlaying();
     }
 
     /*
@@ -353,10 +366,10 @@ changeFavoriteIconNowPlaying();
                     String songPath = currentSongHelper.getSongData();
 
                     /*
-                    * If it is already favorite, then that means
-                    * the user wants it deleted.
+                     * If it is already favorite, then that means
+                     * the user wants it deleted.
                      */
-                    if(echoDatabaseFavorite.ifSongIdExists(songId)) {
+                    if (echoDatabaseFavorite.ifSongIdExists(songId)) {
 
                         favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
                         echoDatabaseFavorite.delete(songId);

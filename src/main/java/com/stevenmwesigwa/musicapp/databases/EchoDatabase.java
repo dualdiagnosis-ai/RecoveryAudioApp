@@ -13,7 +13,7 @@ import com.stevenmwesigwa.musicapp.Songs;
 import java.util.ArrayList;
 
 public class EchoDatabase extends SQLiteOpenHelper {
-    private  ArrayList<Songs> songsArrayList = null;
+    private ArrayList<Songs> songsArrayList = null;
     private Context context = null;
     final static private String DB_NAME = "FavoriteDatabase";
     final static private int DB_VERSION = 1;
@@ -40,7 +40,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
-    public EchoDatabase( Context context) {
+    public EchoDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
     }
@@ -95,7 +95,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
     }
 
-    protected ArrayList<Songs> get() {
+    public ArrayList<Songs> get() {
         try {
             final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
             final String getQuery = "SELECT * FROM " + TABLE_NAME;
@@ -107,7 +107,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
                     String songArtist = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SONG_ARTIST));
                     String songTitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SONG_TITLE));
                     String songPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SONG_PATH));
-                    songsArrayList.add(new Songs((long)songId, songTitle, songArtist, songPath,(long)0));
+                    songsArrayList.add(new Songs((long) songId, songTitle, songArtist, songPath, (long) 0));
                 } while (cursor.moveToNext());
             } else {
                 return null;
@@ -120,7 +120,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
     }
 
     public boolean ifSongIdExists(int trackId) {
-        boolean songIdExists =true;
+        boolean songIdExists = true;
         int songId = 0;
         try {
             final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
@@ -129,7 +129,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
 
             if (cursor.moveToFirst()) {
                 do {
-                     songId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                    songId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
 
                 } while (cursor.moveToNext());
             } else {
@@ -150,6 +150,25 @@ public class EchoDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 
+    public int rowCount() {
+        int totalRowCount = 0;
+        try {
+            final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+            final String getQuery = "SELECT * FROM " + TABLE_NAME;
+            Cursor cursor = sqLiteDatabase.rawQuery(getQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    totalRowCount++;
+                } while (cursor.moveToNext());
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return totalRowCount;
+    }
 
 
 }
