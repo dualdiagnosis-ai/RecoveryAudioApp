@@ -101,6 +101,7 @@ public class FavoriteScreenAdapter extends RecyclerView.Adapter<FavoriteScreenAd
                          * Replace the the already added fragment from MainActivity.java
                          */
                         .replace(R.id.detailsFragment,songPlayingFragment)
+                        .addToBackStack("SongPlayingFragmentFavorite")
                         .commit();
 
             }

@@ -539,6 +539,7 @@ return false;
 
                 view -> {
                     currentSongHelper.setPlaying(true);
+                    playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
                     if (currentSongHelper.isShuffleFeatureEnabled()) {
                         playNext("PlayNextLikeNormalShuffle");
                     } else {

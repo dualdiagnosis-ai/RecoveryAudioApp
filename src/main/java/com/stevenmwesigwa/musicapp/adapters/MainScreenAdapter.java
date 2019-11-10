@@ -109,6 +109,7 @@ songPlayingFragment.setArguments(bundle);
                          * Replace the the already added fragment from MainActivity.java
                          */
                         .replace(R.id.detailsFragment,songPlayingFragment)
+                        .addToBackStack("SongPlayingFragmentMain")
                         .commit();
 
             }
