@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +38,15 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class FavoriteFragment extends Fragment {
-private Activity activity = null;
-private ArrayList<Songs> songsArrayList = null;
-private TextView noFavoritesFavFrag = null;
-private RelativeLayout hiddenBottomBarMainScreen = null;
-private TextView songTitleMainScreen = null;
-private ImageButton playPauseButtonMainScreen = null;
-private RecyclerView favoriteRecyclerFavFrag = null;
+    private Activity activity = null;
+    private ArrayList<Songs> songsArrayList = null;
+    private TextView noFavoritesFavFrag = null;
+    private RelativeLayout hiddenBottomBarMainScreen = null;
+    private TextView songTitleMainScreen = null;
+    private ImageButton playPauseButtonMainScreen = null;
+    private RecyclerView favoriteRecyclerFavFrag = null;
+    private int trackPosition =0;
+    public static MediaPlayer mediaPlayerFavFrag = null;
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -52,7 +57,7 @@ private RecyclerView favoriteRecyclerFavFrag = null;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_favorite, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         noFavoritesFavFrag = view.findViewById(R.id.noFavoritesFavFrag);
         hiddenBottomBarMainScreen = view.findViewById(R.id.hiddenBottomBarMainScreen);
@@ -61,7 +66,7 @@ private RecyclerView favoriteRecyclerFavFrag = null;
         favoriteRecyclerFavFrag = view.findViewById(R.id.favoriteRecyclerFavFrag);
 
 
-return view;
+        return view;
     }
 
     /**
@@ -130,21 +135,21 @@ return view;
         songsArrayList = getSongsFromDevice();
 
         /*
-        * If 'songsArrayList' is null, make `RecyclerView` disappear
-        * and make 'noFavoritesFavFrag' appear.
-        * Else set up Adapter so that all songs in the database
-        * get displayed on the screen.
+         * If 'songsArrayList' is null, make `RecyclerView` disappear
+         * and make 'noFavoritesFavFrag' appear.
+         * Else set up Adapter so that all songs in the database
+         * get displayed on the screen.
          */
-        if(songsArrayList == null) {
-favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
-noFavoritesFavFrag.setVisibility(View.VISIBLE);
+        if (songsArrayList == null) {
+            favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
+            noFavoritesFavFrag.setVisibility(View.VISIBLE);
         } else {
             FavoriteScreenAdapter favoriteScreenAdapter = new FavoriteScreenAdapter(songsArrayList, (Context) activity);
             /**
              * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
              */
             // use a linear layout manager
-            RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager( (Context)  activity);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((Context) activity);
             favoriteRecyclerFavFrag.setLayoutManager(layoutManager);
             favoriteRecyclerFavFrag.setItemAnimator(new DefaultItemAnimator());
             favoriteRecyclerFavFrag.setHasFixedSize(true);
@@ -216,5 +221,90 @@ noFavoritesFavFrag.setVisibility(View.VISIBLE);
         }
 
         return songsList;
+    }
+
+    private void bottomBarSetup() {
+        try {
+            bottomBarClickHandler();
+            songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
+// Change text when song is completed
+            SongPlayingFragment.mediaPlayer.setOnCompletionListener(
+                    view -> {
+
+                        songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
+                        //Change Song
+                        SongPlayingFragment.onSongComplete();
+                    }
+            );
+// Set up visibility of the 'now playing' bottom bar
+            if (SongPlayingFragment.mediaPlayer.isPlaying()) {
+                hiddenBottomBarMainScreen.setVisibility(View.VISIBLE);
+            } else {
+                hiddenBottomBarMainScreen.setVisibility(View.INVISIBLE);
+
+            }
+
+
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    private void bottomBarClickHandler() {
+        hiddenBottomBarMainScreen.setOnClickListener(
+                view -> {
+                    mediaPlayerFavFrag = SongPlayingFragment.mediaPlayer;
+                    /*
+                     *When a user clicks on the bottom bar OR List item in the Fav Frag RecyclerView, they
+                     * get redirected to the "SongPlaying" screen
+                     */
+                    final SongPlayingFragment songPlayingFragment = new SongPlayingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("songArtist", SongPlayingFragment.currentSongHelper.getSongArtist());
+                    bundle.putString("songTitle", SongPlayingFragment.currentSongHelper.getSongTitle());
+                    bundle.putLong("songId", SongPlayingFragment.currentSongHelper.getSongId());
+                    bundle.putString("songData", SongPlayingFragment.currentSongHelper.getSongData());
+                    bundle.putLong("songDateAdded", SongPlayingFragment.currentSongHelper.getSongDateAdded());
+                    bundle.putInt("songPosition", SongPlayingFragment.currentSongHelper.getCurrentPosition());
+                    bundle.putParcelableArrayList("songsList", SongPlayingFragment.songsList);
+
+                    /*
+                     * Let the 'SongPlayingFragment' know that the trigger that has occurred,
+                     * the one that lead to the opening of the "SongPlayingFragment" screen
+                     * is done through this "FavoriteFragment"
+                     */
+                    bundle.putString("favoriteFragBottomBar", "success");
+
+//Link values with the songPlayingFragment
+                    songPlayingFragment.setArguments(bundle);
+
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.detailsFragment, songPlayingFragment)
+                            /*
+                            * Make fragment not to get destroyed and is pushed below the current
+                            *  appearing fragment
+                             */
+                            .addToBackStack("SongPlayingFragment")
+                            .commit();
+
+                }
+        );
+
+        playPauseButtonMainScreen.setOnClickListener(
+                view -> {
+                    if(SongPlayingFragment.mediaPlayer.isPlaying()) {
+                        SongPlayingFragment.mediaPlayer.pause();
+                       trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
+                        playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+                    } else {
+                        SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
+                        // User wants to resume the song
+                        SongPlayingFragment.mediaPlayer.start();
+                        playPauseButtonMainScreen.setBackgroundResource(R.drawable.pause_icon);
+                    }
+                }
+        );
     }
 }
