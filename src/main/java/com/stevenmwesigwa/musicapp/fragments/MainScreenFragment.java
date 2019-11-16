@@ -73,10 +73,12 @@ public class MainScreenFragment extends Fragment {
         if(getSongsList != null) {
             if(actionSortAscending.equalsIgnoreCase("true") ) {
                 Collections.sort(getSongsList, Songs.sortBySongTItle);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
                 mainScreenAdapter.notifyDataSetChanged();
 
             } else  if(actionSortRecent.equalsIgnoreCase("true") ) {
                 Collections.sort(getSongsList, Songs.sortBySongDateAdded);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
                 mainScreenAdapter.notifyDataSetChanged();
 
             }
