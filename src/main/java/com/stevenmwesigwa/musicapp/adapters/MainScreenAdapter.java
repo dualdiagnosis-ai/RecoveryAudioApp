@@ -100,7 +100,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
 songPlayingFragment.setArguments(bundle);
                 /**
                  * Let's begin the transaction
-                 * We will invoke this Adapter through our MainActivity.java file.
+                 * We will invoke this Adapter through our FragmentActivity.java file.
                  */
                 FragmentActivity fragmentActivity = (FragmentActivity) mContext;
                 fragmentActivity.getSupportFragmentManager()
@@ -109,7 +109,7 @@ songPlayingFragment.setArguments(bundle);
                          * Replace the the already added fragment from MainActivity.java
                          */
                         .replace(R.id.detailsFragment,songPlayingFragment)
-                        .addToBackStack("SongPlayingFragmentMain")
+                        .addToBackStack("SongPlayingFragment")
                         .commit();
 
             }
