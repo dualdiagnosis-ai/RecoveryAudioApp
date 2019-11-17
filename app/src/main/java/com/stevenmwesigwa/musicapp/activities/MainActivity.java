@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
         navigationRecyclerView.setAdapter(navigationDrawerAdapter);
         /**
          * Set up the Recycler View to a fixed size
-         * Meaning that we can addd or delete elements from this Recycler View.
-         * This helps   the Recycler View perform better
+         * Meaning that we can add or delete elements from this Recycler View.
+         * This helps the Recycler View perform better
          */
         navigationRecyclerView.setHasFixedSize(true);
     }
