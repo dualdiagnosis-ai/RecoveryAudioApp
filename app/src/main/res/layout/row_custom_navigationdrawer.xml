@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#fff">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
+
     <RelativeLayout
+        android:id="@+id/navdrawerItemContentHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="13dp"
-        android:id="@+id/navdrawerItemContentHolder">
+        android:padding="13dp">
 
-<ImageView
-    tools:src="@drawable/navigation_allsongs"
-    android:layout_width="24dp"
-    android:layout_height="24dp" android:id="@+id/iconNavdrawer"
-    android:layout_marginLeft="13dp" />
+        <ImageView
+            android:id="@+id/iconNavdrawer"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="13dp"
+            tools:src="@drawable/navigation_allsongs" />
+
         <TextView
-            android:layout_width="wrap_content"  android:layout_toRightOf="@+id/iconNavdrawer"
-            android:layout_marginLeft="17dp"  android:textColor="#212121"
-            android:layout_height="wrap_content"  android:id="@+id/textNavdrawer"/>
-<!--To add a separator line between list elements-->
+            android:id="@+id/textNavdrawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:layout_toRightOf="@+id/iconNavdrawer"
+            android:textColor="#212121" />
+        <!--To add a separator line between list elements-->
         <View
-            android:layout_marginRight="17dp"
-            android:background="#eee"
             android:layout_width="match_parent"
-            android:layout_height="0.2dp" />
+            android:layout_height="0.2dp"
+            android:layout_marginRight="17dp"
+            android:background="#eee" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -36,6 +36,8 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class FavoriteFragment extends Fragment {
+    public static MediaPlayer mediaPlayerFavFrag = null;
+    private static EchoDatabase echoDatabase = null;
     private Activity activity = null;
     private TextView noFavoritesFavFrag = null;
     private RelativeLayout hiddenBottomBarMainScreen = null;
@@ -43,8 +45,6 @@ public class FavoriteFragment extends Fragment {
     private ImageButton playPauseButtonMainScreen = null;
     private RecyclerView favoriteRecyclerFavFrag = null;
     private int trackPosition = 0;
-    public static MediaPlayer mediaPlayerFavFrag = null;
-    private static EchoDatabase echoDatabase = null;
     // Updated lis to be fed into the Adapter
     private ArrayList<Songs> refreshSongListFavFrag = null;
     private ArrayList<Songs> getSongListFromDbFavFrag = null;
@@ -200,7 +200,7 @@ public class FavoriteFragment extends Fragment {
         return songsList;
     }
 
-    private  void bottomBarSetup() {
+    private void bottomBarSetup() {
         try {
             bottomBarClickHandler();
             songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
@@ -286,12 +286,12 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void displayFavoritesBySearching() {
-        if ( (echoDatabase !=null) &&  echoDatabase.rowCount() > 0) {
+        if ((echoDatabase != null) && echoDatabase.rowCount() > 0) {
             refreshSongListFavFrag = new ArrayList<>();
             getSongListFromDbFavFrag = echoDatabase.get();
             ArrayList<Songs> getSongListFromDeviceFavFrag = getSongsFromDevice();
 
-            if (getSongListFromDeviceFavFrag != null  && (getSongListFromDbFavFrag != null) )  {
+            if (getSongListFromDeviceFavFrag != null && (getSongListFromDbFavFrag != null)) {
                 for (int i = 0; i < getSongListFromDeviceFavFrag.size() - 1; i++) {
                     for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; i++) {
                         if (getSongListFromDbFavFrag.get(j).getSongId().equals(getSongListFromDeviceFavFrag.get(i).getSongId())) {

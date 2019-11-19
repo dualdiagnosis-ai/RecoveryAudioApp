@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/contentMainScreenFrag"
-    android:clickable="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true">
     <!--    Will contain the Recycler View which will use to display a list of songs-->
     <!--    It will also contain the 'bottom bar' which will get displayed when the song is playing when -->
     <!--    we're on our main screen fragment-->
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
         <!--        Creating the bottom bar-->
-        <include layout="@layout/echo_partial_bottom_bar_fragment"/>
+        <include layout="@layout/echo_partial_bottom_bar_fragment" />
 
     </RelativeLayout>
 

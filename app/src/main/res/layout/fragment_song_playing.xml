@@ -16,30 +16,29 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.cleveroad.audiovisualization.GLAudioVisualizationView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+
+            <com.cleveroad.audiovisualization.GLAudioVisualizationView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/visualizerViewNowPlaying"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:av_bubblesSize="25dp"
-                app:av_wavesColors="@array/rainbow"
-                app:av_bubblesRandomizeSizes="true"
-                app:av_wavesHeight="60dp"
-                app:av_wavesFooterHeight="170dp"
-                app:av_wavesCount="50"
-                app:av_layersCount="4"
                 app:av_backgroundColor="#00032a"
                 app:av_bubblesPerLayer="16"
-                />
+                app:av_bubblesRandomizeSizes="true"
+                app:av_bubblesSize="25dp"
+                app:av_layersCount="4"
+                app:av_wavesColors="@array/rainbow"
+                app:av_wavesCount="50"
+                app:av_wavesFooterHeight="170dp"
+                app:av_wavesHeight="60dp" />
 
             <ImageButton
                 android:id="@+id/favoriteIconNowPlaying"
-                android:layout_alignParentRight="true"
                 android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_alignParentRight="true"
                 android:layout_margin="20dp"
-                android:background="@drawable/white_circle_icon"
-                android:layout_height="64dp"/>
+                android:background="@drawable/white_circle_icon" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -133,6 +132,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="60dp">
+
                 <ImageButton
                     android:id="@+id/shuffleButtonNowPlaying"
                     android:layout_width="60dp"
@@ -163,6 +163,7 @@
                     android:background="@drawable/play_icon"
                     android:minWidth="0dp"
                     android:minHeight="0dp" />
+
                 <ImageButton
                     android:id="@+id/nextButtonNowPlaying"
                     android:layout_width="60dp"
@@ -173,6 +174,7 @@
                     android:background="@drawable/play_next_icon"
                     android:minWidth="0dp"
                     android:minHeight="0dp" />
+
                 <ImageButton
                     android:id="@+id/loopButtonNowPlaying"
                     android:layout_width="60dp"

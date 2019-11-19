@@ -18,7 +18,7 @@ import com.stevenmwesigwa.musicapp.fragments.SongPlayingFragment;
 
 import java.util.ArrayList;
 
-public class FavoriteScreenAdapter extends RecyclerView.Adapter<FavoriteScreenAdapter.FavoriteScreenViewHolder>  {
+public class FavoriteScreenAdapter extends RecyclerView.Adapter<FavoriteScreenAdapter.FavoriteScreenViewHolder> {
     /**
      * Define LayoutInflater
      */
@@ -39,23 +39,6 @@ public class FavoriteScreenAdapter extends RecyclerView.Adapter<FavoriteScreenAd
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-
-    /**
-     * This is where we will initialize our views
-     */
-    public class FavoriteScreenViewHolder extends RecyclerView.ViewHolder {
-        TextView trackTitle;
-        TextView trackArtist;
-        RelativeLayout contentRowSongList;
-
-        public FavoriteScreenViewHolder(View view) {
-            super(view);
-            trackTitle = view.findViewById(R.id.trackTitle);
-            trackArtist = view.findViewById(R.id.trackArtist);
-            contentRowSongList = view.findViewById(R.id.contentRowSongList);
-
-        }
-    }
 
     @NonNull
     @Override
@@ -100,7 +83,7 @@ public class FavoriteScreenAdapter extends RecyclerView.Adapter<FavoriteScreenAd
                         /**
                          * Replace the the already added fragment from MainActivity.java
                          */
-                        .replace(R.id.detailsFragment,songPlayingFragment)
+                        .replace(R.id.detailsFragment, songPlayingFragment)
                         .addToBackStack("SongPlayingFragmentFavorite")
                         .commit();
 
@@ -111,13 +94,30 @@ public class FavoriteScreenAdapter extends RecyclerView.Adapter<FavoriteScreenAd
     @Override
     public int getItemCount() {
 
-        if(mSongsList == null) {
+        if (mSongsList == null) {
 
             return 0;
         } else {
             return mSongsList.size();
         }
 
+    }
+
+    /**
+     * This is where we will initialize our views
+     */
+    public class FavoriteScreenViewHolder extends RecyclerView.ViewHolder {
+        TextView trackTitle;
+        TextView trackArtist;
+        RelativeLayout contentRowSongList;
+
+        public FavoriteScreenViewHolder(View view) {
+            super(view);
+            trackTitle = view.findViewById(R.id.trackTitle);
+            trackArtist = view.findViewById(R.id.trackArtist);
+            contentRowSongList = view.findViewById(R.id.contentRowSongList);
+
+        }
     }
 
 

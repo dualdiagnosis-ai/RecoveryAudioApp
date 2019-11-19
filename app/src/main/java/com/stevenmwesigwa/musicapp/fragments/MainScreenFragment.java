@@ -8,14 +8,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,14 +19,19 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
 import com.stevenmwesigwa.musicapp.adapters.MainScreenAdapter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 
 /**
@@ -51,7 +48,7 @@ public class MainScreenFragment extends Fragment {
     RecyclerView contentMainRecyclerView = null;
     // Holds the 'context'
     Activity activity = null;
-//Instantiate MainScreenAdapter
+    //Instantiate MainScreenAdapter
     MainScreenAdapter mainScreenAdapter = null;
 
     ArrayList<Songs> getSongsList = null;
@@ -70,31 +67,31 @@ public class MainScreenFragment extends Fragment {
         String actionSortAscending = sharedPreferencesEdit2.getString("action_sort_ascending", "true");
         bottomBarSetup();
 
-        if(getSongsList != null) {
-            if(actionSortAscending.equalsIgnoreCase("true") ) {
+        if (getSongsList != null) {
+            if (actionSortAscending.equalsIgnoreCase("true")) {
                 Collections.sort(getSongsList, Songs.sortBySongTItle);
-                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context) activity);
                 mainScreenAdapter.notifyDataSetChanged();
 
-            } else  if(actionSortRecent.equalsIgnoreCase("true") ) {
+            } else if (actionSortRecent.equalsIgnoreCase("true")) {
                 Collections.sort(getSongsList, Songs.sortBySongDateAdded);
-                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context) activity);
                 mainScreenAdapter.notifyDataSetChanged();
 
             }
         }
 
-        if(getSongsList == null) {
-visibleLayout.setVisibility(View.INVISIBLE);
-noSongsMainScreen.setVisibility(View.VISIBLE);
+        if (getSongsList == null) {
+            visibleLayout.setVisibility(View.INVISIBLE);
+            noSongsMainScreen.setVisibility(View.VISIBLE);
         } else {
-            mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context)  activity);
+            mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context) activity);
 
             /**
              * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
              */
             // use a linear layout manager
-            RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager( (Context)  activity);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((Context) activity);
             contentMainRecyclerView.setLayoutManager(layoutManager);
             contentMainRecyclerView.setItemAnimator(new DefaultItemAnimator());
             /**
@@ -132,23 +129,23 @@ noSongsMainScreen.setVisibility(View.VISIBLE);
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int switcher = item.getItemId();
-        if(switcher == R.id.actionSorAscending) {
+        if (switcher == R.id.actionSorAscending) {
             SharedPreferences.Editor sharedPreferencesEdit = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
             sharedPreferencesEdit.putString("action_sort_ascending", "true");
             sharedPreferencesEdit.putString("action_sort_recent", "false");
             sharedPreferencesEdit.apply();
-            if(getSongsList != null) {
+            if (getSongsList != null) {
                 Collections.sort(getSongsList, Songs.sortBySongTItle);
             }
             mainScreenAdapter.notifyDataSetChanged();
             return false;
-        } else if(switcher == R.id.actionSortRecent){
+        } else if (switcher == R.id.actionSortRecent) {
             SharedPreferences.Editor sharedPreferencesEdit2 = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
             sharedPreferencesEdit2.putString("action_sort_recent", "true");
             sharedPreferencesEdit2.putString("action_sort_ascending", "false");
             sharedPreferencesEdit2.apply();
-            if(getSongsList != null) {
-            Collections.sort(getSongsList, Songs.sortBySongDateAdded);
+            if (getSongsList != null) {
+                Collections.sort(getSongsList, Songs.sortBySongDateAdded);
             }
             mainScreenAdapter.notifyDataSetChanged();
             return false;
@@ -238,7 +235,7 @@ noSongsMainScreen.setVisibility(View.VISIBLE);
         return songsList;
     }
 
-    private  void bottomBarSetup() {
+    private void bottomBarSetup() {
         try {
             songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
 // Change text when song is completed

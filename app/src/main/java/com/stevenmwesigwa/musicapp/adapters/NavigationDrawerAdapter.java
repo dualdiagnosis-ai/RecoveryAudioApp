@@ -1,8 +1,6 @@
 package com.stevenmwesigwa.musicapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,23 +44,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
 
-    /**
-     * This is where we will initialize our views
-     */
-    public class NavViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
-        ImageView imageView;
-        RelativeLayout relativeLayout;
-
-        public NavViewHolder(View view) {
-            super(view);
-            textView = view.findViewById(R.id.textNavdrawer);
-            imageView = view.findViewById(R.id.iconNavdrawer);
-            relativeLayout = view.findViewById(R.id.navdrawerItemContentHolder);
-
-        }
-    }
-
     @NonNull
     @Override
     public NavigationDrawerAdapter.NavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -91,11 +72,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                     MainActivity mainActivity = (MainActivity) mContext;
                     mainActivity.getSupportFragmentManager()
                             .beginTransaction()
-                    /**
-                     * Replace the the already added fragment from MainActivity.java
-                     */
-                    .replace(R.id.detailsFragment,mainScreenFragment)
-                    .commit();
+                            /**
+                             * Replace the the already added fragment from MainActivity.java
+                             */
+                            .replace(R.id.detailsFragment, mainScreenFragment)
+                            .commit();
                 } else if (position == 1) {
                     final FavoriteFragment favoriteFragment = new FavoriteFragment();
                     /**
@@ -108,9 +89,9 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                             /**
                              * Replace the the already added fragment from MainActivity.java
                              */
-                            .replace(R.id.detailsFragment,favoriteFragment)
+                            .replace(R.id.detailsFragment, favoriteFragment)
                             .commit();
-                }  else if (position == 2) {
+                } else if (position == 2) {
                     final SettingsFragment settingsFragment = new SettingsFragment();
                     /**
                      * Let's begin the transaction
@@ -122,7 +103,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                             /**
                              * Replace the the already added fragment from MainActivity.java
                              */
-                            .replace(R.id.detailsFragment,settingsFragment)
+                            .replace(R.id.detailsFragment, settingsFragment)
                             .commit();
                 } else {
                     final AboutUsFragment aboutUsFragment = new AboutUsFragment();
@@ -136,7 +117,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
                             /**
                              * Replace the the already added fragment from MainActivity.java
                              */
-                            .replace(R.id.detailsFragment,aboutUsFragment)
+                            .replace(R.id.detailsFragment, aboutUsFragment)
                             .commit();
                 }
                 /**
@@ -150,5 +131,22 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public int getItemCount() {
         return mContentList.size();
+    }
+
+    /**
+     * This is where we will initialize our views
+     */
+    public class NavViewHolder extends RecyclerView.ViewHolder {
+        TextView textView;
+        ImageView imageView;
+        RelativeLayout relativeLayout;
+
+        public NavViewHolder(View view) {
+            super(view);
+            textView = view.findViewById(R.id.textNavdrawer);
+            imageView = view.findViewById(R.id.iconNavdrawer);
+            relativeLayout = view.findViewById(R.id.navdrawerItemContentHolder);
+
+        }
     }
 }

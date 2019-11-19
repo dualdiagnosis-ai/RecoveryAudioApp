@@ -1,23 +1,19 @@
 package com.stevenmwesigwa.musicapp.activities;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.adapters.NavigationDrawerAdapter;
 import com.stevenmwesigwa.musicapp.fragments.MainScreenFragment;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     public static DrawerLayout drawerLayout = null;
 
 
-    private int[] imagesForNavigationDrawer = {R.drawable.navigation_allsongs, R.drawable.navigation_favorites, R.drawable.navigation_settings, R.drawable.navigation_aboutus };;
+    private int[] imagesForNavigationDrawer = {R.drawable.navigation_allsongs, R.drawable.navigation_favorites, R.drawable.navigation_settings, R.drawable.navigation_aboutus};
+    ;
 
     /**
      * navigationdrawer icons list
@@ -56,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Set up the Tool bar / Action bar / App bar
          */
-       final Toolbar toolbar = findViewById(R.id.toolBar);
+        final Toolbar toolbar = findViewById(R.id.toolBar);
         /**
          * Set toolbar as the default toolbar
          */
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         this.getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.detailsFragment, mainScreenFragment, "MainScreenFragment")
-        .commit();
+                .commit();
 
         /**
          * Instantiate the NavigationDrawerAdapter
@@ -118,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Define Recycler View
          */
-       RecyclerView navigationRecyclerView = findViewById(R.id.navigationRecyclerView);
+        RecyclerView navigationRecyclerView = findViewById(R.id.navigationRecyclerView);
         /**
          * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
          */
         // use a linear layout manager
-        RecyclerView.LayoutManager  layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         navigationRecyclerView.setLayoutManager(layoutManager);
         navigationRecyclerView.setItemAnimator(new DefaultItemAnimator());
         /**

@@ -6,6 +6,20 @@ import android.os.Parcelable;
 import java.util.Comparator;
 
 public class Songs implements Parcelable {
+    public static final Parcelable.Creator<Songs> CREATOR
+            = new Parcelable.Creator<Songs>() {
+        @Override
+        public Songs createFromParcel(Parcel parcel) {
+            return new Songs(parcel);
+        }
+
+        @Override
+        public Songs[] newArray(int size) {
+            return new Songs[size];
+        }
+    };
+    public static Comparator<Songs> sortBySongTItle = (Songs o1, Songs o2) -> o1.getSongTitle().compareToIgnoreCase(o2.getSongTitle());
+    public static Comparator<Songs> sortBySongDateAdded = (Songs o1, Songs o2) -> o1.getSongDateAdded().compareTo(o2.getSongDateAdded());
     private Long songId;
     private String songTitle;
     private String songArtist;
@@ -18,6 +32,18 @@ public class Songs implements Parcelable {
         this.songArtist = songArtist;
         this.songData = songData;
         this.songDateAdded = songDateAdded;
+    }
+
+    private Songs(Parcel parcel) {
+        songId = parcel.readLong();
+        songTitle = parcel.readString();
+        songArtist = parcel.readString();
+        songData = parcel.readString();
+        songDateAdded = parcel.readLong();
+    }
+
+    public static Creator<Songs> getCREATOR() {
+        return CREATOR;
     }
 
     public Long getSongId() {
@@ -69,37 +95,8 @@ public class Songs implements Parcelable {
         parcel.writeLong(songDateAdded);
     }
 
-    public static final Parcelable.Creator<Songs> CREATOR
-            = new Parcelable.Creator<Songs>() {
-        @Override
-        public Songs createFromParcel(Parcel parcel) {
-            return new Songs(parcel);
-        }
-
-        @Override
-        public Songs[] newArray(int size) {
-            return new Songs[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
     }
-
-    public static Creator<Songs> getCREATOR() {
-        return CREATOR;
-    }
-
-    private Songs(Parcel parcel) {
-        songId = parcel.readLong();
-        songTitle = parcel.readString();
-        songArtist = parcel.readString();
-        songData = parcel.readString();
-        songDateAdded = parcel.readLong();
-    }
-
-   public static Comparator<Songs> sortBySongTItle =  (Songs o1, Songs o2) -> o1.getSongTitle().compareToIgnoreCase(o2.getSongTitle());
-
-    public static Comparator<Songs> sortBySongDateAdded =  (Songs o1, Songs o2) -> o1.getSongDateAdded().compareTo(o2.getSongDateAdded());
 }

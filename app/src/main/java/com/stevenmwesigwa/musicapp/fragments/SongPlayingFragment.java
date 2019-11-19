@@ -3,7 +3,6 @@ package com.stevenmwesigwa.musicapp.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,14 +11,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.net.sip.SipSession;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,12 +19,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.cleveroad.audiovisualization.AudioVisualization;
 import com.cleveroad.audiovisualization.DbmHandler;
@@ -53,21 +49,14 @@ import java.util.concurrent.TimeUnit;
  * A simple {@link Fragment} subclass.
  */
 public class SongPlayingFragment extends Fragment {
-    private static String My_PREFS_NAME = "ShakeFeature";
-    private Float accelaration = 0f;
-    private Float accelarationCurrent = 0f;
-    private Float accelarationLast = 0f;
     public static Activity activity;
     // Controls playback of audio or video files
     public static MediaPlayer mediaPlayer;
-
     // Lets you access your device's sensors
     public static SensorManager sensorManager = null;
-
     //Enables you receive notifications from the 'Sensor Manager'
     // when sensor values are changed.
     public static SensorEventListener sensorEventListener = null;
-    private RelativeLayout songInformationNowPlaying = null;
     public static TextView songTitleNowPlaying = null;
     public static TextView songArtistNowPlaying = null;
     public static RelativeLayout seekBarLayoutNowPlaying = null;
@@ -82,13 +71,8 @@ public class SongPlayingFragment extends Fragment {
     public static ImageButton loopButtonNowPlaying = null;
     public static ImageButton favoriteIconNowPlaying = null;
     public static EchoDatabase echoDatabaseFavorite = null;
-
-    private AudioVisualization audioVisualization = null;
-    private GLAudioVisualizationView glAudioVisualizationView = null;
-
     public static String MY_PREFS_SHUFFLE = "Shuffle feature";
     public static String MY_PREFS_LOOP = "Loop feature";
-
     public static Runnable updateSongTime = new Runnable() {
         @Override
         public void run() {
@@ -100,17 +84,126 @@ public class SongPlayingFragment extends Fragment {
             handler.postDelayed(this, 1000);
         }
     };
-
-
-    public static CurrentSongHelper currentSongHelper = null;
-
+    public static CurrentSongHelper currentSongHelper = new CurrentSongHelper();
     public static Integer currentPosition = null;
     public static ArrayList<Songs> songsList = null;
+    private static String My_PREFS_NAME = "ShakeFeature";
+    private Float accelaration = 0f;
+    private Float accelarationCurrent = 0f;
+    private Float accelarationLast = 0f;
+    private RelativeLayout songInformationNowPlaying = null;
+    private AudioVisualization audioVisualization = null;
+    private GLAudioVisualizationView glAudioVisualizationView = null;
 
     public SongPlayingFragment() {
         // Required empty public constructor
     }
 
+    /*
+     * If song is playing and is among favorite songs
+     * change 'favorite icon'
+     */
+    public static void changeFavoriteIconNowPlaying() {
+
+        if (echoDatabaseFavorite.ifSongIdExists(currentSongHelper.getSongId().intValue())) {
+            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
+        } else {
+            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
+        }
+
+    }
+
+    public static void onSongComplete() {
+        if (currentSongHelper.isShuffleFeatureEnabled()) {
+            playNext("PlayNextLikeNormalShuffle");
+            currentSongHelper.setPlaying(true);
+        } else {
+            if (currentSongHelper.isLoopFeatureEnabled()) {
+                currentSongHelper.setPlaying(true);
+                Songs nextSong = songsList.get(currentPosition);
+                currentSongHelper.setSongData(nextSong.getSongData());
+                currentSongHelper.setSongArtist(nextSong.getSongArtist());
+                currentSongHelper.setSongId(nextSong.getSongId());
+                currentSongHelper.setSongTitle(nextSong.getSongTitle());
+                currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
+                currentSongHelper.setCurrentPosition(currentPosition);
+                updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
+
+                mediaPlayer.reset();
+
+                try {
+                    mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                    processInformation(mediaPlayer);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                playNext("PlayNextNormal");
+                currentSongHelper.setPlaying(true);
+            }
+
+            changeFavoriteIconNowPlaying();
+        }
+    }
+
+    public static void playNext(String check) {
+        if (check.equalsIgnoreCase("PlayNextNormal")) {
+            currentPosition++;
+        } else if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
+            Random random = new Random();
+            currentPosition = random.nextInt(songsList.size() + 1);
+
+        } else if (currentPosition == songsList.size()) {
+            currentPosition = 0;
+
+        }
+        currentSongHelper.setLoopFeatureEnabled(false);
+        Songs nextSong = songsList.get(currentPosition);
+        currentSongHelper.setSongData(nextSong.getSongData());
+        currentSongHelper.setSongArtist(nextSong.getSongArtist());
+        currentSongHelper.setSongId(nextSong.getSongId());
+        currentSongHelper.setSongTitle(nextSong.getSongTitle());
+        currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
+        currentSongHelper.setCurrentPosition(currentPosition);
+        updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            processInformation(mediaPlayer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        changeFavoriteIconNowPlaying();
+    }
+
+    public static void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
+        SongPlayingFragment.songTitleNowPlaying.setText(songTitleNowPlaying);
+        SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
+    }
+
+    public static void processInformation(MediaPlayer mediaPlayer) {
+        int finalTime = mediaPlayer.getDuration();
+        int startTime = mediaPlayer.getCurrentPosition();
+        // Set max seek ar length
+        seekBarNowPlaying.setMax(finalTime);
+        startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
+                TimeUnit.MILLISECONDS.toMinutes(startTime),
+                TimeUnit.MILLISECONDS.toSeconds(startTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime))));
+
+        endTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
+                TimeUnit.MILLISECONDS.toMinutes(finalTime),
+                TimeUnit.MILLISECONDS.toSeconds(finalTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
+
+
+        seekBarNowPlaying.setProgress(startTime);
+        final Handler handler = new Handler();
+        handler.postDelayed(updateSongTime, 1000);
+    }
 
     /**
      * Called to do initial creation of a fragment.  This is called after
@@ -135,9 +228,9 @@ public class SongPlayingFragment extends Fragment {
 
         sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         accelaration = 0.0f;
-accelarationCurrent = SensorManager.GRAVITY_EARTH;
-accelarationLast = SensorManager.GRAVITY_EARTH;
-bindShakeListener();
+        accelarationCurrent = SensorManager.GRAVITY_EARTH;
+        accelarationLast = SensorManager.GRAVITY_EARTH;
+        bindShakeListener();
 
     }
 
@@ -330,20 +423,6 @@ bindShakeListener();
     }
 
     /*
-     * If song is playing and is among favorite songs
-     * change 'favorite icon'
-     */
-    public static void changeFavoriteIconNowPlaying() {
-
-        if (echoDatabaseFavorite.ifSongIdExists(currentSongHelper.getSongId().intValue())) {
-            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
-        } else {
-            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
-        }
-
-    }
-
-    /*
         You must always call onPause method to pause visualization
         and stop wasting CPU resources for computations in vain.
         As soon as your view appears in sight of user, call onResume.
@@ -363,7 +442,7 @@ bindShakeListener();
         audioVisualization.onPause();
         super.onPause();
         /*
-        * Unregister the Listener
+         * Unregister the Listener
          */
         sensorManager.unregisterListener(sensorEventListener);
     }
@@ -430,9 +509,9 @@ bindShakeListener();
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.actionRedirect) {
-activity.onBackPressed();
-return false;
+        if (item.getItemId() == R.id.actionRedirect) {
+            activity.onBackPressed();
+            return false;
         }
         return false;
 
@@ -445,41 +524,6 @@ return false;
     public void onDestroyView() {
         audioVisualization.release();
         super.onDestroyView();
-    }
-
-    public static void onSongComplete() {
-        if (currentSongHelper.isShuffleFeatureEnabled()) {
-            playNext("PlayNextLikeNormalShuffle");
-            currentSongHelper.setPlaying(true);
-        } else {
-            if (currentSongHelper.isLoopFeatureEnabled()) {
-                currentSongHelper.setPlaying(true);
-                Songs nextSong = songsList.get(currentPosition);
-                currentSongHelper.setSongData(nextSong.getSongData());
-                currentSongHelper.setSongArtist(nextSong.getSongArtist());
-                currentSongHelper.setSongId(nextSong.getSongId());
-                currentSongHelper.setSongTitle(nextSong.getSongTitle());
-                currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
-                currentSongHelper.setCurrentPosition(currentPosition);
-                updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-
-                mediaPlayer.reset();
-
-                try {
-                    mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    processInformation(mediaPlayer);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                playNext("PlayNextNormal");
-                currentSongHelper.setPlaying(true);
-            }
-
-            changeFavoriteIconNowPlaying();
-        }
     }
 
     private void clickHandler() {
@@ -600,39 +644,6 @@ return false;
         );
     }
 
-    public static void playNext(String check) {
-        if (check.equalsIgnoreCase("PlayNextNormal")) {
-            currentPosition++;
-        } else if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
-            Random random = new Random();
-            currentPosition = random.nextInt(songsList.size() + 1);
-
-        } else if (currentPosition == songsList.size()) {
-            currentPosition = 0;
-
-        }
-        currentSongHelper.setLoopFeatureEnabled(false);
-        Songs nextSong = songsList.get(currentPosition);
-        currentSongHelper.setSongData(nextSong.getSongData());
-        currentSongHelper.setSongArtist(nextSong.getSongArtist());
-        currentSongHelper.setSongId(nextSong.getSongId());
-        currentSongHelper.setSongTitle(nextSong.getSongTitle());
-        currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
-        currentSongHelper.setCurrentPosition(currentPosition);
-        updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-        mediaPlayer.reset();
-        try {
-            mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            processInformation(mediaPlayer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        changeFavoriteIconNowPlaying();
-    }
-
     private void playPrevious() {
         currentPosition--;
         if (currentPosition == -1) {
@@ -668,60 +679,35 @@ return false;
 
     }
 
-    public static void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
-        SongPlayingFragment.songTitleNowPlaying.setText(songTitleNowPlaying);
-        SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
-    }
-
-    public static void processInformation(MediaPlayer mediaPlayer) {
-        int finalTime = mediaPlayer.getDuration();
-        int startTime = mediaPlayer.getCurrentPosition();
-        // Set max seek ar length
-        seekBarNowPlaying.setMax(finalTime);
-        startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
-                TimeUnit.MILLISECONDS.toMinutes(startTime),
-                TimeUnit.MILLISECONDS.toSeconds(startTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime))));
-
-        endTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
-                TimeUnit.MILLISECONDS.toMinutes(finalTime),
-                TimeUnit.MILLISECONDS.toSeconds(finalTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
-
-
-        seekBarNowPlaying.setProgress(startTime);
-        final Handler handler = new Handler();
-        handler.postDelayed(updateSongTime, 1000);
-    }
-
-
     private void bindShakeListener() {
-sensorEventListener = new SensorEventListener() {
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-final float xFirst  =event.values[0];
-final float ySecond  =event.values[1];
-final float zThird  =event.values[2];
-accelarationLast = accelarationCurrent;
-accelarationCurrent = (float) Math.sqrt(xFirst*xFirst + ySecond*ySecond + zThird*zThird);
-final float delta = accelarationCurrent - accelarationLast;
-accelaration = accelaration * 0.9f + delta;
+        sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                final float xFirst = event.values[0];
+                final float ySecond = event.values[1];
+                final float zThird = event.values[2];
+                accelarationLast = accelarationCurrent;
+                accelarationCurrent = (float) Math.sqrt(xFirst * xFirst + ySecond * ySecond + zThird * zThird);
+                final float delta = accelarationCurrent - accelarationLast;
+                accelaration = accelaration * 0.9f + delta;
 
-if(accelaration > 12) {
-    final SharedPreferences sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
-    final boolean isAllowed = sharedPreferencesEditor.getBoolean("feature", false);
-    if(isAllowed) {
-        playNext("PlayNextNormal");
+                if (accelaration > 12) {
+                    final SharedPreferences sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
+                    final boolean isAllowed = sharedPreferencesEditor.getBoolean("feature", false);
+                    if (isAllowed) {
+                        playNext("PlayNextNormal");
 
-    }
-    }
+                    }
+                }
 
 
-    }
+            }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
-};
+            }
+        };
     }
 
     public AudioVisualization getAudioVisualization() {

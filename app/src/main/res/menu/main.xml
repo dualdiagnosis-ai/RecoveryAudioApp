@@ -8,9 +8,11 @@
         android:title="@string/action_settings"
         app:showAsAction="always" />
 
-<item android:id="@+id/actionSortRecent"
-    android:title="By recently added" />
- <item android:id="@+id/actionSorAscending"
-            android:title="By name" />
+    <item
+        android:id="@+id/actionSortRecent"
+        android:title="By recently added" />
+    <item
+        android:id="@+id/actionSorAscending"
+        android:title="By name" />
 
 </menu>

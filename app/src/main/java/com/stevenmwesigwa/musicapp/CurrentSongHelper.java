@@ -10,7 +10,9 @@ public class CurrentSongHelper {
     private int trackPosition;
     private Boolean isPlaying = false;
     private Boolean isLoopFeatureEnabled = false;
-    private  Boolean isShuffleFeatureEnabled = false;
+    private Boolean isShuffleFeatureEnabled = false;
+
+
 
     public String getSongData() {
         return songData;

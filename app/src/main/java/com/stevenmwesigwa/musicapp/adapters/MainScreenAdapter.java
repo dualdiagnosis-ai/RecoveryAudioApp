@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -16,17 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
-import com.stevenmwesigwa.musicapp.activities.MainActivity;
-import com.stevenmwesigwa.musicapp.fragments.AboutUsFragment;
-import com.stevenmwesigwa.musicapp.fragments.FavoriteFragment;
-import com.stevenmwesigwa.musicapp.fragments.MainScreenFragment;
-import com.stevenmwesigwa.musicapp.fragments.SettingsFragment;
 import com.stevenmwesigwa.musicapp.fragments.SongPlayingFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.MainScreenViewHolder>  {
+public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.MainScreenViewHolder> {
     /**
      * Define LayoutInflater
      */
@@ -47,23 +39,6 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-
-    /**
-     * This is where we will initialize our views
-     */
-    public class MainScreenViewHolder extends RecyclerView.ViewHolder {
-        TextView trackTitle;
-        TextView trackArtist;
-        RelativeLayout contentRowSongList;
-
-        public MainScreenViewHolder(View view) {
-            super(view);
-            trackTitle = view.findViewById(R.id.trackTitle);
-            trackArtist = view.findViewById(R.id.trackArtist);
-            contentRowSongList = view.findViewById(R.id.contentRowSongList);
-
-        }
-    }
 
     @NonNull
     @Override
@@ -97,7 +72,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
                 bundle.putParcelableArrayList("songsList", mSongsList);
 
 //Link values with the songPlayingFragment
-songPlayingFragment.setArguments(bundle);
+                songPlayingFragment.setArguments(bundle);
                 /**
                  * Let's begin the transaction
                  * We will invoke this Adapter through our FragmentActivity.java file.
@@ -108,7 +83,7 @@ songPlayingFragment.setArguments(bundle);
                         /**
                          * Replace the the already added fragment from MainActivity.java
                          */
-                        .replace(R.id.detailsFragment,songPlayingFragment)
+                        .replace(R.id.detailsFragment, songPlayingFragment)
                         .addToBackStack("SongPlayingFragment")
                         .commit();
 
@@ -119,13 +94,30 @@ songPlayingFragment.setArguments(bundle);
     @Override
     public int getItemCount() {
 
-        if(mSongsList == null) {
+        if (mSongsList == null) {
 
             return 0;
         } else {
             return mSongsList.size();
         }
 
+    }
+
+    /**
+     * This is where we will initialize our views
+     */
+    public class MainScreenViewHolder extends RecyclerView.ViewHolder {
+        TextView trackTitle;
+        TextView trackArtist;
+        RelativeLayout contentRowSongList;
+
+        public MainScreenViewHolder(View view) {
+            super(view);
+            trackTitle = view.findViewById(R.id.trackTitle);
+            trackArtist = view.findViewById(R.id.trackArtist);
+            contentRowSongList = view.findViewById(R.id.contentRowSongList);
+
+        }
     }
 
 

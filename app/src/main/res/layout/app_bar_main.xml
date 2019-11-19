@@ -5,35 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/appBarLayout"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolBar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
 
-    <!--   Define / set up the 'default fragment' class that is going to get launched inside our
-    xml file i.e class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"-->
-<fragment
-    class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"
-    android:layout_width="match_parent"
-    android:layout_below="@id/appBarLayout"
-    android:id="@+id/detailsFragment"
-    android:layout_height="match_parent"></fragment>
+        <!--   Define / set up the 'default fragment' class that is going to get launched inside our
+        xml file i.e class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"-->
+        <fragment
+            android:id="@+id/detailsFragment"
+            class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/appBarLayout"></fragment>
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

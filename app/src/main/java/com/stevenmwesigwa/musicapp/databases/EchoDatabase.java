@@ -13,8 +13,6 @@ import com.stevenmwesigwa.musicapp.Songs;
 import java.util.ArrayList;
 
 public class EchoDatabase extends SQLiteOpenHelper {
-    private ArrayList<Songs> songsArrayList = null;
-    private Context context = null;
     final static private String DB_NAME = "FavoriteDatabase";
     final static private int DB_VERSION = 1;
     final static private String TABLE_NAME = "FavoriteTable";
@@ -22,6 +20,8 @@ public class EchoDatabase extends SQLiteOpenHelper {
     final static private String COLUMN_SONG_TITLE = "SongTitle";
     final static private String COLUMN_SONG_ARTIST = "SongArtist";
     final static private String COLUMN_SONG_PATH = "SongPath";
+    private ArrayList<Songs> songsArrayList = null;
+    private Context context = null;
 
     /**
      * Create a helper object to create, open, and/or manage a database.

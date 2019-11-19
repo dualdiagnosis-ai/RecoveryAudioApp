@@ -5,17 +5,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.stevenmwesigwa.musicapp.R;
 
@@ -24,8 +23,8 @@ import com.stevenmwesigwa.musicapp.R;
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends Fragment {
-    private Activity activity = null;
     private static String My_PREFS_NAME = "ShakeFeature";
+    private Activity activity = null;
     private Switch switchShakeSettingFrag = null;
 
 
@@ -111,29 +110,29 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       final SharedPreferences preferenceSettingFrag = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
-       final boolean isAllowedFeatureSettingFrag = preferenceSettingFrag.getBoolean("feature", false);
-       if(isAllowedFeatureSettingFrag) {
-switchShakeSettingFrag.setChecked(true);
-       } else {
-           switchShakeSettingFrag.setChecked(true);
+        final SharedPreferences preferenceSettingFrag = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
+        final boolean isAllowedFeatureSettingFrag = preferenceSettingFrag.getBoolean("feature", false);
+        if (isAllowedFeatureSettingFrag) {
+            switchShakeSettingFrag.setChecked(true);
+        } else {
+            switchShakeSettingFrag.setChecked(true);
 
-       }
+        }
 
-       switchShakeSettingFrag.setOnCheckedChangeListener(
-               (CompoundButton buttonView, boolean isChecked) -> {
-if(isChecked) {
-    final SharedPreferences.Editor sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE).edit();
-    sharedPreferencesEditor.putBoolean("feature", true);
-    sharedPreferencesEditor.apply();
-} else {
-    final SharedPreferences.Editor sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE).edit();
-    sharedPreferencesEditor.putBoolean("feature", false);
-    sharedPreferencesEditor.apply();
+        switchShakeSettingFrag.setOnCheckedChangeListener(
+                (CompoundButton buttonView, boolean isChecked) -> {
+                    if (isChecked) {
+                        final SharedPreferences.Editor sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE).edit();
+                        sharedPreferencesEditor.putBoolean("feature", true);
+                        sharedPreferencesEditor.apply();
+                    } else {
+                        final SharedPreferences.Editor sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE).edit();
+                        sharedPreferencesEditor.putBoolean("feature", false);
+                        sharedPreferencesEditor.apply();
 
-}
-               }
-       );
+                    }
+                }
+        );
 
     }
 
