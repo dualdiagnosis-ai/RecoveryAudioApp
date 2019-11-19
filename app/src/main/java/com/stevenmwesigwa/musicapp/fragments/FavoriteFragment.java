@@ -44,7 +44,7 @@ public class FavoriteFragment extends Fragment {
     private RecyclerView favoriteRecyclerFavFrag = null;
     private int trackPosition = 0;
     public static MediaPlayer mediaPlayerFavFrag = null;
-    private EchoDatabase echoDatabase = null;
+    private static EchoDatabase echoDatabase = null;
     // Updated lis to be fed into the Adapter
     private ArrayList<Songs> refreshSongListFavFrag = null;
     private ArrayList<Songs> getSongListFromDbFavFrag = null;
@@ -169,7 +169,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     private ArrayList<Songs> getSongsFromDevice() {
-        ArrayList<Songs> songsList = new ArrayList();
+        ArrayList<Songs> songsList = new ArrayList<>();
         // Create 'ContentResolver' to access the database
         ContentResolver contentResolver = activity.getContentResolver();
         // Create a 'Uri' so that you would fetch a specific song. i.e searching for songs
@@ -218,7 +218,6 @@ public class FavoriteFragment extends Fragment {
                 hiddenBottomBarMainScreen.setVisibility(View.VISIBLE);
             } else {
                 hiddenBottomBarMainScreen.setVisibility(View.INVISIBLE);
-
             }
 
 
@@ -287,12 +286,12 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void displayFavoritesBySearching() {
-        if (echoDatabase.rowCount() > 0) {
+        if ( (echoDatabase !=null) &&  echoDatabase.rowCount() > 0) {
             refreshSongListFavFrag = new ArrayList<>();
             getSongListFromDbFavFrag = echoDatabase.get();
             ArrayList<Songs> getSongListFromDeviceFavFrag = getSongsFromDevice();
 
-            if (getSongListFromDeviceFavFrag != null) {
+            if (getSongListFromDeviceFavFrag != null  && (getSongListFromDbFavFrag != null) )  {
                 for (int i = 0; i < getSongListFromDeviceFavFrag.size() - 1; i++) {
                     for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; i++) {
                         if (getSongListFromDbFavFrag.get(j).getSongId().equals(getSongListFromDeviceFavFrag.get(i).getSongId())) {
@@ -305,6 +304,7 @@ public class FavoriteFragment extends Fragment {
                 }
 
             } else {
+                favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
                 noFavoritesFavFrag.setVisibility(View.VISIBLE);
             }
             /*
@@ -337,7 +337,6 @@ public class FavoriteFragment extends Fragment {
         } else {
             favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
             noFavoritesFavFrag.setVisibility(View.VISIBLE);
-
         }
     }
 }
