@@ -161,6 +161,9 @@ noSongsMainScreen.setVisibility(View.VISIBLE);
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity.setTitle("All Songs");
+//        activity.getActionBar().setIcon(R.drawable.navigation_allsongs);
+
+//        activity.getActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
