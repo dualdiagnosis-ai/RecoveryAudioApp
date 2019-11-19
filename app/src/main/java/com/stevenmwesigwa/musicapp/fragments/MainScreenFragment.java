@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -41,6 +42,7 @@ public class MainScreenFragment extends Fragment {
     RelativeLayout hiddenBottomBarMainScreen = null;
     ImageButton playPauseButtonMainScreen = null;
     TextView songTitleMainScreen = null;
+    private int trackPosition = 0;
     // Contains 'RecyclerView' and the 'bottombar'
     RelativeLayout visibleLayout = null;
     // The view that will get displayed when there're no songs
@@ -237,6 +239,7 @@ public class MainScreenFragment extends Fragment {
 
     private void bottomBarSetup() {
         try {
+            bottomBarClickHandler();
             songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
 // Change text when song is completed
             SongPlayingFragment.mediaPlayer.setOnCompletionListener(
@@ -260,5 +263,63 @@ public class MainScreenFragment extends Fragment {
 
         }
 
+    }
+
+    private void bottomBarClickHandler() {
+        hiddenBottomBarMainScreen.setOnClickListener(
+                view -> {
+                  MediaPlayer mediaPlayerFavFrag = SongPlayingFragment.mediaPlayer;
+                    /*
+                     *When a user clicks on the bottom bar OR List item in the Fav Frag RecyclerView, they
+                     * get redirected to the "SongPlaying" screen
+                     */
+                    final SongPlayingFragment songPlayingFragment = new SongPlayingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("songArtist", SongPlayingFragment.currentSongHelper.getSongArtist());
+                    bundle.putString("songTitle", SongPlayingFragment.currentSongHelper.getSongTitle());
+                    bundle.putLong("songId", SongPlayingFragment.currentSongHelper.getSongId());
+                    bundle.putString("songData", SongPlayingFragment.currentSongHelper.getSongData());
+                    bundle.putLong("songDateAdded", SongPlayingFragment.currentSongHelper.getSongDateAdded());
+                    bundle.putInt("songPosition", SongPlayingFragment.currentSongHelper.getCurrentPosition());
+                    bundle.putParcelableArrayList("songsList", SongPlayingFragment.songsList);
+
+                    /*
+                     * Let the 'SongPlayingFragment' know that the trigger that has occurred,
+                     * the one that lead to the opening of the "SongPlayingFragment" screen
+                     * is done through this "FavoriteFragment"
+                     */
+                    bundle.putString("favoriteFragBottomBar", "success");
+
+//Link values with the songPlayingFragment
+                    songPlayingFragment.setArguments(bundle);
+
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.detailsFragment, songPlayingFragment)
+                            /*
+                             * Make fragment not to get destroyed and is pushed below the current
+                             *  appearing fragment
+                             */
+                            .addToBackStack("SongPlayingFragment")
+                            .commit();
+
+                }
+        );
+
+        playPauseButtonMainScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SongPlayingFragment.mediaPlayer.isPlaying()) {
+                    SongPlayingFragment.mediaPlayer.pause();
+                    trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
+                    playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+                } else {
+                    SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
+                    // User wants to resume the song
+                    SongPlayingFragment.mediaPlayer.start();
+                    playPauseButtonMainScreen.setBackgroundResource(R.drawable.pause_icon);
+                }
+            }
+        });
     }
 }

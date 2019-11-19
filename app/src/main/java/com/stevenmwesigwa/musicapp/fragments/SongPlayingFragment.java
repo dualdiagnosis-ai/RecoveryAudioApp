@@ -183,7 +183,7 @@ public class SongPlayingFragment extends Fragment {
 
     public static void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
         SongPlayingFragment.songTitleNowPlaying.setText(songTitleNowPlaying);
-        SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
+        SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying == null ? "": songArtistNowPlaying);
     }
 
     public static void processInformation(MediaPlayer mediaPlayer) {

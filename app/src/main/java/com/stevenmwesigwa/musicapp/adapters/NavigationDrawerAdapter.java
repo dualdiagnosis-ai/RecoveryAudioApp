@@ -130,7 +130,10 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
     @Override
     public int getItemCount() {
-        return mContentList.size();
+        if (mContentList == null) {
+
+            return 0;
+        } else {return mContentList.size();}
     }
 
     /**
