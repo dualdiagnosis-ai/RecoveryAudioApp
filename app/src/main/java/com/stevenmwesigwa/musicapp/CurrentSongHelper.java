@@ -12,7 +12,8 @@ public class CurrentSongHelper {
     private Boolean isLoopFeatureEnabled = false;
     private Boolean isShuffleFeatureEnabled = false;
 
-
+    public CurrentSongHelper() {
+    }
 
     public String getSongData() {
         return songData;
