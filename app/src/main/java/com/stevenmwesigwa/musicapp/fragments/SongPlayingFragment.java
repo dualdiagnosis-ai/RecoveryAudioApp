@@ -410,8 +410,6 @@ bindShakeListener();
         //Display a certain menu item on a specific screen
         final MenuItem menuItem = menu.findItem(R.id.actionRedirect);
         menuItem.setVisible(true);
-        final MenuItem menuItem2 = menu.findItem(R.id.actionSort);
-        menuItem2.setVisible(false);
     }
 
     /**

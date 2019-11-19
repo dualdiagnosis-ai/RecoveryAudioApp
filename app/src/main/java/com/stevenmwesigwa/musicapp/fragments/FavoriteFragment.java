@@ -118,6 +118,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity.setTitle("Favorites");
     }
 
     /**
@@ -204,7 +205,7 @@ public class FavoriteFragment extends Fragment {
         return songsList;
     }
 
-    private void bottomBarSetup() {
+    private  void bottomBarSetup() {
         try {
             bottomBarClickHandler();
             songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
@@ -273,20 +274,21 @@ public class FavoriteFragment extends Fragment {
                 }
         );
 
-        playPauseButtonMainScreen.setOnClickListener(
-                view -> {
-                    if (SongPlayingFragment.mediaPlayer.isPlaying()) {
-                        SongPlayingFragment.mediaPlayer.pause();
-                        trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
-                        playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
-                    } else {
-                        SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
-                        // User wants to resume the song
-                        SongPlayingFragment.mediaPlayer.start();
-                        playPauseButtonMainScreen.setBackgroundResource(R.drawable.pause_icon);
-                    }
+        playPauseButtonMainScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SongPlayingFragment.mediaPlayer.isPlaying()) {
+                    SongPlayingFragment.mediaPlayer.pause();
+                    trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
+                    playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+                } else {
+                    SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
+                    // User wants to resume the song
+                    SongPlayingFragment.mediaPlayer.start();
+                    playPauseButtonMainScreen.setBackgroundResource(R.drawable.pause_icon);
                 }
-        );
+            }
+        });
     }
 
     private void displayFavoritesBySearching() {

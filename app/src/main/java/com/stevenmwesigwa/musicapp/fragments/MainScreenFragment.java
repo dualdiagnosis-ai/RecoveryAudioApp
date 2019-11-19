@@ -68,7 +68,7 @@ public class MainScreenFragment extends Fragment {
         SharedPreferences sharedPreferencesEdit2 = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE);
         String actionSortRecent = sharedPreferencesEdit2.getString("action_sort_recent", "false");
         String actionSortAscending = sharedPreferencesEdit2.getString("action_sort_ascending", "true");
-
+        bottomBarSetup();
 
         if(getSongsList != null) {
             if(actionSortAscending.equalsIgnoreCase("true") ) {
@@ -103,8 +103,6 @@ noSongsMainScreen.setVisibility(View.VISIBLE);
              */
             contentMainRecyclerView.setAdapter(mainScreenAdapter);
         }
-
-//        bottomBarSetup();
 
     }
 
@@ -157,6 +155,12 @@ noSongsMainScreen.setVisibility(View.VISIBLE);
 
         }
         return false;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity.setTitle("All Songs");
     }
 
     @Override
@@ -229,5 +233,32 @@ noSongsMainScreen.setVisibility(View.VISIBLE);
         }
 
         return songsList;
+    }
+
+    private  void bottomBarSetup() {
+        try {
+            songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
+// Change text when song is completed
+            SongPlayingFragment.mediaPlayer.setOnCompletionListener(
+                    view -> {
+
+                        songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
+                        //Change Song
+                        SongPlayingFragment.onSongComplete();
+                    }
+            );
+// Set up visibility of the 'now playing' bottom bar
+            if (SongPlayingFragment.mediaPlayer.isPlaying()) {
+                hiddenBottomBarMainScreen.setVisibility(View.VISIBLE);
+            } else {
+                hiddenBottomBarMainScreen.setVisibility(View.INVISIBLE);
+
+            }
+
+
+        } catch (Exception e) {
+
+        }
+
     }
 }

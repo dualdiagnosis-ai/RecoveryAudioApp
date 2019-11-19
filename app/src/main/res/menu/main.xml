@@ -10,7 +10,7 @@
 
 <item android:id="@+id/actionSortRecent"
     android:title="By recently added" />
-        <item android:id="@+id/actionSorAscending"
+ <item android:id="@+id/actionSorAscending"
             android:title="By name" />
 
 </menu>

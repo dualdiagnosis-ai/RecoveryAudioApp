@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#fff">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,8 +11,9 @@
         android:id="@+id/navdrawerItemContentHolder">
 
 <ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:id="@+id/iconNavdrawer"
+    tools:src="@drawable/navigation_allsongs"
+    android:layout_width="24dp"
+    android:layout_height="24dp" android:id="@+id/iconNavdrawer"
     android:layout_marginLeft="13dp" />
         <TextView
             android:layout_width="wrap_content"  android:layout_toRightOf="@+id/iconNavdrawer"

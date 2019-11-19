@@ -65,6 +65,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity.setTitle("Settings");
     }
 
     /**
