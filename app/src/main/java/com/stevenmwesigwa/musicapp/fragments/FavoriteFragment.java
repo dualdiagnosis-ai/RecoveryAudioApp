@@ -8,16 +8,6 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.stevenmwesigwa.musicapp.R;
 import com.stevenmwesigwa.musicapp.Songs;
@@ -68,8 +65,6 @@ public class FavoriteFragment extends Fragment {
         songTitleMainScreen = view.findViewById(R.id.songTitleMainScreen);
         playPauseButtonMainScreen = view.findViewById(R.id.playPauseButtonMainScreen);
         favoriteRecyclerFavFrag = view.findViewById(R.id.favoriteRecyclerFavFrag);
-
-
         return view;
     }
 
@@ -300,7 +295,7 @@ public class FavoriteFragment extends Fragment {
             if (getSongListFromDeviceFavFrag != null) {
                 for (int i = 0; i < getSongListFromDeviceFavFrag.size() - 1; i++) {
                     for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; i++) {
-                        if (getSongListFromDbFavFrag.get(j).getSongId() == getSongListFromDeviceFavFrag.get(i).getSongId()) {
+                        if (getSongListFromDbFavFrag.get(j).getSongId().equals(getSongListFromDeviceFavFrag.get(i).getSongId())) {
                             refreshSongListFavFrag.add(getSongListFromDbFavFrag.get(j));
 
                         }
@@ -310,7 +305,7 @@ public class FavoriteFragment extends Fragment {
                 }
 
             } else {
-
+                noFavoritesFavFrag.setVisibility(View.VISIBLE);
             }
             /*
              * If 'songsArrayList' is null, make `RecyclerView` disappear
