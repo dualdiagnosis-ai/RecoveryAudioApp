@@ -28,12 +28,11 @@
 
         <!--   Define / set up the 'default fragment' class that is going to get launched inside our
         xml file i.e class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"-->
-        <fragment
+        <FrameLayout
             android:id="@+id/detailsFragment"
-            class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"
+            android:layout_below="@id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/appBarLayout"></fragment>
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 

@@ -300,7 +300,7 @@ public class MainScreenFragment extends Fragment {
                              * Make fragment not to get destroyed and is pushed below the current
                              *  appearing fragment
                              */
-                            .addToBackStack("SongPlayingFragment")
+                            .addToBackStack("MainScreenFragment")
                             .commit();
 
                 }
