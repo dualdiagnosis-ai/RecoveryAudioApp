@@ -252,6 +252,7 @@ public class SongPlayingFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity.setTitle("Song Playing");
 
         sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         accelaration = 0.0f;
