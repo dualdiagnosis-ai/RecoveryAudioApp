@@ -659,7 +659,7 @@ public class SongPlayingFragment extends Fragment {
         playPauseButtonNowPlaying.setOnClickListener(
 
                 view -> {
-                    displayToastMessage("Am here", Toast.LENGTH_SHORT);
+//                    displayToastMessage("Am here", Toast.LENGTH_SHORT);
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                         currentSongHelper.setPlaying(false);

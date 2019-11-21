@@ -214,7 +214,8 @@ public class FavoriteFragment extends Fragment {
                     }
             );
 // Set up visibility of the 'now playing' bottom bar
-            if (SongPlayingFragment.mediaPlayer.isPlaying()) {
+            Boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
+            if (SongPlayingFragment.mediaPlayer.isPlaying() || isPaused) {
                 hiddenBottomBarMainScreen.setVisibility(View.VISIBLE);
             } else {
                 hiddenBottomBarMainScreen.setVisibility(View.INVISIBLE);
@@ -262,7 +263,7 @@ public class FavoriteFragment extends Fragment {
                              * Make fragment not to get destroyed and is pushed below the current
                              *  appearing fragment
                              */
-                            .addToBackStack("SongPlayingFragment")
+                            .addToBackStack("FavoriteFragment")
                             .commit();
 
                 }
