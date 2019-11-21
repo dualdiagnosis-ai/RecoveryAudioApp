@@ -161,9 +161,11 @@ public class SongPlayingFragment extends Fragment {
     public static void playNext(String check) {
 
         int nextSongPosition = currentPosition + 1;
+        currentPosition++;
         if ((songsList.size() == 1)) {
             currentPosition = 0;
-        } else if (nextSongPosition >= songsList.size()) {
+        }
+        if (nextSongPosition >= songsList.size()) {
             displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
             currentPosition = (songsList.size() == 1) ? 0 : songsList.size() - 1;
         } else if (check.equalsIgnoreCase("PlayNextNormal")) {
@@ -182,8 +184,7 @@ public class SongPlayingFragment extends Fragment {
         } else {
             playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
         }
-        int d = currentPosition;
-        List s = songsList;
+
         currentSongHelper.setLoopFeatureEnabled(false);
         Songs nextSong = songsList.get(currentPosition);
         currentSongHelper.setSongData(nextSong.getSongData());
@@ -193,8 +194,7 @@ public class SongPlayingFragment extends Fragment {
         currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
         currentSongHelper.setCurrentPosition(currentPosition);
         updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-        stopCurrentSongIfPlaying(mediaPlayer);
-//            mediaPlayer.reset();
+            mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
@@ -230,14 +230,6 @@ public class SongPlayingFragment extends Fragment {
         seekBarNowPlaying.setProgress(1);
         final Handler handler = new Handler();
         handler.postDelayed(updateSongTime, 1000);
-    }
-
-    private static void stopCurrentSongIfPlaying(MediaPlayer mediaPlayer) {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-            mediaPlayer.release();
-        }
     }
 
     /**
@@ -665,8 +657,8 @@ public class SongPlayingFragment extends Fragment {
         );
         playPauseButtonNowPlaying.setOnClickListener(
 
-
                 view -> {
+                    displayToastMessage("Am here", Toast.LENGTH_SHORT);
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                         currentSongHelper.setPlaying(false);
