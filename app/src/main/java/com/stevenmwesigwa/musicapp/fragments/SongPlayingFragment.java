@@ -161,10 +161,11 @@ public class SongPlayingFragment extends Fragment {
     public static void playNext(String check) {
 
         int nextSongPosition = currentPosition + 1;
-
-            if (nextSongPosition >= songsList.size()) {
+if((songsList.size() == 1)) {
+    currentPosition = 0;
+}else  if (nextSongPosition >= songsList.size()) {
                 displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
-                currentPosition = 0;
+                currentPosition = (songsList.size() == 1) ? 0 :  songsList.size()-1;
             } else if (check.equalsIgnoreCase("PlayNextNormal")) {
                 currentPosition = nextSongPosition;
             }
@@ -184,13 +185,13 @@ public class SongPlayingFragment extends Fragment {
 int d = currentPosition;
             List s = songsList;
             currentSongHelper.setLoopFeatureEnabled(false);
-            Songs nextSong = songsList.get(nextSongPosition);
+            Songs nextSong = songsList.get(currentPosition);
             currentSongHelper.setSongData(nextSong.getSongData());
             currentSongHelper.setSongArtist(nextSong.getSongArtist());
             currentSongHelper.setSongId(nextSong.getSongId());
             currentSongHelper.setSongTitle(nextSong.getSongTitle());
             currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
-            currentSongHelper.setCurrentPosition(nextSongPosition);
+            currentSongHelper.setCurrentPosition(currentPosition);
             updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
             stopCurrentSongIfPlaying(mediaPlayer);
 //            mediaPlayer.reset();
@@ -226,7 +227,7 @@ int d = currentPosition;
                 TimeUnit.MILLISECONDS.toSeconds(finalTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
 
 
-        seekBarNowPlaying.setProgress(startTime + 1);
+        seekBarNowPlaying.setProgress(1);
         final Handler handler = new Handler();
         handler.postDelayed(updateSongTime, 1000);
     }
@@ -688,7 +689,7 @@ int d = currentPosition;
         int previousSongPosition = currentPosition - 1;
         currentPosition--;
             if ( previousSongPosition < 1) {
-                displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
+                displayToastMessage("You have reached the beginning of the playlist", Toast.LENGTH_SHORT);
                 currentPosition = 0;
             }
             if (currentSongHelper.isPlaying()) {
