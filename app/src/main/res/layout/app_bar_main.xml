@@ -30,9 +30,9 @@
         xml file i.e class="com.stevenmwesigwa.musicapp.fragments.MainScreenFragment"-->
         <FrameLayout
             android:id="@+id/detailsFragment"
-            android:layout_below="@id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appBarLayout" />
 
     </RelativeLayout>
 

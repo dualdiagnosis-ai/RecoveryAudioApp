@@ -161,50 +161,50 @@ public class SongPlayingFragment extends Fragment {
     public static void playNext(String check) {
 
         int nextSongPosition = currentPosition + 1;
-if((songsList.size() == 1)) {
-    currentPosition = 0;
-}else  if (nextSongPosition >= songsList.size()) {
-                displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
-                currentPosition = (songsList.size() == 1) ? 0 :  songsList.size()-1;
-            } else if (check.equalsIgnoreCase("PlayNextNormal")) {
-                currentPosition = nextSongPosition;
+        if ((songsList.size() == 1)) {
+            currentPosition = 0;
+        } else if (nextSongPosition >= songsList.size()) {
+            displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
+            currentPosition = (songsList.size() == 1) ? 0 : songsList.size() - 1;
+        } else if (check.equalsIgnoreCase("PlayNextNormal")) {
+            currentPosition = nextSongPosition;
+        }
+        if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
+            Random random = new Random();
+            int nextRandomSongPosition = random.nextInt(songsList.size() + 1);
+            if (nextRandomSongPosition < songsList.size()) {
+                currentPosition = nextRandomSongPosition;
             }
-            if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
-                Random random = new Random();
-                int nextRandomSongPosition = random.nextInt(songsList.size() + 1);
-                if (nextRandomSongPosition < songsList.size()) {
-                    currentPosition = nextRandomSongPosition;
-                }
-            }
+        }
 
-            if (currentSongHelper.isPlaying()) {
-                playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
-            } else {
-                playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
-            }
-int d = currentPosition;
-            List s = songsList;
-            currentSongHelper.setLoopFeatureEnabled(false);
-            Songs nextSong = songsList.get(currentPosition);
-            currentSongHelper.setSongData(nextSong.getSongData());
-            currentSongHelper.setSongArtist(nextSong.getSongArtist());
-            currentSongHelper.setSongId(nextSong.getSongId());
-            currentSongHelper.setSongTitle(nextSong.getSongTitle());
-            currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
-            currentSongHelper.setCurrentPosition(currentPosition);
-            updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-            stopCurrentSongIfPlaying(mediaPlayer);
+        if (currentSongHelper.isPlaying()) {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
+        } else {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
+        }
+        int d = currentPosition;
+        List s = songsList;
+        currentSongHelper.setLoopFeatureEnabled(false);
+        Songs nextSong = songsList.get(currentPosition);
+        currentSongHelper.setSongData(nextSong.getSongData());
+        currentSongHelper.setSongArtist(nextSong.getSongArtist());
+        currentSongHelper.setSongId(nextSong.getSongId());
+        currentSongHelper.setSongTitle(nextSong.getSongTitle());
+        currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
+        currentSongHelper.setCurrentPosition(currentPosition);
+        updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
+        stopCurrentSongIfPlaying(mediaPlayer);
 //            mediaPlayer.reset();
-            try {
-                mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-                processInformation(mediaPlayer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            processInformation(mediaPlayer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            changeFavoriteIconNowPlaying();
+        changeFavoriteIconNowPlaying();
 
     }
 
@@ -230,6 +230,14 @@ int d = currentPosition;
         seekBarNowPlaying.setProgress(1);
         final Handler handler = new Handler();
         handler.postDelayed(updateSongTime, 1000);
+    }
+
+    private static void stopCurrentSongIfPlaying(MediaPlayer mediaPlayer) {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+        }
     }
 
     /**
@@ -328,18 +336,6 @@ int d = currentPosition;
         super.onAttach(activity);
         this.activity = activity;
     }
-
-
-
-    private static void stopCurrentSongIfPlaying(MediaPlayer mediaPlayer) {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-            mediaPlayer.release();
-        }
-    }
-
-
 
     /**
      * Called when the fragment's activity has been created and this
@@ -688,38 +684,37 @@ int d = currentPosition;
     private void playPrevious() {
         int previousSongPosition = currentPosition - 1;
         currentPosition--;
-            if ( previousSongPosition < 1) {
-                displayToastMessage("You have reached the beginning of the playlist", Toast.LENGTH_SHORT);
-                currentPosition = 0;
-            }
-            if (currentSongHelper.isPlaying()) {
-                playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
-            } else {
-                playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
-            }
-            currentSongHelper.setLoopFeatureEnabled(false);
-            Songs nextSong = songsList.get(currentPosition);
-            currentSongHelper.setSongData(nextSong.getSongData());
-            currentSongHelper.setSongArtist(nextSong.getSongArtist());
-            currentSongHelper.setSongId(nextSong.getSongId());
-            currentSongHelper.setSongTitle(nextSong.getSongTitle());
-            currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
-            currentSongHelper.setCurrentPosition(currentPosition);
-            updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-//stopCurrentSongIfPlaying(mediaPlayer);
-            mediaPlayer.reset();
+        if (previousSongPosition < 1) {
+            displayToastMessage("You have reached the beginning of the playlist", Toast.LENGTH_SHORT);
+            currentPosition = 0;
+        }
+        if (currentSongHelper.isPlaying()) {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
+        } else {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
+        }
+        currentSongHelper.setLoopFeatureEnabled(false);
+        Songs nextSong = songsList.get(currentPosition);
+        currentSongHelper.setSongData(nextSong.getSongData());
+        currentSongHelper.setSongArtist(nextSong.getSongArtist());
+        currentSongHelper.setSongId(nextSong.getSongId());
+        currentSongHelper.setSongTitle(nextSong.getSongTitle());
+        currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
+        currentSongHelper.setCurrentPosition(currentPosition);
+        updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
+        mediaPlayer.reset();
 
-            try {
-                mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-                processInformation(mediaPlayer);
+        try {
+            mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            processInformation(mediaPlayer);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            changeFavoriteIconNowPlaying();
+        changeFavoriteIconNowPlaying();
 
 
     }

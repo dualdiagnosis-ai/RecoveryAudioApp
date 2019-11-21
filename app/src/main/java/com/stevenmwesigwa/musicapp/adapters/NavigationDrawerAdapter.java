@@ -133,7 +133,9 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         if (mContentList == null) {
 
             return 0;
-        } else {return mContentList.size();}
+        } else {
+            return mContentList.size();
+        }
     }
 
     /**

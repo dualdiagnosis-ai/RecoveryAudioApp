@@ -42,7 +42,6 @@ public class MainScreenFragment extends Fragment {
     RelativeLayout hiddenBottomBarMainScreen = null;
     ImageButton playPauseButtonMainScreen = null;
     TextView songTitleMainScreen = null;
-    private int trackPosition = 0;
     // Contains 'RecyclerView' and the 'bottombar'
     RelativeLayout visibleLayout = null;
     // The view that will get displayed when there're no songs
@@ -52,8 +51,8 @@ public class MainScreenFragment extends Fragment {
     Activity activity = null;
     //Instantiate MainScreenAdapter
     MainScreenAdapter mainScreenAdapter = null;
-
     ArrayList<Songs> getSongsList = null;
+    private int trackPosition = 0;
 
     public MainScreenFragment() {
         // Required empty public constructor
@@ -268,7 +267,7 @@ public class MainScreenFragment extends Fragment {
     private void bottomBarClickHandler() {
         hiddenBottomBarMainScreen.setOnClickListener(
                 view -> {
-                  MediaPlayer mediaPlayerFavFrag = SongPlayingFragment.mediaPlayer;
+                    MediaPlayer mediaPlayerFavFrag = SongPlayingFragment.mediaPlayer;
                     /*
                      *When a user clicks on the bottom bar OR List item in the Fav Frag RecyclerView, they
                      * get redirected to the "SongPlaying" screen
