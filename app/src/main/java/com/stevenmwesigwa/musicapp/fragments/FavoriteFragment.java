@@ -36,7 +36,6 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class FavoriteFragment extends Fragment {
-    public static MediaPlayer mediaPlayerFavFrag = null;
     private static EchoDatabase echoDatabase = null;
     private Activity activity = null;
     private TextView noFavoritesFavFrag = null;
@@ -231,7 +230,6 @@ public class FavoriteFragment extends Fragment {
     private void bottomBarClickHandler() {
         hiddenBottomBarMainScreen.setOnClickListener(
                 view -> {
-                    mediaPlayerFavFrag = SongPlayingFragment.mediaPlayer;
                     /*
                      *When a user clicks on the bottom bar OR List item in the Fav Frag RecyclerView, they
                      * get redirected to the "SongPlaying" screen

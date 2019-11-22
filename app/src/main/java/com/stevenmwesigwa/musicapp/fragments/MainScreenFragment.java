@@ -268,7 +268,6 @@ public class MainScreenFragment extends Fragment {
     private void bottomBarClickHandler() {
         hiddenBottomBarMainScreen.setOnClickListener(
                 view -> {
-                    MediaPlayer mediaPlayerFavFrag = SongPlayingFragment.mediaPlayer;
                     /*
                      *When a user clicks on the bottom bar OR List item in the Fav Frag RecyclerView, they
                      * get redirected to the "SongPlaying" screen

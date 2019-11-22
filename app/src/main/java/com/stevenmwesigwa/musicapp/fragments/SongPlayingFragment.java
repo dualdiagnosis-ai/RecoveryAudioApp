@@ -376,10 +376,10 @@ public class SongPlayingFragment extends Fragment {
 
         try {
             Object fromFavBottomBarScreen = getArguments().get("favoriteFragBottomBar");
-            if (fromFavBottomBarScreen != null) {
+//            if (fromFavBottomBarScreen != null) {
                 // To maintain the consistency of the instance
-                mediaPlayer = FavoriteFragment.mediaPlayerFavFrag;
-            } else {
+//                mediaPlayer = SongPlayingFragment.mediaPlayer;
+            if(fromFavBottomBarScreen == null){
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
@@ -388,7 +388,7 @@ public class SongPlayingFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                stopCurrentSongIfPlaying(mediaPlayer);
+                mediaPlayer.reset();
                 mediaPlayer.start();
             }
         } catch (Exception e) {
