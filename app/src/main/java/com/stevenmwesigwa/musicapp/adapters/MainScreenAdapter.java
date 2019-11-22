@@ -87,13 +87,13 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
                         .addToBackStack("SongPlayingFragment")
                         .commit();
 
-            /*
-             *   Stop the currently playing track and starting a new one when a song is clicked upon,
-              *   rather than starting a new one over top of the existing one
-                */
-                if( (SongPlayingFragment.mediaPlayer != null) && SongPlayingFragment.mediaPlayer.isPlaying()  ) {
-SongPlayingFragment.mediaPlayer.stop();
-             }
+                /*
+                 *   Stop the currently playing track and starting a new one when a song is clicked upon,
+                 *   rather than starting a new one over top of the existing one
+                 */
+                if ((SongPlayingFragment.mediaPlayer != null) && SongPlayingFragment.mediaPlayer.isPlaying()) {
+                    SongPlayingFragment.mediaPlayer.stop();
+                }
 
 
             }

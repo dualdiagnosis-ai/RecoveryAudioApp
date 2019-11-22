@@ -41,7 +41,6 @@ import com.stevenmwesigwa.musicapp.Songs;
 import com.stevenmwesigwa.musicapp.databases.EchoDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -194,7 +193,7 @@ public class SongPlayingFragment extends Fragment {
         currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
         currentSongHelper.setCurrentPosition(currentPosition);
         updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-            mediaPlayer.reset();
+        mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
@@ -213,7 +212,7 @@ public class SongPlayingFragment extends Fragment {
         SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
     }
 
-    public static void processInformation(MediaPlayer mediaPlayer) {
+    private static void processInformation(MediaPlayer mediaPlayer) {
         int finalTime = mediaPlayer.getDuration();
         int startTime = mediaPlayer.getCurrentPosition();
         // Set max seek ar length
