@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -134,6 +133,11 @@ public class FavoriteFragment extends Fragment {
         echoDatabase = new EchoDatabase(activity);
         displayFavoritesBySearching();
         bottomBarSetup();
+
+        boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
+        if (isPaused) {
+            playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+        }
 
 
     }
@@ -316,12 +320,12 @@ public class FavoriteFragment extends Fragment {
                 favoriteRecyclerFavFrag.setVisibility(View.INVISIBLE);
                 noFavoritesFavFrag.setVisibility(View.VISIBLE);
             } else {
-                FavoriteScreenAdapter favoriteScreenAdapter = new FavoriteScreenAdapter(refreshSongListFavFrag, (Context) activity);
+                FavoriteScreenAdapter favoriteScreenAdapter = new FavoriteScreenAdapter(refreshSongListFavFrag, activity);
                 /**
                  * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
                  */
                 // use a linear layout manager
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((Context) activity);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
                 favoriteRecyclerFavFrag.setLayoutManager(layoutManager);
                 favoriteRecyclerFavFrag.setItemAnimator(new DefaultItemAnimator());
                 favoriteRecyclerFavFrag.setHasFixedSize(true);

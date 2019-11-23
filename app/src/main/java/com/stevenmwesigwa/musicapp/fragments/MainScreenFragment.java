@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -71,12 +70,12 @@ public class MainScreenFragment extends Fragment {
         if (getSongsList != null) {
             if (actionSortAscending.equalsIgnoreCase("true")) {
                 Collections.sort(getSongsList, Songs.sortBySongTItle);
-                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context) activity);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, activity);
                 mainScreenAdapter.notifyDataSetChanged();
 
             } else if (actionSortRecent.equalsIgnoreCase("true")) {
                 Collections.sort(getSongsList, Songs.sortBySongDateAdded);
-                mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context) activity);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, activity);
                 mainScreenAdapter.notifyDataSetChanged();
 
             }
@@ -86,13 +85,13 @@ public class MainScreenFragment extends Fragment {
             visibleLayout.setVisibility(View.INVISIBLE);
             noSongsMainScreen.setVisibility(View.VISIBLE);
         } else {
-            mainScreenAdapter = new MainScreenAdapter(getSongsList, (Context) activity);
+            mainScreenAdapter = new MainScreenAdapter(getSongsList, activity);
 
             /**
              * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
              */
             // use a linear layout manager
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager((Context) activity);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
             contentMainRecyclerView.setLayoutManager(layoutManager);
             contentMainRecyclerView.setItemAnimator(new DefaultItemAnimator());
             /**
@@ -250,12 +249,15 @@ public class MainScreenFragment extends Fragment {
                     }
             );
 // Set up visibility of the 'now playing' bottom bar
-            Boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
+            boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
             if (SongPlayingFragment.mediaPlayer.isPlaying() || isPaused) {
                 hiddenBottomBarMainScreen.setVisibility(View.VISIBLE);
             } else {
                 hiddenBottomBarMainScreen.setVisibility(View.INVISIBLE);
 
+            }
+            if (isPaused) {
+                playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
             }
 
 

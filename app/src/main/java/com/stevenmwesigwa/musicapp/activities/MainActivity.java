@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private int[] imagesForNavigationDrawer = {R.drawable.navigation_allsongs, R.drawable.navigation_favorites, R.drawable.navigation_settings, R.drawable.navigation_aboutus};
-    ;
 
     /**
      * navigationdrawer icons list

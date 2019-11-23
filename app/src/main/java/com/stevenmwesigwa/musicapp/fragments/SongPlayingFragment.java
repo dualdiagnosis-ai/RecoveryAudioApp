@@ -149,7 +149,7 @@ public class SongPlayingFragment extends Fragment {
         }
     }
 
-    private static void displayToastMessage(String toastMessage, int toastDuration) {
+    public static void displayToastMessage(String toastMessage, int toastDuration) {
         Context context = activity;
         Toast toast = Toast.makeText(context, toastMessage, toastDuration);
         toast.setGravity(Gravity.TOP | Gravity.LEFT, 0, 0);
@@ -326,7 +326,7 @@ public class SongPlayingFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
+        SongPlayingFragment.activity = activity;
     }
 
     /**
@@ -361,7 +361,7 @@ public class SongPlayingFragment extends Fragment {
             songArtist = getArguments().getString("songArtist");
             currentSongHelper.setSongArtist(songArtist);
             songTitle = getArguments().getString("songTitle");
-            currentSongHelper.setSongArtist(songTitle);
+            currentSongHelper.setSongTitle(songTitle);
             songDateAdded = getArguments().getLong("songDateAdded");
             currentSongHelper.setSongDateAdded(songDateAdded);
             currentPosition = getArguments().getInt("songPosition");
@@ -376,10 +376,7 @@ public class SongPlayingFragment extends Fragment {
 
         try {
             Object fromFavBottomBarScreen = getArguments().get("favoriteFragBottomBar");
-//            if (fromFavBottomBarScreen != null) {
-                // To maintain the consistency of the instance
-//                mediaPlayer = SongPlayingFragment.mediaPlayer;
-            if(fromFavBottomBarScreen == null){
+            if (fromFavBottomBarScreen == null) {
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
@@ -402,6 +399,12 @@ public class SongPlayingFragment extends Fragment {
         } else {
             playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
 
+        }
+
+        boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
+
+        if (isPaused) {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
         }
 
         mediaPlayer.setOnCompletionListener(
