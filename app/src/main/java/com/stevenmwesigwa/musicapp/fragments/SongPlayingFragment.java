@@ -78,11 +78,16 @@ public class SongPlayingFragment extends Fragment {
         @Override
         public void run() {
             final Handler handler = new Handler();
+            int getDuration = mediaPlayer.getDuration();
             int getCurrentPosition = mediaPlayer.getCurrentPosition();
             startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
                     TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition),
                     TimeUnit.MILLISECONDS.toSeconds(getCurrentPosition) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrentPosition))));
             handler.postDelayed(this, 1000);
+
+            // Set max seek ar length
+            seekBarNowPlaying.setMax(getDuration);
+            seekBarNowPlaying.setProgress(getCurrentPosition);
         }
     };
     public static CurrentSongHelper currentSongHelper = new CurrentSongHelper();
@@ -215,8 +220,6 @@ public class SongPlayingFragment extends Fragment {
     private static void processInformation(MediaPlayer mediaPlayer) {
         int finalTime = mediaPlayer.getDuration();
         int startTime = mediaPlayer.getCurrentPosition();
-        // Set max seek ar length
-        seekBarNowPlaying.setMax(finalTime);
         startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
                 TimeUnit.MILLISECONDS.toMinutes(startTime),
                 TimeUnit.MILLISECONDS.toSeconds(startTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime))));
@@ -225,8 +228,6 @@ public class SongPlayingFragment extends Fragment {
                 TimeUnit.MILLISECONDS.toMinutes(finalTime),
                 TimeUnit.MILLISECONDS.toSeconds(finalTime) - TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime))));
 
-
-        seekBarNowPlaying.setProgress(1);
         final Handler handler = new Handler();
         handler.postDelayed(updateSongTime, 1000);
     }
