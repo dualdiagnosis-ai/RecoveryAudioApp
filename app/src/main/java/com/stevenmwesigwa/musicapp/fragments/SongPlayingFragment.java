@@ -662,7 +662,6 @@ public class SongPlayingFragment extends Fragment {
         playPauseButtonNowPlaying.setOnClickListener(
 
                 view -> {
-//                    displayToastMessage("Am here", Toast.LENGTH_SHORT);
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                         currentSongHelper.setPlaying(false);
@@ -675,6 +674,25 @@ public class SongPlayingFragment extends Fragment {
 
                 }
         );
+
+//        seekBarNowPlaying.setOnSeekBarChangeListener(
+//                new SeekBar.OnSeekBarChangeListener() {
+//                    @Override
+//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//mediaPlayer.seekTo(progress, MediaPlayer.SEEK_PREVIOUS_SYNC );
+//                    }
+//
+//                    @Override
+//                    public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//                    }
+//                }
+//        );
     }
 
     private void playPrevious() {

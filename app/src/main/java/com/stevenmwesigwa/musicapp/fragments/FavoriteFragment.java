@@ -134,9 +134,11 @@ public class FavoriteFragment extends Fragment {
         displayFavoritesBySearching();
         bottomBarSetup();
 
-        boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
-        if (isPaused) {
-            playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+        if(SongPlayingFragment.mediaPlayer != null) {
+            boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
+            if (isPaused) {
+                playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+            }
         }
 
 
