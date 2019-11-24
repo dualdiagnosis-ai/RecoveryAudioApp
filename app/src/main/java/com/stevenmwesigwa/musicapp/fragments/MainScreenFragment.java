@@ -242,10 +242,10 @@ public class MainScreenFragment extends Fragment {
 // Change text when song is completed
             SongPlayingFragment.mediaPlayer.setOnCompletionListener(
                     view -> {
-
-                        songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
                         //Change Song
                         SongPlayingFragment.onSongComplete();
+                        // Update song Title in the hiddenBottomBarMainScreen
+                        songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
                     }
             );
 // Set up visibility of the 'now playing' bottom bar

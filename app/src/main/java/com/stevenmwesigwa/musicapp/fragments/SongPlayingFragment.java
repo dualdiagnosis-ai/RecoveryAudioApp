@@ -134,7 +134,6 @@ public class SongPlayingFragment extends Fragment {
                 currentSongHelper.setSongDateAdded(nextSong.getSongDateAdded());
                 currentSongHelper.setCurrentPosition(currentPosition);
                 updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
-//stopCurrentSongIfPlaying(mediaPlayer);
                 mediaPlayer.reset();
 
                 try {
@@ -402,18 +401,19 @@ public class SongPlayingFragment extends Fragment {
 
         }
 
-        boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
+        if (mediaPlayer != null) {
+            boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
 
-        if (isPaused) {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
+            if (isPaused) {
+                playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
+            }
+
+            mediaPlayer.setOnCompletionListener(
+                    view -> {
+                        onSongComplete();
+                    }
+            );
         }
-
-        mediaPlayer.setOnCompletionListener(
-                view -> {
-                    onSongComplete();
-                }
-        );
-
         clickHandler();
 
         // set audio visualization handler. This will REPLACE previously set speech recognizer handler
