@@ -162,7 +162,6 @@ public class SongPlayingFragment extends Fragment {
 
 
     public static void playNext(String check) {
-displayToastMessage("PLATNEXT, ENTERED", Toast.LENGTH_LONG);
         int nextSongPosition = currentPosition + 1;
         currentPosition++;
         if ((songsList.size() == 1)) {
