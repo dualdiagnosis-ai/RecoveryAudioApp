@@ -298,13 +298,13 @@ public class FavoriteFragment extends Fragment {
             ArrayList<Songs> getSongListFromDeviceFavFrag = getSongsFromDevice();
 
             if (getSongListFromDeviceFavFrag != null && (getSongListFromDbFavFrag != null)) {
-                for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; j++) {
+                for (int j = 0; j < getSongListFromDbFavFrag.size(); j++) {
                     final int dbSongPosition = j;
                     Optional<Songs> hasSong = getSongListFromDeviceFavFrag.stream()
                             .filter(e -> e.getSongId().equals(getSongListFromDbFavFrag.get(dbSongPosition).getSongId()))
                             .findAny();
                     if (hasSong.isPresent()) {
-                        refreshSongListFavFrag.add(getSongListFromDbFavFrag.get(j));
+                        refreshSongListFavFrag.add(getSongListFromDbFavFrag.get(dbSongPosition));
                     }
                 }
 
