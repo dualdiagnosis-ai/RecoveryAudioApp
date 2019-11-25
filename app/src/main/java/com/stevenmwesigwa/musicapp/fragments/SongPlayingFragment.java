@@ -140,17 +140,20 @@ public class SongPlayingFragment extends Fragment {
                     mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
                     mediaPlayer.prepare();
                     mediaPlayer.start();
-                    processInformation(mediaPlayer);
+                    updateSeekBarStartEndTime(mediaPlayer);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                playNext("PlayNextNormal");
-                currentSongHelper.setPlaying(true);
+                if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()) {
+                    playNext("PlayNextNormal");
+                    currentSongHelper.setPlaying(true);
+                }
             }
 
             changeFavoriteIconNowPlaying();
         }
+
     }
 
     public static void displayToastMessage(String toastMessage, int toastDuration) {
@@ -181,11 +184,7 @@ public class SongPlayingFragment extends Fragment {
             }
         }
 
-        if (currentSongHelper.isPlaying()) {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
-        } else {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
-        }
+        changePlayPauseButton(currentSongHelper);
 
         currentSongHelper.setLoopFeatureEnabled(false);
         Songs nextSong = songsList.get(currentPosition);
@@ -201,7 +200,7 @@ public class SongPlayingFragment extends Fragment {
             mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
             mediaPlayer.start();
-            processInformation(mediaPlayer);
+            updateSeekBarStartEndTime(mediaPlayer);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -215,7 +214,7 @@ public class SongPlayingFragment extends Fragment {
         SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
     }
 
-    private static void processInformation(MediaPlayer mediaPlayer) {
+    private static void updateSeekBarStartEndTime(MediaPlayer mediaPlayer) {
         int finalTime = mediaPlayer.getDuration();
         int startTime = mediaPlayer.getCurrentPosition();
         startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
@@ -392,13 +391,8 @@ public class SongPlayingFragment extends Fragment {
         }
 
 
-        processInformation(mediaPlayer);
-        if (currentSongHelper.isPlaying()) {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
-        } else {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
-
-        }
+        updateSeekBarStartEndTime(mediaPlayer);
+        changePlayPauseButton(currentSongHelper);
 
         if (mediaPlayer != null) {
             boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
@@ -406,12 +400,21 @@ public class SongPlayingFragment extends Fragment {
             if (isPaused) {
                 playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
             }
-
-            mediaPlayer.setOnCompletionListener(
-                    view -> {
-                        onSongComplete();
-                    }
-            );
+            try {
+                mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+                currentSongHelper.setPlaying(true);
+                updateSeekBarStartEndTime(mediaPlayer);
+                changePlayPauseButton(currentSongHelper);
+                mediaPlayer.setOnCompletionListener(
+                        view -> {
+                            onSongComplete();
+                        }
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         clickHandler();
 
@@ -452,6 +455,15 @@ public class SongPlayingFragment extends Fragment {
 //            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
         }
         changeFavoriteIconNowPlaying();
+    }
+
+    private static void changePlayPauseButton(CurrentSongHelper currentSongHelper) {
+        if (currentSongHelper.isPlaying()) {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
+        } else {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
+
+        }
     }
 
     /*
@@ -701,11 +713,7 @@ public class SongPlayingFragment extends Fragment {
             displayToastMessage("You have reached the beginning of the playlist", Toast.LENGTH_SHORT);
             currentPosition = 0;
         }
-        if (currentSongHelper.isPlaying()) {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
-        } else {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
-        }
+        changePlayPauseButton(currentSongHelper);
         currentSongHelper.setLoopFeatureEnabled(false);
         Songs nextSong = songsList.get(currentPosition);
         currentSongHelper.setSongData(nextSong.getSongData());
@@ -721,7 +729,7 @@ public class SongPlayingFragment extends Fragment {
             mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
             mediaPlayer.start();
-            processInformation(mediaPlayer);
+            updateSeekBarStartEndTime(mediaPlayer);
 
         } catch (Exception e) {
             e.printStackTrace();
