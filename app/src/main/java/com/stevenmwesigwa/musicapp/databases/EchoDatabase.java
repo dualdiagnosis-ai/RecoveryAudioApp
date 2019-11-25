@@ -96,6 +96,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
     }
 
     public ArrayList<Songs> get() {
+        ArrayList<Songs> songsArrayList = new ArrayList<>();
         try {
             final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
             final String getQuery = "SELECT * FROM " + TABLE_NAME;
@@ -110,7 +111,7 @@ public class EchoDatabase extends SQLiteOpenHelper {
                     songsArrayList.add(new Songs((long) songId, songTitle, songArtist, songPath, (long) 0));
                 } while (cursor.moveToNext());
             } else {
-                return null;
+                return songsArrayList;
             }
         } catch (Exception e) {
             e.printStackTrace();

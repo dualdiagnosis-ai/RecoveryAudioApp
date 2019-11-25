@@ -29,6 +29,7 @@ import com.stevenmwesigwa.musicapp.adapters.FavoriteScreenAdapter;
 import com.stevenmwesigwa.musicapp.databases.EchoDatabase;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 /**
@@ -134,7 +135,7 @@ public class FavoriteFragment extends Fragment {
         displayFavoritesBySearching();
         bottomBarSetup();
 
-        if(SongPlayingFragment.mediaPlayer != null) {
+        if (SongPlayingFragment.mediaPlayer != null) {
             boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
             if (isPaused) {
                 playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
@@ -297,15 +298,14 @@ public class FavoriteFragment extends Fragment {
             ArrayList<Songs> getSongListFromDeviceFavFrag = getSongsFromDevice();
 
             if (getSongListFromDeviceFavFrag != null && (getSongListFromDbFavFrag != null)) {
-                for (int i = 0; i < getSongListFromDeviceFavFrag.size() - 1; i++) {
-                    for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; i++) {
-                        if (getSongListFromDbFavFrag.get(j).getSongId().equals(getSongListFromDeviceFavFrag.get(i).getSongId())) {
-                            refreshSongListFavFrag.add(getSongListFromDbFavFrag.get(j));
-
-                        }
-
+                for (int j = 0; j < getSongListFromDbFavFrag.size() - 1; j++) {
+                    final int dbSongPosition = j;
+                    Optional<Songs> hasSong = getSongListFromDeviceFavFrag.stream()
+                            .filter(e -> e.getSongId().equals(getSongListFromDbFavFrag.get(dbSongPosition).getSongId()))
+                            .findAny();
+                    if (hasSong.isPresent()) {
+                        refreshSongListFavFrag.add(getSongListFromDbFavFrag.get(j));
                     }
-
                 }
 
             } else {
