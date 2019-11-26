@@ -120,8 +120,6 @@ public class SongPlayingFragment extends Fragment {
     }
 
     public static void onSongComplete() {
-        displayToastMessage("DURATION  " + mediaPlayer.getDuration() + " CURR_POSITION  " + mediaPlayer.getCurrentPosition(), Toast.LENGTH_LONG);
-
         if (currentSongHelper.isShuffleFeatureEnabled()) {
             playNext("PlayNextLikeNormalShuffle");
             currentSongHelper.setPlaying(true);
@@ -147,15 +145,20 @@ public class SongPlayingFragment extends Fragment {
                     e.printStackTrace();
                 }
             } else {
-                if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration() - 30) {
-                    displayToastMessage("YES WORKED", Toast.LENGTH_LONG);
-                    playNext("PlayNextNormal");
-                    currentSongHelper.setPlaying(true);
-                } else {
-                    displayToastMessage("FAILED MISERABLE", Toast.LENGTH_SHORT);
+                /*
+                 * When the song has finished / completed playing
+                 * "getCurrentPosition()" was a couple of milliseconds off very
+                 * close to the "getDuration".
+                 *  The difference seemed to be consistent on a couple of songs which was
+                 *  5 milliseconds for my case. For safely I've decided to go with 30 milliseconds OFF.
+                 */
+                int playerOnCompleteMillisecondsOffset = 30;
+
+                if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration() - playerOnCompleteMillisecondsOffset) {
+                        playNext("PlayNextNormal");
+                        currentSongHelper.setPlaying(true);
                 }
             }
-
             changeFavoriteIconNowPlaying();
         }
 
@@ -175,10 +178,13 @@ public class SongPlayingFragment extends Fragment {
         if ((songsList.size() == 1)) {
             currentPosition = 0;
         }
-        if (nextSongPosition >= songsList.size()) {
+        if (nextSongPosition == songsList.size() -1) {
             displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
-            currentPosition = (songsList.size() == 1) ? 0 : songsList.size() - 1;
-        } else if (check.equalsIgnoreCase("PlayNextNormal")) {
+            currentPosition = songsList.size() - 1;
+        } else if (nextSongPosition > songsList.size() -1) {
+            currentPosition = 0;
+        }
+        else if (check.equalsIgnoreCase("PlayNextNormal")) {
             currentPosition = nextSongPosition;
         }
         if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
