@@ -120,6 +120,8 @@ public class SongPlayingFragment extends Fragment {
     }
 
     public static void onSongComplete() {
+        displayToastMessage("DURATION  " + mediaPlayer.getDuration() + " CURR_POSITION  " + mediaPlayer.getCurrentPosition(), Toast.LENGTH_LONG);
+
         if (currentSongHelper.isShuffleFeatureEnabled()) {
             playNext("PlayNextLikeNormalShuffle");
             currentSongHelper.setPlaying(true);
@@ -145,9 +147,12 @@ public class SongPlayingFragment extends Fragment {
                     e.printStackTrace();
                 }
             } else {
-                if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration()) {
+                if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration() - 30) {
+                    displayToastMessage("YES WORKED", Toast.LENGTH_LONG);
                     playNext("PlayNextNormal");
                     currentSongHelper.setPlaying(true);
+                } else {
+                    displayToastMessage("FAILED MISERABLE", Toast.LENGTH_SHORT);
                 }
             }
 
