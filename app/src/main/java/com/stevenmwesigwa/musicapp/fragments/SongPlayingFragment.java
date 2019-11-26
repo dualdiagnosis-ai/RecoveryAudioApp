@@ -704,10 +704,11 @@ public class SongPlayingFragment extends Fragment {
 
         seekBarNowPlaying.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
+                    int seekBarProgress = 0;
+
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        seekBar.setProgress(progress);
-                        mediaPlayer.seekTo(progress);
+                        seekBarProgress = progress;
                     }
 
                     @Override
@@ -716,7 +717,8 @@ public class SongPlayingFragment extends Fragment {
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        seekBar.setProgress(seekBarProgress);
+                        mediaPlayer.seekTo(seekBarProgress);
                     }
                 }
         );
