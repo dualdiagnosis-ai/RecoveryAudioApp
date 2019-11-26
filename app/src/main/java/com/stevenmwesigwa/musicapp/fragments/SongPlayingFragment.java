@@ -182,6 +182,7 @@ public class SongPlayingFragment extends Fragment {
             displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
             currentPosition = songsList.size() - 1;
         } else if (nextSongPosition > songsList.size() -1) {
+            // If song List is finished / Complete, move to first song in the list
             currentPosition = 0;
         }
         else if (check.equalsIgnoreCase("PlayNextNormal")) {
@@ -212,6 +213,11 @@ public class SongPlayingFragment extends Fragment {
             mediaPlayer.prepare();
             mediaPlayer.start();
             updateSeekBarStartEndTime(mediaPlayer);
+            if (nextSongPosition > songsList.size() -1) {
+                // If song List is finished / Complete, Force Pause current Song to let user
+                // Know that the list is Finished.
+                playPauseButtonNowPlaying.performClick();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
