@@ -155,8 +155,8 @@ public class SongPlayingFragment extends Fragment {
                 int playerOnCompleteMillisecondsOffset = 30;
 
                 if (mediaPlayer.getCurrentPosition() >= mediaPlayer.getDuration() - playerOnCompleteMillisecondsOffset) {
-                        playNext("PlayNextNormal");
-                        currentSongHelper.setPlaying(true);
+                    playNext("PlayNextNormal");
+                    currentSongHelper.setPlaying(true);
                 }
             }
             changeFavoriteIconNowPlaying();
@@ -178,14 +178,13 @@ public class SongPlayingFragment extends Fragment {
         if ((songsList.size() == 1)) {
             currentPosition = 0;
         }
-        if (nextSongPosition == songsList.size() -1) {
+        if (nextSongPosition == songsList.size() - 1) {
             displayToastMessage("You have reached the end of the playlist", Toast.LENGTH_SHORT);
             currentPosition = songsList.size() - 1;
-        } else if (nextSongPosition > songsList.size() -1) {
+        } else if (nextSongPosition > songsList.size() - 1) {
             // If song List is finished / Complete, move to first song in the list
             currentPosition = 0;
-        }
-        else if (check.equalsIgnoreCase("PlayNextNormal")) {
+        } else if (check.equalsIgnoreCase("PlayNextNormal")) {
             currentPosition = nextSongPosition;
         }
         if (check.equalsIgnoreCase("PlayNextLikeNormalShuffle")) {
@@ -213,7 +212,7 @@ public class SongPlayingFragment extends Fragment {
             mediaPlayer.prepare();
             mediaPlayer.start();
             updateSeekBarStartEndTime(mediaPlayer);
-            if (nextSongPosition > songsList.size() -1) {
+            if (nextSongPosition > songsList.size() - 1) {
                 // If song List is finished / Complete, Force Pause current Song to let user
                 // Know that the list is Finished.
                 playPauseButtonNowPlaying.performClick();
@@ -703,24 +702,24 @@ public class SongPlayingFragment extends Fragment {
                 }
         );
 
-//        seekBarNowPlaying.setOnSeekBarChangeListener(
-//                new SeekBar.OnSeekBarChangeListener() {
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//mediaPlayer.seekTo(progress, MediaPlayer.SEEK_PREVIOUS_SYNC );
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//                }
-//        );
+        seekBarNowPlaying.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        seekBar.setProgress(progress);
+                        mediaPlayer.seekTo(progress);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                }
+        );
     }
 
     private void playPrevious() {
