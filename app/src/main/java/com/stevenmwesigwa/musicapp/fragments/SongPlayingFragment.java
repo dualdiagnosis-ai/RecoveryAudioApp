@@ -1,7 +1,5 @@
 package com.stevenmwesigwa.musicapp.fragments;
 
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,35 +43,32 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+// A simple {@link Fragment} subclass.
 public class SongPlayingFragment extends Fragment {
-    public static Activity activity;
     // Controls playback of audio or video files
     public static MediaPlayer mediaPlayer;
+    private static String MY_PREFS_SHUFFLE = "Shuffle feature";
+    private static String MY_PREFS_LOOP = "Loop feature";
+    private static CurrentSongHelper currentSongHelper = new CurrentSongHelper();
+    private static ArrayList<Songs> songsList = null;
     // Lets you access your device's sensors
-    public static SensorManager sensorManager = null;
+    private SensorManager sensorManager = null;
     //Enables you receive notifications from the 'Sensor Manager'
     // when sensor values are changed.
-    public static SensorEventListener sensorEventListener = null;
-    public static TextView songTitleNowPlaying = null;
-    public static TextView songArtistNowPlaying = null;
-    public static RelativeLayout seekBarLayoutNowPlaying = null;
-    public static SeekBar seekBarNowPlaying = null;
-    public static TextView startTimeSeekBarNowPlaying = null;
-    public static TextView endTimeSeekBarNowPlaying = null;
-    public static RelativeLayout controlPanelNowPlaying = null;
-    public static ImageButton shuffleButtonNowPlaying = null;
-    public static ImageButton previousButtonNowPlaying = null;
-    public static ImageButton playPauseButtonNowPlaying = null;
-    public static ImageButton nextButtonNowPlaying = null;
-    public static ImageButton loopButtonNowPlaying = null;
-    public static ImageButton favoriteIconNowPlaying = null;
-    public static EchoDatabase echoDatabaseFavorite = null;
-    public static String MY_PREFS_SHUFFLE = "Shuffle feature";
-    public static String MY_PREFS_LOOP = "Loop feature";
-    public static Runnable updateSongTime = new Runnable() {
+    private SensorEventListener sensorEventListener = null;
+    private TextView songTitleNowPlaying = null;
+    private TextView songArtistNowPlaying = null;
+    private SeekBar seekBarNowPlaying = null;
+    private TextView startTimeSeekBarNowPlaying = null;
+    private TextView endTimeSeekBarNowPlaying = null;
+    private ImageButton shuffleButtonNowPlaying = null;
+    private ImageButton previousButtonNowPlaying = null;
+    private ImageButton playPauseButtonNowPlaying = null;
+    private ImageButton nextButtonNowPlaying = null;
+    private ImageButton loopButtonNowPlaying = null;
+    private ImageButton favoriteIconNowPlaying = null;
+    private EchoDatabase echoDatabaseFavorite = null;
+    private Runnable updateSongTime = new Runnable() {
         @Override
         public void run() {
             final Handler handler = new Handler();
@@ -90,14 +84,11 @@ public class SongPlayingFragment extends Fragment {
             seekBarNowPlaying.setProgress(getCurrentPosition);
         }
     };
-    public static CurrentSongHelper currentSongHelper = new CurrentSongHelper();
-    public static Integer currentPosition = null;
-    public static ArrayList<Songs> songsList = null;
+    private Integer currentPosition = null;
     private static String My_PREFS_NAME = "ShakeFeature";
     private Float accelaration = 0f;
     private Float accelarationCurrent = 0f;
     private Float accelarationLast = 0f;
-    private RelativeLayout songInformationNowPlaying = null;
     private AudioVisualization audioVisualization = null;
     private GLAudioVisualizationView glAudioVisualizationView = null;
 
@@ -105,21 +96,29 @@ public class SongPlayingFragment extends Fragment {
         // Required empty public constructor
     }
 
+    static CurrentSongHelper getCurrentSongHelper() {
+        return currentSongHelper;
+    }
+
+    static ArrayList<Songs> getSongsList() {
+        return songsList;
+    }
+
     /*
      * If song is playing and is among favorite songs
      * change 'favorite icon'
      */
-    public static void changeFavoriteIconNowPlaying() {
+    private void changeFavoriteIconNowPlaying() {
 
         if (echoDatabaseFavorite.ifSongIdExists(currentSongHelper.getSongId().intValue())) {
-            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
+            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.favorite_on));
         } else {
-            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
+            favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.favorite_off));
         }
 
     }
 
-    public static void onSongComplete() {
+    private void onSongComplete() {
         if (currentSongHelper.isShuffleFeatureEnabled()) {
             playNext("PlayNextLikeNormalShuffle");
             currentSongHelper.setPlaying(true);
@@ -137,7 +136,7 @@ public class SongPlayingFragment extends Fragment {
                 mediaPlayer.reset();
 
                 try {
-                    mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+                    mediaPlayer.setDataSource(getActivity(), Uri.parse(currentSongHelper.getSongData()));
                     mediaPlayer.prepare();
                     mediaPlayer.start();
                     updateSeekBarStartEndTime(mediaPlayer);
@@ -164,15 +163,14 @@ public class SongPlayingFragment extends Fragment {
 
     }
 
-    public static void displayToastMessage(String toastMessage, int toastDuration) {
-        Context context = activity;
-        Toast toast = Toast.makeText(context, toastMessage, toastDuration);
+    private void displayToastMessage(String toastMessage, int toastDuration) {
+        Toast toast = Toast.makeText(getContext(), toastMessage, toastDuration);
         toast.setGravity(Gravity.TOP | Gravity.LEFT, 0, 0);
         toast.show();
     }
 
 
-    public static void playNext(String check) {
+    private void playNext(String check) {
         int nextSongPosition = currentPosition + 1;
         currentPosition++;
         if ((songsList.size() == 1)) {
@@ -208,7 +206,7 @@ public class SongPlayingFragment extends Fragment {
         updateTextViews(currentSongHelper.getSongTitle(), currentSongHelper.getSongArtist());
         mediaPlayer.reset();
         try {
-            mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+            mediaPlayer.setDataSource(getActivity(), Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
             mediaPlayer.start();
             updateSeekBarStartEndTime(mediaPlayer);
@@ -225,12 +223,12 @@ public class SongPlayingFragment extends Fragment {
 
     }
 
-    public static void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
-        SongPlayingFragment.songTitleNowPlaying.setText(songTitleNowPlaying);
-        SongPlayingFragment.songArtistNowPlaying.setText(songArtistNowPlaying);
+    private void updateTextViews(String songTitleNowPlaying, String songArtistNowPlaying) {
+        this.songTitleNowPlaying.setText(songTitleNowPlaying);
+        this.songArtistNowPlaying.setText(songArtistNowPlaying);
     }
 
-    private static void updateSeekBarStartEndTime(MediaPlayer mediaPlayer) {
+    private void updateSeekBarStartEndTime(MediaPlayer mediaPlayer) {
         int finalTime = mediaPlayer.getDuration();
         int startTime = mediaPlayer.getCurrentPosition();
         startTimeSeekBarNowPlaying.setText(String.format(Locale.US, "%d:%d",
@@ -245,7 +243,7 @@ public class SongPlayingFragment extends Fragment {
         handler.postDelayed(updateSongTime, 1000);
     }
 
-    private static void changePlayPauseButton(CurrentSongHelper currentSongHelper) {
+    private void changePlayPauseButton(CurrentSongHelper currentSongHelper) {
         if (currentSongHelper.isPlaying()) {
             playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
         } else {
@@ -254,29 +252,12 @@ public class SongPlayingFragment extends Fragment {
         }
     }
 
-    /**
-     * Called to do initial creation of a fragment.  This is called after
-     * {@link #onAttach(Activity)} and before
-     * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-     *
-     * <p>Note that this can be called while the fragment's activity is
-     * still in the process of being created.  As such, you can not rely
-     * on things like the activity's content view hierarchy being initialized
-     * at this point.  If you want to do work once the activity itself is
-     * created, see {@link #onActivityCreated(Bundle)}.
-     *
-     * <p>Any restored child fragments will be created before the base
-     * <code>Fragment.onCreate</code> method returns.</p>
-     *
-     * @param savedInstanceState If the fragment is being re-created from
-     *                           a previous saved state, this is the state.
-     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity.setTitle("Song Playing");
+        getActivity().setTitle("Song Playing");
 
-        sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelaration = 0.0f;
         accelarationCurrent = SensorManager.GRAVITY_EARTH;
         accelarationLast = SensorManager.GRAVITY_EARTH;
@@ -288,19 +269,15 @@ public class SongPlayingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_song_playing, container, false);
         //Display Menu
         setHasOptionsMenu(true);
-        songInformationNowPlaying = view.findViewById(R.id.songInformationNowPlaying);
         songTitleNowPlaying = view.findViewById(R.id.songTitleNowPlaying);
         songArtistNowPlaying = view.findViewById(R.id.songArtistNowPlaying);
-        seekBarLayoutNowPlaying = view.findViewById(R.id.seekBarLayoutNowPlaying);
         seekBarNowPlaying = view.findViewById(R.id.seekBarNowPlaying);
         startTimeSeekBarNowPlaying = view.findViewById(R.id.startTimeSeekBarNowPlaying);
         endTimeSeekBarNowPlaying = view.findViewById(R.id.endTimeSeekBarNowPlaying);
-        controlPanelNowPlaying = view.findViewById(R.id.controlPanelNowPlaying);
         shuffleButtonNowPlaying = view.findViewById(R.id.shuffleButtonNowPlaying);
         previousButtonNowPlaying = view.findViewById(R.id.previousButtonNowPlaying);
         playPauseButtonNowPlaying = view.findViewById(R.id.playPauseButtonNowPlaying);
@@ -311,73 +288,25 @@ public class SongPlayingFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Called immediately after {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}
-     * has returned, but before any saved state has been restored in to the view.
-     * This gives subclasses a chance to initialize themselves once
-     * they know their view hierarchy has been completely created.  The fragment's
-     * view hierarchy is not however attached to its parent at this point.
-     *
-     * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-     * @param savedInstanceState If non-null, this fragment is being re-constructed
-     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         audioVisualization = glAudioVisualizationView;
     }
 
-    /**
-     * Called when a fragment is first attached to its context.
-     * {@link #onCreate(Bundle)} will be called after this.
-     *
-     * @param context
-     */
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
-    }
-
-    /**
-     * Called when a fragment is first attached to its activity.
-     * {@link #onCreate(Bundle)} will be called after this.
-     *
-     * @param activity
-     * @deprecated See {@link #onAttach(Context)}.
-     */
-    @Override
-    public void onAttach(@NonNull Activity activity) {
-        super.onAttach(activity);
-        SongPlayingFragment.activity = activity;
-    }
-
-    /**
-     * Called when the fragment's activity has been created and this
-     * fragment's view hierarchy instantiated.  It can be used to do final
-     * initialization once these pieces are in place, such as retrieving
-     * views or restoring state.  It is also useful for fragments that use
-     * {@link #setRetainInstance(boolean)} to retain their instance,
-     * as this callback tells the fragment when it is fully associated with
-     * the new activity instance.  This is called after {@link #onCreateView}
-     * and before {@link #onViewStateRestored(Bundle)}.
-     *
-     * @param savedInstanceState If the fragment is being re-created from
-     *                           a previous saved state, this is the state.
-     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        echoDatabaseFavorite = new EchoDatabase(activity);
+        echoDatabaseFavorite = new EchoDatabase(getActivity());
         currentSongHelper = new CurrentSongHelper();
         currentSongHelper.setPlaying(true);
         currentSongHelper.setShuffleFeatureEnabled(false);
         currentSongHelper.setLoopFeatureEnabled(false);
         String songData = null;
-        String songTitle = null;
-        String songArtist = null;
-        Long songId = null;
-        Long songDateAdded = null;
+        String songTitle;
+        String songArtist;
+        Long songId;
+        Long songDateAdded;
         try {
             songData = getArguments().getString("songData");
             currentSongHelper.setSongData(songData);
@@ -403,7 +332,7 @@ public class SongPlayingFragment extends Fragment {
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 try {
-                    mediaPlayer.setDataSource(activity, Uri.parse(songData));
+                    mediaPlayer.setDataSource(getActivity(), Uri.parse(songData));
                     mediaPlayer.prepare();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -426,16 +355,14 @@ public class SongPlayingFragment extends Fragment {
                 playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
             }
             try {
-                mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+                mediaPlayer.setDataSource(getActivity(), Uri.parse(currentSongHelper.getSongData()));
                 mediaPlayer.prepare();
                 mediaPlayer.start();
                 currentSongHelper.setPlaying(true);
                 updateSeekBarStartEndTime(mediaPlayer);
                 changePlayPauseButton(currentSongHelper);
                 mediaPlayer.setOnCompletionListener(
-                        view -> {
-                            onSongComplete();
-                        }
+                        view -> onSongComplete()
                 );
             } catch (Exception e) {
                 e.printStackTrace();
@@ -444,12 +371,12 @@ public class SongPlayingFragment extends Fragment {
         clickHandler();
 
         // set audio visualization handler. This will REPLACE previously set speech recognizer handler
-        VisualizerDbmHandler vizualizerHandler = DbmHandler.Factory.newVisualizerHandler(activity, 0);
+        VisualizerDbmHandler vizualizerHandler = DbmHandler.Factory.newVisualizerHandler(getActivity(), 0);
         audioVisualization.linkTo(vizualizerHandler);
 
-// For shuffle
-        SharedPreferences prefsForShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE);
-        Boolean isShuffleAllowed = prefsForShuffle.getBoolean("feature", false);
+        // For shuffle
+        SharedPreferences prefsForShuffle = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE);
+        boolean isShuffleAllowed = prefsForShuffle.getBoolean("feature", false);
 
         if (isShuffleAllowed) {
             currentSongHelper.setShuffleFeatureEnabled(true);
@@ -460,13 +387,10 @@ public class SongPlayingFragment extends Fragment {
         } else {
             currentSongHelper.setShuffleFeatureEnabled(false);
             shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
-//            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
         }
 
-        // For Loop
-
-        SharedPreferences prefsForLoop = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE);
-        Boolean isLoopAllowed = prefsForLoop.getBoolean("feature", false);
+        SharedPreferences prefsForLoop = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE);
+        boolean isLoopAllowed = prefsForLoop.getBoolean("feature", false);
 
         if (isLoopAllowed) {
             currentSongHelper.setLoopFeatureEnabled(true);
@@ -477,7 +401,6 @@ public class SongPlayingFragment extends Fragment {
         } else {
             currentSongHelper.setLoopFeatureEnabled(false);
             loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
-//            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
         }
         changeFavoriteIconNowPlaying();
     }
@@ -501,28 +424,14 @@ public class SongPlayingFragment extends Fragment {
     public void onPause() {
         audioVisualization.onPause();
         super.onPause();
-        /*
-         * Unregister the Listener
-         */
+
+        // Unregister the Listener
         sensorManager.unregisterListener(sensorEventListener);
     }
 
-    /**
-     * Initialize the contents of the Fragment host's standard options menu.  You
-     * should place your menu items in to <var>menu</var>.  For this method
-     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
-     * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
-     * for more information.
-     *
-     * @param menu     The options menu in which you place your items.
-     * @param inflater
-     * @see #setHasOptionsMenu
-     * @see #onPrepareOptionsMenu
-     * @see #onOptionsItemSelected
-     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//Clear previous menu items
+        //Clear previous menu items
         menu.clear();
         // Create custom menu
         inflater.inflate(R.menu.song_playing_menu, menu);
@@ -530,19 +439,6 @@ public class SongPlayingFragment extends Fragment {
 
     }
 
-    /**
-     * Prepare the Fragment host's standard options menu to be displayed.  This is
-     * called right before the menu is shown, every time it is shown.  You can
-     * use this method to efficiently enable/disable items or otherwise
-     * dynamically modify the contents.  See
-     * {@link Activity#onPrepareOptionsMenu(Menu) Activity.onPrepareOptionsMenu}
-     * for more information.
-     *
-     * @param menu The options menu as last shown or first initialized by
-     *             onCreateOptionsMenu().
-     * @see #setHasOptionsMenu
-     * @see #onCreateOptionsMenu
-     */
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -551,35 +447,18 @@ public class SongPlayingFragment extends Fragment {
         menuItem.setVisible(true);
     }
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     * The default implementation simply returns false to have the normal
-     * processing happen (calling the item's Runnable or sending a message to
-     * its Handler as appropriate).  You can use this method for any items
-     * for which you would like to do processing without those other
-     * facilities.
-     *
-     * <p>Derived classes should call through to the base class for it to
-     * perform the default menu handling.
-     *
-     * @param item The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to
-     * proceed, true to consume it here.
-     * @see #onCreateOptionsMenu
-     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.actionRedirect) {
-            activity.onBackPressed();
+            getActivity().onBackPressed();
             return false;
         }
         return false;
-
     }
 
     /* When user leaves screen with audio visualization view,
-                 don't forget to free resources and call release() method.
-             */
+     * don't forget to free resources and call release() method.
+     */
     @Override
     public void onDestroyView() {
         audioVisualization.release();
@@ -602,21 +481,21 @@ public class SongPlayingFragment extends Fragment {
                      */
                     if (echoDatabaseFavorite.ifSongIdExists(songId)) {
 
-                        favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_off));
+                        favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.favorite_off));
                         echoDatabaseFavorite.delete(songId);
-                        Toast.makeText(activity, "Removed from Favorites List", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Removed from Favorites List", Toast.LENGTH_SHORT).show();
                     } else {
-                        favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.favorite_on));
+                        favoriteIconNowPlaying.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.favorite_on));
                         echoDatabaseFavorite.insert(songId, songArtist, songTitle, songPath);
-                        Toast.makeText(activity, "Added to Favorites List", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Added to Favorites List", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
 
         shuffleButtonNowPlaying.setOnClickListener(
                 view -> {
-                    SharedPreferences.Editor editShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
-                    SharedPreferences.Editor editLoop = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editShuffle = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editLoop = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE).edit();
 
                     if (currentSongHelper.isShuffleFeatureEnabled()) {
                         shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
@@ -664,8 +543,8 @@ public class SongPlayingFragment extends Fragment {
         loopButtonNowPlaying.setOnClickListener(
 
                 view -> {
-                    SharedPreferences.Editor editShuffle = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
-                    SharedPreferences.Editor editLoop = activity.getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editShuffle = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editLoop = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE).edit();
 
                     if (currentSongHelper.isLoopFeatureEnabled()) {
                         currentSongHelper.setLoopFeatureEnabled(false);
@@ -744,7 +623,7 @@ public class SongPlayingFragment extends Fragment {
         mediaPlayer.reset();
 
         try {
-            mediaPlayer.setDataSource(activity, Uri.parse(currentSongHelper.getSongData()));
+            mediaPlayer.setDataSource(getActivity(), Uri.parse(currentSongHelper.getSongData()));
             mediaPlayer.prepare();
             mediaPlayer.start();
             updateSeekBarStartEndTime(mediaPlayer);
@@ -752,9 +631,7 @@ public class SongPlayingFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         changeFavoriteIconNowPlaying();
-
 
     }
 
@@ -771,7 +648,7 @@ public class SongPlayingFragment extends Fragment {
                 accelaration = accelaration * 0.9f + delta;
 
                 if (accelaration > 12) {
-                    final SharedPreferences sharedPreferencesEditor = activity.getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
+                    final SharedPreferences sharedPreferencesEditor = getActivity().getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE);
                     final boolean isAllowed = sharedPreferencesEditor.getBoolean("feature", false);
                     if (isAllowed) {
                         playNext("PlayNextNormal");
@@ -787,13 +664,5 @@ public class SongPlayingFragment extends Fragment {
 
             }
         };
-    }
-
-    public AudioVisualization getAudioVisualization() {
-        return audioVisualization;
-    }
-
-    public void setAudioVisualization(AudioVisualization audioVisualization) {
-        this.audioVisualization = audioVisualization;
     }
 }

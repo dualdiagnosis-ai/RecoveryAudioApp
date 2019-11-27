@@ -238,14 +238,12 @@ public class MainScreenFragment extends Fragment {
     private void bottomBarSetup() {
         try {
             bottomBarClickHandler();
-            songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
+            songTitleMainScreen.setText(SongPlayingFragment.getCurrentSongHelper().getSongTitle());
 // Change text when song is completed
             SongPlayingFragment.mediaPlayer.setOnCompletionListener(
                     view -> {
-                        //Change Song
-                        SongPlayingFragment.onSongComplete();
                         // Update song Title in the hiddenBottomBarMainScreen
-                        songTitleMainScreen.setText(SongPlayingFragment.currentSongHelper.getSongTitle());
+                        songTitleMainScreen.setText(SongPlayingFragment.getCurrentSongHelper().getSongTitle());
                     }
             );
 // Set up visibility of the 'now playing' bottom bar
@@ -276,13 +274,13 @@ public class MainScreenFragment extends Fragment {
                      */
                     final SongPlayingFragment songPlayingFragment = new SongPlayingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("songArtist", SongPlayingFragment.currentSongHelper.getSongArtist());
-                    bundle.putString("songTitle", SongPlayingFragment.currentSongHelper.getSongTitle());
-                    bundle.putLong("songId", SongPlayingFragment.currentSongHelper.getSongId());
-                    bundle.putString("songData", SongPlayingFragment.currentSongHelper.getSongData());
-                    bundle.putLong("songDateAdded", SongPlayingFragment.currentSongHelper.getSongDateAdded());
-                    bundle.putInt("songPosition", SongPlayingFragment.currentSongHelper.getCurrentPosition());
-                    bundle.putParcelableArrayList("songsList", SongPlayingFragment.songsList);
+                    bundle.putString("songArtist", SongPlayingFragment.getCurrentSongHelper().getSongArtist());
+                    bundle.putString("songTitle", SongPlayingFragment.getCurrentSongHelper().getSongTitle());
+                    bundle.putLong("songId", SongPlayingFragment.getCurrentSongHelper().getSongId());
+                    bundle.putString("songData", SongPlayingFragment.getCurrentSongHelper().getSongData());
+                    bundle.putLong("songDateAdded", SongPlayingFragment.getCurrentSongHelper().getSongDateAdded());
+                    bundle.putInt("songPosition", SongPlayingFragment.getCurrentSongHelper().getCurrentPosition());
+                    bundle.putParcelableArrayList("songsList", SongPlayingFragment.getSongsList());
 
                     /*
                      * Let the 'SongPlayingFragment' know that the trigger that has occurred,
