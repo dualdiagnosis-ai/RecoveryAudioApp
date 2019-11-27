@@ -19,13 +19,7 @@ import com.stevenmwesigwa.musicapp.fragments.SongPlayingFragment;
 import java.util.ArrayList;
 
 public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.MainScreenViewHolder> {
-    /**
-     * Define LayoutInflater
-     */
     private LayoutInflater mInflater;
-    /**
-     * Define the data
-     */
     private ArrayList<Songs> mSongsList;
     private Context mContext;
 
@@ -36,14 +30,15 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
         this.mContext = context;
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-
+    /*
+     * Provide a reference to the views for each data item
+     * Complex data items may need more than one view per item, and
+     * you provide access to all the views for a data item in a view holder
+     */
     @NonNull
     @Override
     public MainScreenAdapter.MainScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        /* We inflate the xml which gives us a View object */
+        // We inflate the xml which gives us a View object
         View view = mInflater.inflate(R.layout.row_custom_mainscreen_adapter, parent, false);
         return new MainScreenAdapter.MainScreenViewHolder(view);
     }
@@ -54,7 +49,7 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
 
         holder.trackTitle.setText(song.getSongTitle());
         holder.trackArtist.setText(song.getSongArtist());
-        /**
+        /*
          * Implement the onClickListener on the 'navdrawerItemContentHolder' to open the respective
          * Fragment on click.
          */
@@ -71,18 +66,17 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
                 bundle.putInt("songPosition", position);
                 bundle.putParcelableArrayList("songsList", mSongsList);
 
-//Link values with the songPlayingFragment
+                //Link values with the songPlayingFragment
                 songPlayingFragment.setArguments(bundle);
-                /**
+                /*
                  * Let's begin the transaction
                  * We will invoke this Adapter through our FragmentActivity.java file.
                  */
                 FragmentActivity fragmentActivity = (FragmentActivity) mContext;
                 fragmentActivity.getSupportFragmentManager()
                         .beginTransaction()
-                        /**
-                         * Replace the the already added fragment from MainActivity.java
-                         */
+
+                        // Replace the the already added fragment from MainActivity.java
                         .replace(R.id.detailsFragment, songPlayingFragment)
                         .addToBackStack("SongPlayingFragment")
                         .commit();
@@ -112,15 +106,14 @@ public class MainScreenAdapter extends RecyclerView.Adapter<MainScreenAdapter.Ma
 
     }
 
-    /**
-     * This is where we will initialize our views
-     */
-    public class MainScreenViewHolder extends RecyclerView.ViewHolder {
+
+    // This is where we will initialize our views
+    class MainScreenViewHolder extends RecyclerView.ViewHolder {
         TextView trackTitle;
         TextView trackArtist;
         RelativeLayout contentRowSongList;
 
-        public MainScreenViewHolder(View view) {
+        MainScreenViewHolder(View view) {
             super(view);
             trackTitle = view.findViewById(R.id.trackTitle);
             trackArtist = view.findViewById(R.id.trackArtist);

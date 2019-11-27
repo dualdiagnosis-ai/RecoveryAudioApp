@@ -21,13 +21,7 @@ import com.stevenmwesigwa.musicapp.fragments.SettingsFragment;
 import java.util.List;
 
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.NavViewHolder> {
-    /**
-     * Define LayoutInflater
-     */
     private LayoutInflater mInflater;
-    /**
-     * Define the data
-     */
     private List<String> mContentList;
     private int[] mGetImages;
     private Context mContext;
@@ -40,14 +34,15 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         this.mContext = context;
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-
+    /*
+     * Provide a reference to the views for each data item
+     * Complex data items may need more than one view per item, and
+     * you provide access to all the views for a data item in a view holder
+     */
     @NonNull
     @Override
     public NavigationDrawerAdapter.NavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        /* We inflate the xml which gives us a View object */
+        // We inflate the xml which gives us a View object
         View view = mInflater.inflate(R.layout.row_custom_navigationdrawer, parent, false);
         return new NavigationDrawerAdapter.NavViewHolder(view);
     }
@@ -56,7 +51,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     public void onBindViewHolder(@NonNull NavViewHolder holder, int position) {
         holder.imageView.setBackgroundResource(mGetImages[position]);
         holder.textView.setText(mContentList.get(position));
-        /**
+        /*
          * Implement the onClickListener on the 'navdrawerItemContentHolder' to open the respective
          * Fragment on click.
          */
@@ -65,64 +60,54 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             public void onClick(View v) {
                 if (position == 0) {
                     final MainScreenFragment mainScreenFragment = new MainScreenFragment();
-                    /**
+                    /*
                      * Let's begin the transaction
                      * We will invoke this Adapter through our MainActivity.java file.
                      */
                     MainActivity mainActivity = (MainActivity) mContext;
                     mainActivity.getSupportFragmentManager()
                             .beginTransaction()
-                            /**
-                             * Replace the the already added fragment from MainActivity.java
-                             */
+                            // Replace the the already added fragment from MainActivity.java
                             .replace(R.id.detailsFragment, mainScreenFragment)
                             .commit();
                 } else if (position == 1) {
                     final FavoriteFragment favoriteFragment = new FavoriteFragment();
-                    /**
+                    /*
                      * Let's begin the transaction
                      * We will invoke this Adapter through our MainActivity.java file.
                      */
                     MainActivity mainActivity = (MainActivity) mContext;
                     mainActivity.getSupportFragmentManager()
                             .beginTransaction()
-                            /**
-                             * Replace the the already added fragment from MainActivity.java
-                             */
+                            // Replace the the already added fragment from MainActivity.java
                             .replace(R.id.detailsFragment, favoriteFragment)
                             .commit();
                 } else if (position == 2) {
                     final SettingsFragment settingsFragment = new SettingsFragment();
-                    /**
+                    /*
                      * Let's begin the transaction
                      * We will invoke this Adapter through our MainActivity.java file.
                      */
                     MainActivity mainActivity = (MainActivity) mContext;
                     mainActivity.getSupportFragmentManager()
                             .beginTransaction()
-                            /**
-                             * Replace the the already added fragment from MainActivity.java
-                             */
+                            // Replace the the already added fragment from MainActivity.java
                             .replace(R.id.detailsFragment, settingsFragment)
                             .commit();
                 } else {
                     final AboutUsFragment aboutUsFragment = new AboutUsFragment();
-                    /**
+                    /*
                      * Let's begin the transaction
                      * We will invoke this Adapter through our MainActivity.java file.
                      */
                     MainActivity mainActivity = (MainActivity) mContext;
                     mainActivity.getSupportFragmentManager()
                             .beginTransaction()
-                            /**
-                             * Replace the the already added fragment from MainActivity.java
-                             */
+                            // Replace the the already added fragment from MainActivity.java
                             .replace(R.id.detailsFragment, aboutUsFragment)
                             .commit();
                 }
-                /**
-                 * (To automatically close the 'nav drawer' when an item is clicked)
-                 */
+                // (To automatically close the 'nav drawer' when an item is clicked)
                 MainActivity.drawerLayout.closeDrawers();
             }
         });
@@ -138,15 +123,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         }
     }
 
-    /**
-     * This is where we will initialize our views
-     */
-    public class NavViewHolder extends RecyclerView.ViewHolder {
+    class NavViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         ImageView imageView;
         RelativeLayout relativeLayout;
 
-        public NavViewHolder(View view) {
+        NavViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.textNavdrawer);
             imageView = view.findViewById(R.id.iconNavdrawer);
