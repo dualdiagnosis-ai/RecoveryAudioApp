@@ -42,8 +42,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-
-// A simple {@link Fragment} subclass.
 public class SongPlayingFragment extends Fragment {
     // Controls playback of audio or video files
     public static MediaPlayer mediaPlayer;

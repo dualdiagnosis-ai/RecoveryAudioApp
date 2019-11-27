@@ -27,8 +27,6 @@ import com.stevenmwesigwa.musicapp.databases.EchoDatabase;
 import java.util.ArrayList;
 import java.util.Optional;
 
-
-// A simple {@link Fragment} subclass.
 public class FavoriteFragment extends Fragment {
     private EchoDatabase echoDatabase = null;
     private TextView noFavoritesFavFrag = null;

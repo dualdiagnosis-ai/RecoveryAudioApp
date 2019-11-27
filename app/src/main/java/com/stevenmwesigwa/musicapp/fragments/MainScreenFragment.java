@@ -32,8 +32,6 @@ import com.stevenmwesigwa.musicapp.adapters.MainScreenAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
-// A simple {@link Fragment} subclass.
 public class MainScreenFragment extends Fragment {
     private RelativeLayout hiddenBottomBarMainScreen = null;
     private ImageButton playPauseButtonMainScreen = null;
