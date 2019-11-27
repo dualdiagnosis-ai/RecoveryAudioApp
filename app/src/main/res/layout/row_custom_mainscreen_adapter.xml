@@ -24,10 +24,10 @@
                 android:layout_marginStart="20dp"
                 android:paddingEnd="9dp"
                 android:paddingBottom="-7dp"
-                tools:text="@string/default_song_title"
                 android:textColor="#212121"
                 android:textSize="17sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                tools:text="@string/default_song_title" />
 
             <TextView
                 android:id="@+id/trackArtist"
@@ -36,8 +36,8 @@
                 android:layout_below="@id/trackTitle"
                 android:layout_marginStart="20dp"
                 android:paddingEnd="7dp"
-                tools:text="@string/default_song_artist"
-                android:textColor="@color/colorLightGrey" />
+                android:textColor="@color/colorLightGrey"
+                tools:text="@string/default_song_artist" />
 
         </RelativeLayout>
         <!--        Setting a Divider-->

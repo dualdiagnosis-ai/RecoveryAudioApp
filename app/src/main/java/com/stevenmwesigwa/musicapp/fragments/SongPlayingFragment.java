@@ -245,6 +245,15 @@ public class SongPlayingFragment extends Fragment {
         handler.postDelayed(updateSongTime, 1000);
     }
 
+    private static void changePlayPauseButton(CurrentSongHelper currentSongHelper) {
+        if (currentSongHelper.isPlaying()) {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
+        } else {
+            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
+
+        }
+    }
+
     /**
      * Called to do initial creation of a fragment.  This is called after
      * {@link #onAttach(Activity)} and before
@@ -471,15 +480,6 @@ public class SongPlayingFragment extends Fragment {
 //            loopButtonNowPlaying.setBackgroundResource(R.drawable.loop_white_icon);
         }
         changeFavoriteIconNowPlaying();
-    }
-
-    private static void changePlayPauseButton(CurrentSongHelper currentSongHelper) {
-        if (currentSongHelper.isPlaying()) {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.pause_icon);
-        } else {
-            playPauseButtonNowPlaying.setBackgroundResource(R.drawable.play_icon);
-
-        }
     }
 
     /*

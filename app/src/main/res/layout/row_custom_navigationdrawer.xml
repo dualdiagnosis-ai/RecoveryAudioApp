@@ -13,11 +13,11 @@
         android:padding="13dp">
 
         <ImageView
-            android:contentDescription="@string/song_default_image_description"
             android:id="@+id/iconNavdrawer"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="13dp"
+            android:contentDescription="@string/song_default_image_description"
             tools:src="@drawable/navigation_allsongs" />
 
         <TextView

@@ -50,7 +50,7 @@
         android:maxWidth="160dp"
         android:maxLines="1"
         android:singleLine="true"
-        tools:text="@string/default_song_title"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        tools:text="@string/default_song_title" />
 </RelativeLayout>

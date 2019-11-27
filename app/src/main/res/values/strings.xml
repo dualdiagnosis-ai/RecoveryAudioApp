@@ -3,18 +3,18 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
-<!--    main.xml-->
+    <!--    main.xml-->
     <string name="all_songs_sort_by_recently_added">By recently added</string>
     <string name="all_songs_sort_by_name">By name</string>
-    
-<!--    song_playing_menu.xml-->
+
+    <!--    song_playing_menu.xml-->
     <string name="back_to_all_songs_list">Back to list</string>
 
-<!--    row_custom_mainscreen_adapter.xml-->
+    <!--    row_custom_mainscreen_adapter.xml-->
     <string name="default_song_title">Take On Me</string>
     <string name="default_song_artist">a-ha</string>
 
-<!--    fragment_main_screen.xml-->
+    <!--    fragment_main_screen.xml-->
     <string name="no_songs_on_phone_message">You don\'t have any songs on the phone at the
         moment</string>
 
@@ -22,12 +22,18 @@
     <string name="no_favorite_songs_message">You don\'t have any favorite songs at the
         moment</string>
 
-<!--    fragment_settings.xml-->
+    <!--    fragment_settings.xml-->
     <string name="settings_shake_to_change_song_msg">Shake to change song</string>
-<!--    echo_partial_bottom_bar_fragment.xml-->
+    <!--    echo_partial_bottom_bar_fragment.xml-->
     <string name="bottom_mini_player_now_playing_message">Now Playing</string>
-<!--    row_custom_navigation-->
-<string name="song_default_image_description">Song Image</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--    row_custom_navigation-->
+    <string name="song_default_image_description">Song Image</string>
+    <!-- fragment_about_us -->
+    <string name="about_us_short_description">An Audio Music Player app  with notable features i.e PLAY, PAUSE, SHUFFLE, LOOP, AUDIO VISUALIZER as where as making a list of favorite songs.</string>
+    <string name="app_img_content_description">App Image Description</string>
+    <string name="about_us_contributors_heading">Contributors</string>
+    <string name="about_us_source_heading">Contribute to:</string>
+    <string name="about_us_contributors_1">1. Steven Mwesigwa - (stevenmwesigwa.com)</string>
+    <string name="about_us_contributors_2">2. Alex H</string>
+    <string name="about_us_source_link">https://github.com/steven7mwesigwa/MusicApp</string>
 </resources>

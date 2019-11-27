@@ -10,8 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteRecyclerFavFrag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
     <!--        Creating the bottom bar-->
     <include layout="@layout/echo_partial_bottom_bar_fragment" />
@@ -21,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="30sp"
         android:text="@string/no_favorite_songs_message"
         android:textColor="#212121"
+        android:textSize="30sp"
         android:visibility="invisible" />
 </RelativeLayout>
