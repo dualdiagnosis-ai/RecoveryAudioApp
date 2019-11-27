@@ -15,18 +15,15 @@ import androidx.fragment.app.Fragment;
 
 import com.stevenmwesigwa.musicapp.R;
 
-
 // A simple {@link Fragment} subclass.
 
 public class SettingsFragment extends Fragment {
     private static String My_PREFS_NAME = "ShakeFeature";
     private Switch switchShakeSettingFrag = null;
 
-
     public SettingsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,8 +31,6 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         switchShakeSettingFrag = view.findViewById(R.id.switchShakeSettingFrag);
-
-
         return view;
     }
 
@@ -54,7 +49,6 @@ public class SettingsFragment extends Fragment {
             switchShakeSettingFrag.setChecked(true);
         } else {
             switchShakeSettingFrag.setChecked(true);
-
         }
 
         switchShakeSettingFrag.setOnCheckedChangeListener(
@@ -67,7 +61,6 @@ public class SettingsFragment extends Fragment {
                         final SharedPreferences.Editor sharedPreferencesEditor = getActivity().getSharedPreferences(My_PREFS_NAME, Context.MODE_PRIVATE).edit();
                         sharedPreferencesEditor.putBoolean("feature", false);
                         sharedPreferencesEditor.apply();
-
                     }
                 }
         );
