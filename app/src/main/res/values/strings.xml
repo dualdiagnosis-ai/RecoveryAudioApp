@@ -5,6 +5,16 @@
     <string name="action_settings">Settings</string>
     <!--    main.xml-->
     <string name="all_songs_sort_by_recently_added">By recently added</string>
+
+    <!--    fragment_song_playing.xml-->
+    <string name="shuffle_img_descr">Shuffle Button</string>
+    <string name="loop_img_descr">Loop Button</string>
+    <string name="play_img_descr">Play Button</string>
+    <string name="previous_img_descr">Previous Button</string>
+    <string name="next_img_descr">Next Button</string>
+    <string name="favorite_img_descr">Favorite Button</string>
+
+
     <string name="all_songs_sort_by_name">By name</string>
 
     <!--    song_playing_menu.xml-->
