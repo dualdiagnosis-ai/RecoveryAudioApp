@@ -35,6 +35,6 @@ Please don't hesitate to submit issues and pull-requests against this project.
 Please read [CONTRIBUTING.md](/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to me.
 
 ### Contributors
-1. Steven Mwesigwa - ![http://stevenmwesigwa.com/](http://stevenmwesigwa.com/)
+1. Steven Mwesigwa - [http://stevenmwesigwa.com/](http://stevenmwesigwa.com/)
 2. Alex H
 
