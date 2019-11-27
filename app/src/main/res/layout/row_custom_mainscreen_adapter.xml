@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contentRowSongList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,10 +21,10 @@
                 android:id="@+id/trackTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:paddingRight="9dp"
+                android:layout_marginStart="20dp"
+                android:paddingEnd="9dp"
                 android:paddingBottom="-7dp"
-                android:text="Take On Me"
+                tools:text="@string/default_song_title"
                 android:textColor="#212121"
                 android:textSize="17sp"
                 android:textStyle="normal" />
@@ -33,10 +34,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/trackTitle"
-                android:layout_marginLeft="20dp"
-                android:paddingRight="7dp"
-                android:text="a-ha"
-                android:textColor="#bdbdbd" />
+                android:layout_marginStart="20dp"
+                android:paddingEnd="7dp"
+                tools:text="@string/default_song_artist"
+                android:textColor="@color/colorLightGrey" />
 
         </RelativeLayout>
         <!--        Setting a Divider-->
@@ -46,6 +47,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="11dp"
             android:layout_marginRight="11dp"
-            android:background="#e0e0e0" />
+            android:background="@color/colorVeryLightGrey" />
     </RelativeLayout>
 </RelativeLayout>

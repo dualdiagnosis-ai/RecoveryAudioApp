@@ -10,9 +10,9 @@
 
     <item
         android:id="@+id/actionSortRecent"
-        android:title="By recently added" />
+        android:title="@string/all_songs_sort_by_recently_added" />
     <item
         android:id="@+id/actionSorAscending"
-        android:title="By name" />
+        android:title="@string/all_songs_sort_by_name" />
 
 </menu>

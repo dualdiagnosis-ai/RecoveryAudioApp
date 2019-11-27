@@ -13,24 +13,25 @@
         android:padding="13dp">
 
         <ImageView
+            android:contentDescription="@string/song_default_image_description"
             android:id="@+id/iconNavdrawer"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp"
             tools:src="@drawable/navigation_allsongs" />
 
         <TextView
             android:id="@+id/textNavdrawer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="17dp"
-            android:layout_toRightOf="@+id/iconNavdrawer"
+            android:layout_marginStart="17dp"
+            android:layout_toEndOf="@+id/iconNavdrawer"
             android:textColor="#212121" />
         <!--To add a separator line between list elements-->
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
-            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
             android:background="#eee" />
     </RelativeLayout>
 

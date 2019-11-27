@@ -4,6 +4,6 @@
     <item
         android:id="@+id/actionRedirect"
         android:icon="@drawable/redirect_icon"
-        android:title="Backto list"
+        android:title="@string/back_to_all_songs_list"
         app:showAsAction="always" />
 </menu>

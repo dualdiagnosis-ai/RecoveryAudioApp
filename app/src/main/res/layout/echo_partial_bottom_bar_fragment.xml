@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--        Creating the bottom bar-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hiddenBottomBarMainScreen"
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -34,8 +35,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="11dp"
         android:layout_toRightOf="@+id/defaultMusicMainScreen"
-        android:text="Now Playing"
-        android:textColor="#bdbdbd" />
+        android:text="@string/bottom_mini_player_now_playing_message"
+        android:textColor="@color/colorLightGrey" />
 
     <TextView
         android:id="@+id/songTitleMainScreen"
@@ -49,7 +50,7 @@
         android:maxWidth="160dp"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="..."
+        tools:text="@string/default_song_title"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#fff" />
 </RelativeLayout>

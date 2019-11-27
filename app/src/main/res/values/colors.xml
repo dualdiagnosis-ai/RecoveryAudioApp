@@ -14,4 +14,6 @@
         <item>@color/third</item>
         <item>@color/forth</item>
     </array>
+    <color name="colorVeryLightGrey">#e0e0e0</color>
+    <color name="colorLightGrey">#bdbdbd</color>
 </resources>
