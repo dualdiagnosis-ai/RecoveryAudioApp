@@ -305,19 +305,16 @@ public class MainScreenFragment extends Fragment {
                 }
         );
 
-        playPauseButtonMainScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SongPlayingFragment.mediaPlayer.isPlaying()) {
-                    SongPlayingFragment.mediaPlayer.pause();
-                    trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
-                    playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
-                } else {
-                    SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
-                    // User wants to resume the song
-                    SongPlayingFragment.mediaPlayer.start();
-                    playPauseButtonMainScreen.setBackgroundResource(R.drawable.pause_icon);
-                }
+        playPauseButtonMainScreen.setOnClickListener(v -> {
+            if (SongPlayingFragment.mediaPlayer.isPlaying()) {
+                SongPlayingFragment.mediaPlayer.pause();
+                trackPosition = SongPlayingFragment.mediaPlayer.getCurrentPosition();
+                playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
+            } else {
+                SongPlayingFragment.mediaPlayer.seekTo(trackPosition);
+                // User wants to resume the song
+                SongPlayingFragment.mediaPlayer.start();
+                playPauseButtonMainScreen.setBackgroundResource(R.drawable.pause_icon);
             }
         });
     }
