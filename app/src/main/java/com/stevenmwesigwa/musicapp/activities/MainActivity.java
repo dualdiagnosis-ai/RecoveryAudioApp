@@ -31,39 +31,18 @@ public class MainActivity extends AppCompatActivity {
 
     private int[] imagesForNavigationDrawer = {R.drawable.navigation_allsongs, R.drawable.navigation_favorites, R.drawable.navigation_settings, R.drawable.navigation_aboutus};
 
-    /**
-     * navigationdrawer icons list
-     */
-    private List<String> navigationDrawerIconsList;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        List<String> navigationDrawerIconsList;
         super.onCreate(savedInstanceState);
-
-        /**
-         * navigationdrawer icons list
-         */
         navigationDrawerIconsList = Arrays.asList("All Songs", "Favorites", "Settings", "About Us");
-
-        /**
-         * Link this file with the xml layout file
-         */
         setContentView(R.layout.activity_main);
-        /**
-         * Set up the Tool bar / Action bar / App bar
-         */
         final Toolbar toolbar = findViewById(R.id.toolBar);
-        /**
-         * Set toolbar as the default toolbar
-         */
         setSupportActionBar(toolbar);
-        /**
-         * Initialize our DrawerLayout object with a value
-         */
+
+        // Initialize our DrawerLayout object with a value
         MainActivity.drawerLayout = findViewById(R.id.drawerLayout);
-        /**
-         * Make an object of ActionBarDrawerToggle class
-         */
+        // Make an object of ActionBarDrawerToggle class
         final ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, MainActivity.drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         /**
@@ -72,9 +51,7 @@ public class MainActivity extends AppCompatActivity {
          * To do that, we access the DrawerLayout object
          */
         MainActivity.drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        /**
-         * Animate the 'hamburger icon' whenever it's clicked on. i.e from '3 lines' to an 'arrow'
-         */
+        // Animate the 'hamburger icon' whenever it's clicked on. i.e from '3 lines' to an 'arrow'
         actionBarDrawerToggle.syncState();
 
         /**
@@ -88,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
          * A manager to manage different fragments, their inception, their layouts, animations if any
          *  and all the other attributes associated with the fragment.
          *  We access the FragmentManager by mentionng the context. (this)
-         *
          *  To start a series of operations on the Fragments
          *  associated with this FragmentManager - beginTransaction().
-         *
          *  To commit all / apply the changes made - commit()
          */
         this.getSupportFragmentManager()
@@ -99,9 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 .add(R.id.detailsFragment, mainScreenFragment, "MainScreenFragment")
                 .commit();
 
-        /**
-         * Instantiate the NavigationDrawerAdapter
-         */
         NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(navigationDrawerIconsList, imagesForNavigationDrawer, this);
         /**
          * Set the adapter to be adaptable to change.
@@ -111,33 +83,13 @@ public class MainActivity extends AppCompatActivity {
          */
         navigationDrawerAdapter.notifyDataSetChanged();
 
-        /**
-         * Define Recycler View
-         */
+        // Define Recycler View
         RecyclerView navigationRecyclerView = findViewById(R.id.navigationRecyclerView);
-        /**
-         * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
-         */
-        // use a linear layout manager
+        // Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         navigationRecyclerView.setLayoutManager(layoutManager);
         navigationRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        /**
-         * Set the adapter to the Recycler View so that the Recycler View will get synced with the
-         * Adapter.
-         */
         navigationRecyclerView.setAdapter(navigationDrawerAdapter);
-        /**
-         * Set up the Recycler View to a fixed size
-         * Meaning that we can add or delete elements from this Recycler View.
-         * This helps the Recycler View perform better
-         */
         navigationRecyclerView.setHasFixedSize(true);
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 }
