@@ -37,7 +37,11 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Settings");
+        try {
+            getActivity().setTitle("Settings");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
