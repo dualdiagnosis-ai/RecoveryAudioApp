@@ -1,7 +1,6 @@
 package com.stevenmwesigwa.musicapp.fragments;
 
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,23 +33,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+// A simple {@link Fragment} subclass.
 public class MainScreenFragment extends Fragment {
-    RelativeLayout hiddenBottomBarMainScreen = null;
-    ImageButton playPauseButtonMainScreen = null;
-    TextView songTitleMainScreen = null;
+    private RelativeLayout hiddenBottomBarMainScreen = null;
+    private ImageButton playPauseButtonMainScreen = null;
+    private TextView songTitleMainScreen = null;
     // Contains 'RecyclerView' and the 'bottombar'
-    RelativeLayout visibleLayout = null;
-    // The view that will get displayed when there're no songs
-    RelativeLayout noSongsMainScreen = null;
-    RecyclerView contentMainRecyclerView = null;
-    // Holds the 'context'
-    Activity activity = null;
-    //Instantiate MainScreenAdapter
-    MainScreenAdapter mainScreenAdapter = null;
-    ArrayList<Songs> getSongsList = null;
+    private RelativeLayout visibleLayout = null;
+    private RelativeLayout noSongsMainScreen = null;
+    private RecyclerView contentMainRecyclerView = null;
+    private MainScreenAdapter mainScreenAdapter = null;
+    private ArrayList<Songs> getSongsList = null;
     private int trackPosition = 0;
 
     public MainScreenFragment() {
@@ -62,7 +55,7 @@ public class MainScreenFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getSongsList = getSongsFromDevice();
-        SharedPreferences sharedPreferencesEdit2 = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferencesEdit2 = getActivity().getSharedPreferences("action_sort", Context.MODE_PRIVATE);
         String actionSortRecent = sharedPreferencesEdit2.getString("action_sort_recent", "false");
         String actionSortAscending = sharedPreferencesEdit2.getString("action_sort_ascending", "true");
         bottomBarSetup();
@@ -70,12 +63,12 @@ public class MainScreenFragment extends Fragment {
         if (getSongsList != null) {
             if (actionSortAscending.equalsIgnoreCase("true")) {
                 Collections.sort(getSongsList, Songs.sortBySongTItle);
-                mainScreenAdapter = new MainScreenAdapter(getSongsList, activity);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, getActivity());
                 mainScreenAdapter.notifyDataSetChanged();
 
             } else if (actionSortRecent.equalsIgnoreCase("true")) {
                 Collections.sort(getSongsList, Songs.sortBySongDateAdded);
-                mainScreenAdapter = new MainScreenAdapter(getSongsList, activity);
+                mainScreenAdapter = new MainScreenAdapter(getSongsList, getActivity());
                 mainScreenAdapter.notifyDataSetChanged();
 
             }
@@ -85,13 +78,9 @@ public class MainScreenFragment extends Fragment {
             visibleLayout.setVisibility(View.INVISIBLE);
             noSongsMainScreen.setVisibility(View.VISIBLE);
         } else {
-            mainScreenAdapter = new MainScreenAdapter(getSongsList, activity);
-
-            /**
-             * Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
-             */
-            // use a linear layout manager
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
+            mainScreenAdapter = new MainScreenAdapter(getSongsList, getActivity());
+            // Setup LayoutManager - Is responsible for measuring and positioning 'item views' with in a recycler view
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
             contentMainRecyclerView.setLayoutManager(layoutManager);
             contentMainRecyclerView.setItemAnimator(new DefaultItemAnimator());
             /**
@@ -103,20 +92,6 @@ public class MainScreenFragment extends Fragment {
 
     }
 
-
-    /**
-     * Initialize the contents of the Fragment host's standard options menu.  You
-     * should place your menu items in to <var>menu</var>.  For this method
-     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
-     * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
-     * for more information.
-     *
-     * @param menu     The options menu in which you place your items.
-     * @param inflater
-     * @see #setHasOptionsMenu
-     * @see #onPrepareOptionsMenu
-     * @see #onOptionsItemSelected
-     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         //Clear previous menu items
@@ -130,7 +105,7 @@ public class MainScreenFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int switcher = item.getItemId();
         if (switcher == R.id.actionSorAscending) {
-            SharedPreferences.Editor sharedPreferencesEdit = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
+            SharedPreferences.Editor sharedPreferencesEdit = getActivity().getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
             sharedPreferencesEdit.putString("action_sort_ascending", "true");
             sharedPreferencesEdit.putString("action_sort_recent", "false");
             sharedPreferencesEdit.apply();
@@ -140,7 +115,7 @@ public class MainScreenFragment extends Fragment {
             mainScreenAdapter.notifyDataSetChanged();
             return false;
         } else if (switcher == R.id.actionSortRecent) {
-            SharedPreferences.Editor sharedPreferencesEdit2 = activity.getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
+            SharedPreferences.Editor sharedPreferencesEdit2 = getActivity().getSharedPreferences("action_sort", Context.MODE_PRIVATE).edit();
             sharedPreferencesEdit2.putString("action_sort_recent", "true");
             sharedPreferencesEdit2.putString("action_sort_ascending", "false");
             sharedPreferencesEdit2.apply();
@@ -157,10 +132,7 @@ public class MainScreenFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity.setTitle("All Songs");
-//        activity.getActionBar().setIcon(R.drawable.navigation_allsongs);
-
-//        activity.getActionBar().setDisplayShowHomeEnabled(true);
+        getActivity().setTitle("All Songs");
     }
 
     @Override
@@ -177,51 +149,32 @@ public class MainScreenFragment extends Fragment {
         noSongsMainScreen = view.findViewById(R.id.noSongsMainScreen);
         contentMainRecyclerView = view.findViewById(R.id.contentMainRecyclerView);
         setHasOptionsMenu(true);
-        activity.setTitle("All Songs");
+        getActivity().setTitle("All Songs");
 
         return view;
     }
 
-
-    /**
-     * Gets called when the 'MainScreenFragment' is attached to the 'Activity'
-     *
-     * @param context
-     */
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
-    }
-
-    /**
-     * @param activity
-     */
-    @Override
-    public void onAttach(@NonNull Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-    }
-
     private ArrayList<Songs> getSongsFromDevice() {
-        ArrayList songsList = new ArrayList();
+        ArrayList<Songs> songsList = new ArrayList<>();
         // Create 'ContentResolver' to access the database
-        ContentResolver contentResolver = activity.getContentResolver();
+        ContentResolver contentResolver = getActivity().getContentResolver();
         // Create a 'Uri' so that you would fetch a specific song. i.e searching for songs
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        // Make a 'Cursor'
-        // Use the 'ContentResolver' to query the database
-// 'projection' arg is null - because we want to return ALL columns and not a specific one
-        // 'queryArgs' arg is null - because we don't want any arguments inside our query
+        /*
+         * Make a 'Cursor'
+         * Use the 'ContentResolver' to query the database
+         * 'projection' arg is null - because we want to return ALL columns and not a specific one
+         * 'queryArgs' arg is null - because we don't want any arguments inside our query
+         */
         Cursor songCursor = contentResolver.query(songUri, null, null, null);
-//We have to get the columns and data that is fetched only when the cursor is not 'null'
+        //We have to get the columns and data that is fetched only when the cursor is not 'null'
         if ((songCursor != null) && songCursor.moveToFirst()) {
             final int id = songCursor.getColumnIndex(MediaStore.Audio.Media._ID);
             final int title = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             final int artist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             final int data = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             final int dateAdded = songCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED);
-// Get data inside those columns. Add to the 'songsList'
+            // Get data inside those columns. Add to the 'songsList'
             while (songCursor.moveToNext()) {
                 final Long songId = songCursor.getLong(id);
                 final String songTitle = songCursor.getString(title);
@@ -239,14 +192,14 @@ public class MainScreenFragment extends Fragment {
         try {
             bottomBarClickHandler();
             songTitleMainScreen.setText(SongPlayingFragment.getCurrentSongHelper().getSongTitle());
-// Change text when song is completed
+            // Change text when song is completed
             SongPlayingFragment.mediaPlayer.setOnCompletionListener(
                     view -> {
                         // Update song Title in the hiddenBottomBarMainScreen
                         songTitleMainScreen.setText(SongPlayingFragment.getCurrentSongHelper().getSongTitle());
                     }
             );
-// Set up visibility of the 'now playing' bottom bar
+            // Set up visibility of the 'now playing' bottom bar
             boolean isPaused = !SongPlayingFragment.mediaPlayer.isPlaying() && SongPlayingFragment.mediaPlayer.getCurrentPosition() > 1;
             if (SongPlayingFragment.mediaPlayer.isPlaying() || isPaused) {
                 hiddenBottomBarMainScreen.setVisibility(View.VISIBLE);
@@ -258,9 +211,8 @@ public class MainScreenFragment extends Fragment {
                 playPauseButtonMainScreen.setBackgroundResource(R.drawable.play_icon);
             }
 
-
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
@@ -289,7 +241,7 @@ public class MainScreenFragment extends Fragment {
                      */
                     bundle.putString("favoriteFragBottomBar", "success");
 
-//Link values with the songPlayingFragment
+                    //Link values with the songPlayingFragment
                     songPlayingFragment.setArguments(bundle);
 
                     getFragmentManager()
