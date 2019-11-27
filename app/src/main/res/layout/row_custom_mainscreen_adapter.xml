@@ -2,13 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contentRowSongList"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <!--    Contains songTitle & songArtist & a Divider-->
-    <RelativeLayout
         android:layout_width="match_parent"
+    android:orientation="vertical"
         android:layout_height="80dp"
         android:background="#fff">
 
@@ -49,4 +44,3 @@
             android:layout_marginRight="11dp"
             android:background="@color/colorVeryLightGrey" />
     </RelativeLayout>
-</RelativeLayout>
