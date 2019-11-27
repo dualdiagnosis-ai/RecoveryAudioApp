@@ -32,10 +32,11 @@
                 app:av_wavesHeight="60dp" />
 
             <ImageButton
+                android:layout_alignParentEnd="true"
                 android:id="@+id/favoriteIconNowPlaying"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_alignParentRight="true"
+                android:contentDescription="@string/favorite_img_descr"
                 android:layout_margin="20dp"
                 android:background="@drawable/white_circle_icon" />
         </RelativeLayout>
@@ -46,10 +47,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#9d2a58">
+        android:layout_weight="1">
 
         <RelativeLayout
+            android:background="#9d2a58"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <!--            Layout to contain song info (songTitle & songText)-->
@@ -104,8 +105,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/seekBarNowPlaying"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#fff" />
 
@@ -116,8 +117,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/seekBarNowPlaying"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#fff" />
             </RelativeLayout>
@@ -133,28 +134,31 @@
                 android:layout_marginBottom="60dp">
 
                 <ImageButton
+                    android:layout_marginEnd="20dp"
                     android:id="@+id/shuffleButtonNowPlaying"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_toLeftOf="@id/previousButtonNowPlaying"
+                    android:layout_toStartOf="@id/previousButtonNowPlaying"
+                    android:contentDescription="@string/shuffle_img_descr"
                     android:background="@drawable/shuffle_white_icon"
                     android:minWidth="0dp"
                     android:minHeight="0dp" />
 
                 <ImageButton
+                    android:layout_marginEnd="19dp"
                     android:id="@+id/previousButtonNowPlaying"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="19dp"
-                    android:layout_toLeftOf="@id/playPauseButtonNowPlaying"
+                    android:layout_toStartOf="@id/playPauseButtonNowPlaying"
+                    android:contentDescription="@string/previous_img_descr"
                     android:background="@drawable/play_previous_icon"
                     android:minWidth="0dp"
                     android:minHeight="0dp" />
 
                 <ImageButton
+                    android:contentDescription="@string/play_img_descr"
                     android:id="@+id/playPauseButtonNowPlaying"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -164,23 +168,25 @@
                     android:minHeight="0dp" />
 
                 <ImageButton
+                    android:layout_marginStart="19dp"
                     android:id="@+id/nextButtonNowPlaying"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="19dp"
-                    android:layout_toRightOf="@id/playPauseButtonNowPlaying"
+                    android:layout_toEndOf="@id/playPauseButtonNowPlaying"
+                    android:contentDescription="@string/next_img_descr"
                     android:background="@drawable/play_next_icon"
                     android:minWidth="0dp"
                     android:minHeight="0dp" />
 
                 <ImageButton
+                    android:layout_marginStart="20dp"
                     android:id="@+id/loopButtonNowPlaying"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/nextButtonNowPlaying"
+                    android:layout_toEndOf="@id/nextButtonNowPlaying"
+                    android:contentDescription="@string/loop_img_descr"
                     android:background="@drawable/loop_white_icon"
                     android:minWidth="0dp"
                     android:minHeight="0dp" />
