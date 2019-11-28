@@ -31,14 +31,24 @@
                 app:av_wavesFooterHeight="170dp"
                 app:av_wavesHeight="60dp" />
 
-            <ImageButton
+            <ImageView
                 android:layout_alignParentEnd="true"
-                android:id="@+id/favoriteIconNowPlaying"
+                android:id="@+id/favoriteIconNowPlayingBackground"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:contentDescription="@string/favorite_img_descr"
+                android:layout_margin="4dp"
+                android:src="@drawable/white_circle_icon"/>
+
+            <ImageView
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@id/favoriteIconNowPlayingBackground"
+                android:id="@+id/favoriteIconNowPlaying"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:contentDescription="@string/favorite_img_descr"
                 android:layout_margin="20dp"
-                android:background="@drawable/white_circle_icon" />
+                android:src="@drawable/favorite_on"/>
         </RelativeLayout>
 
     </LinearLayout>

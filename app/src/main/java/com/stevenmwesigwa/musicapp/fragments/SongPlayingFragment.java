@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +65,7 @@ public class SongPlayingFragment extends Fragment {
     private ImageButton playPauseButtonNowPlaying = null;
     private ImageButton nextButtonNowPlaying = null;
     private ImageButton loopButtonNowPlaying = null;
-    private ImageButton favoriteIconNowPlaying = null;
+    private ImageView favoriteIconNowPlaying = null;
     private EchoDatabase echoDatabaseFavorite = null;
     private Runnable updateSongTime = new Runnable() {
         @Override
