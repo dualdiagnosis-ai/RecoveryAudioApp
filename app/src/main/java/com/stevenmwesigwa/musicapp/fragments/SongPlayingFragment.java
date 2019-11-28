@@ -387,7 +387,7 @@ public class SongPlayingFragment extends Fragment {
             currentSongHelper.setShuffleFeatureEnabled(false);
             shuffleButtonNowPlaying.setBackgroundResource(R.drawable.shuffle_white_icon);
         }
-
+        // For loop
         SharedPreferences prefsForLoop = getActivity().getSharedPreferences(SongPlayingFragment.MY_PREFS_LOOP, Context.MODE_PRIVATE);
         boolean isLoopAllowed = prefsForLoop.getBoolean("feature", false);
 

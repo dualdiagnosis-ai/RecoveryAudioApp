@@ -168,7 +168,7 @@ public class FavoriteFragment extends Fragment {
                              * Make fragment not to get destroyed and is pushed below the current
                              *  appearing fragment
                              */
-                            .addToBackStack("FavoriteFragment")
+                            .addToBackStack("SongPlayingFragment")
                             .commit();
 
                 }
