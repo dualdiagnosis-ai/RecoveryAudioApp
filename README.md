@@ -1,9 +1,10 @@
-RecoveryAudioApp (A Fork of the Damnn Handy: [MusicApp](https://github.com/steven7mwesigwa/MusicApp/))
+### RecoveryAudioApp
+#### (A Fork of the Damnn Handy: [MusicApp](https://github.com/steven7mwesigwa/MusicApp/))
 ===================================
 
 An Audio Music Player app with notable features i.e PLAY, PAUSE, SHUFFLE, LOOP, AUDIO VISUALIZER, SEEK TO as where as making a list of favorite songs.
 
-Demo
+### Demo
 ----
 ![MusicApp demo](Readme_images/demo.gif "MusicApp demo")
 
@@ -34,9 +35,12 @@ Please don't hesitate to submit issues and pull-requests against this project.
 
 Please read [CONTRIBUTING.md](/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to me.
 
-## Todo List:
+### Todo List:
 
-1. 
+1. Thorooughly Test
+2. Add: 'Buy this Audio File's Developer a Coffee' button, with a link to a PayPal.me or Patreon account for users to donate a small fee for spending the time to create the audio file(s)
+3. Add: Share this Audiofile to Social Media
+4. 
 
 
 ### Contributors
